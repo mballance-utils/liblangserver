@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="bin/" kind="src" path="tests/src/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lsp4j/plugins/org.eclipse.lsp4j_0.9.0.v20200229-1009.jar"/>
+	<classpathentry kind="lib" path="lsp4j/plugins/org.eclipse.lsp4j.jsonrpc_0.9.0.v20200229-1009.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

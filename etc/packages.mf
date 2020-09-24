@@ -1,5 +1,11 @@
 
 json-rpc-cxx@https://github.com/jsonrpcx/json-rpc-cxx.git
+
 lsp4j@http://download.eclipse.org/lsp4j/updates/releases/0.9.0/v0.9.0.zip
+
+gson@https://search.maven.org/remotecontent?filepath=com/google/code/gson/gson/2.8.6/gson-2.8.6.jar
+
+googletest@https://github.com/google/googletest/archive/release-1.10.0.tar.gz
+
 
 

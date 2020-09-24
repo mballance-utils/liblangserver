@@ -1,0 +1,16 @@
+<project name="liblangserver-tests">
+
+	<mkdir dir="${basedir}/../../../bin"/>
+	<!--
+	<mkdir dir="bin"/>
+	-->
+	<javac 
+		srcdir="." destdir="${basedir}/../../../bin">
+		<classpath>
+			<fileset dir="${basedir}/../../../packages/lsp4j/plugins"
+				includes="*.jar"/>
+		</classpath>
+	</javac>
+	
+</project>
+	

@@ -32,3 +32,5 @@
 *.app
 
 packages/
+/bin/
+build/
