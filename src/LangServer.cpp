@@ -7,7 +7,7 @@
 
 #include "LangServer.h"
 
-LangServer::LangServer() {
+LangServer::LangServer(IMessageTransport *out) : m_out(out) {
 	// TODO Auto-generated constructor stub
 
 }

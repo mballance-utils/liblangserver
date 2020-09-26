@@ -23,5 +23,9 @@ ExternalProject_Add(GOOGLETEST
 	-DCMAKE_SYSTEM_NAME:STRING=${CMAKE_SYSTEM_NAME}
 	)
 	
+file(GLOB LIBLANGSERVER_SRCS src/*.cpp src/*.h)
+	
+add_library(liblangserver  ${LIBLANGSERVER_SRCS})
+	
 add_subdirectory(tests/cpp)
 
