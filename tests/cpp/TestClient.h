@@ -21,7 +21,7 @@ public:
 
 	int32_t close();
 
-	virtual void send(const std::string &msg) override;
+	virtual void send(const nlohmann::json &msg) override;
 
 private:
 	static void *thread_main(void *ud);

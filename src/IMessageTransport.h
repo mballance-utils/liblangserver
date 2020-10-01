@@ -7,11 +7,12 @@
 
 #pragma once
 #include <string>
+#include "nlohmann/json_fwd.hpp"
 
 class IMessageTransport {
 public:
 	virtual ~IMessageTransport() { }
 
-	virtual void send(const std::string &msg) = 0;
+	virtual void send(const nlohmann::json &msg) = 0;
 
 };

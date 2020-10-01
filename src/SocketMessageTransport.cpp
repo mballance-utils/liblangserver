@@ -11,6 +11,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include "nlohmann/json.hpp"
 
 SocketMessageTransport::SocketMessageTransport(int32_t socket) :
 	m_msgbuf(0), m_msg_state(0), m_msg_length(0),
@@ -94,8 +95,15 @@ int32_t SocketMessageTransport::process(int timeout_ms) {
 					msgbuf_append(tmp[i]);
 					if (m_msgbuf_idx >= m_msg_length) {
 						msgbuf_append(0);
-						fprintf(stdout, "Received message: %s\n", m_msgbuf);
-						m_in->send(m_msgbuf);
+						fprintf(stdout, "Received message: \"%s\"\n", m_msgbuf);
+						nlohmann::json msg;
+						try {
+							msg = nlohmann::json::parse(m_msgbuf);
+							m_in->send(msg);
+						} catch (const std::exception &e) {
+							fprintf(stdout, "Failed to parse msg \"%s\" %s\n",
+									m_msgbuf, e.what());
+						}
 						m_msg_state = 0;
 						m_msgbuf_idx = 0;
 					}
@@ -114,12 +122,13 @@ int32_t SocketMessageTransport::process(int timeout_ms) {
 	return ret;
 }
 
-void SocketMessageTransport::send(const std::string &msg) {
+void SocketMessageTransport::send(const nlohmann::json &msg) {
 	char tmp[64];
+	std::string body = static_cast<std::string>(msg);
 	sprintf(tmp, "Content-Length: %d\r\n\r\n", msg.size());
 
 	::send(m_socket, tmp, strlen(tmp), 0);
-	::send(m_socket, msg.c_str(), msg.size(), 0);
+	::send(m_socket, body.c_str(), msg.size(), 0);
 
 }
 

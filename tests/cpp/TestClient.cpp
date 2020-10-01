@@ -12,6 +12,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <unistd.h>
+#include "nlohmann/json.hpp"
 
 TestClient::TestClient(int32_t port) :
 	m_port(port), m_sock(-1), m_close_on_complete(true) {
@@ -60,13 +61,17 @@ int32_t TestClient::close() {
 	return 0;
 }
 
-void TestClient::send(const std::string &msg) {
+void TestClient::send(const nlohmann::json &msg) {
 	char header[128];
 
-	int len = sprintf(header, "Content-Length: %d\r\n\r\n", msg.size());
+	std::string body = msg.dump();
+//	body = R"({"jsonrpc":"2.0","id":"2","method":"initialize","params":{"processId":null,"rootUri":null}})";
+	body = R"({"jsonrpc":"2.0","id":"2","method":"initialize"})";
+	fprintf(stdout, "body=%s sz=%d\n", body.c_str(), body.size());
+	int len = sprintf(header, "Content-Length: %d\r\n\r\n", body.size());
 
 	int ret = ::send(m_sock, header, len, 0);
-	ret = ::send(m_sock, msg.c_str(), msg.size(), 0);
+	ret = ::send(m_sock, body.c_str(), body.size(), 0);
 }
 
 void *TestClient::thread_main(void *ud) {

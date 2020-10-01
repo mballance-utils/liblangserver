@@ -8,16 +8,17 @@
 #pragma once
 #include <functional>
 #include "IMessageTransport.h"
+#include "nlohmann/json_fwd.hpp"
 
 class FuncMessageTransportImp : public virtual IMessageTransport {
 public:
-	FuncMessageTransportImp(std::function<void(const std::string &)> recv);
+	FuncMessageTransportImp(std::function<void(const nlohmann::json &)> recv);
 
 	virtual ~FuncMessageTransportImp();
 
-	virtual void send(const std::string &msg) override;
+	virtual void send(const nlohmann::json &msg) override;
 
 private:
-	std::function<void(const std::string &)>		m_recv;
+	std::function<void(const nlohmann::json &)>		m_recv;
 };
 

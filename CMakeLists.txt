@@ -1,9 +1,14 @@
 
 cmake_minimum_required(VERSION 2.8.8)
 
-include(ExternalProject)
-
 project(liblangserver)
+
+include(ExternalProject)
+find_package(Java REQUIRED)
+include(UseJava)
+
+set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.8" "-target" "1.8")
+
 
 if (NOT PACKAGES_DIR)
   set(PACKAGES_DIR ${CMAKE_SOURCE_DIR}/packages)
@@ -11,6 +16,7 @@ endif()
 
 # TODO: make conditional on developing the package
 enable_testing()
+
 ExternalProject_Add(GOOGLETEST
 	PREFIX googletest
 	SOURCE_DIR "${PACKAGES_DIR}/googletest"
@@ -23,9 +29,13 @@ ExternalProject_Add(GOOGLETEST
 	-DCMAKE_SYSTEM_NAME:STRING=${CMAKE_SYSTEM_NAME}
 	)
 	
+include_directories(
+	${PACKAGES_DIR}/json/include
+	)
+	
 file(GLOB LIBLANGSERVER_SRCS src/*.cpp src/*.h)
 	
 add_library(liblangserver  ${LIBLANGSERVER_SRCS})
 	
-add_subdirectory(tests/cpp)
+add_subdirectory(tests)
 

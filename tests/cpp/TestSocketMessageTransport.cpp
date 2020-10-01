@@ -21,6 +21,9 @@
 #include "TestServer.h"
 #include "TestClient.h"
 
+#include "nlohmann/json.hpp"
+#include "RequestMessage.h"
+
 TestSocketMessageTransport::TestSocketMessageTransport() {
 	// TODO Auto-generated constructor stub
 
@@ -40,7 +43,17 @@ TEST_F(TestSocketMessageTransport, smoke) {
 
 	// Client runs asynchronously
 	ASSERT_EQ(client.start_client([&] (TestClient *t) {
-		t->send(R"({"jsonrpc":"2.0","id":"1","method":"initialize","params":{"processId":null,"rootUri":null}})");
+		nlohmann::json msg = {
+				{"jsonrpc", 2.0},
+				{"id", 1},
+				{"method", "initialize"},
+				{"params", {
+					{"processId", nullptr},
+					{"rootUri", nullptr}
+				}}
+		};
+		t->send(msg);
+				// R"({"jsonrpc":"2.0","id":"1","method":"initialize","params":{"processId":null,"rootUri":null}})");
 	}), 0);
 
 	// Client must be running before we accept a connection
@@ -57,8 +70,18 @@ TEST_F(TestSocketMessageTransport, smoke) {
 
 	SocketMessageTransport transport(srv_fd);
 
-	std::vector<std::string> msgs;
-	FuncMessageTransportImp msg_recv([&](const std::string &msg) {
+	std::vector<nlohmann::json> msgs;
+	FuncMessageTransportImp msg_recv([&](const nlohmann::json &msg) {
+		lls::RequestMessage msg_o;
+
+		fprintf(stdout, "Received message\n");
+		fflush(stdout);
+
+		msg_o.load(msg);
+
+		fprintf(stdout, "id=%d method=%s\n",
+				msg_o.id(), msg_o.method().c_str());
+		fflush(stdout);
 		msgs.push_back(msg);
 	});
 	transport.init(&msg_recv);

@@ -17,7 +17,7 @@ public:
 	/**
 	 * Accept in-bound messages
 	 */
-	virtual void send(const std::string &msg) override;
+	virtual void send(const nlohmann::json &msg) override;
 
 private:
 	IMessageTransport			*m_out;

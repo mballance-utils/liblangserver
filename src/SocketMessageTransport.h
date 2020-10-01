@@ -20,7 +20,7 @@ public:
 
 	int32_t process(int32_t timeout_ms=-1);
 
-	virtual void send(const std::string &msg) override;
+	virtual void send(const nlohmann::json &msg) override;
 
 private:
 	void msgbuf_append(char c) {

@@ -6,9 +6,10 @@
  */
 
 #include "FuncMessageTransportImp.h"
+#include "nlohmann/json.hpp"
 
 FuncMessageTransportImp::FuncMessageTransportImp(
-		std::function<void(const std::string &)> recv) : m_recv(recv) {
+		std::function<void(const nlohmann::json &)> recv) : m_recv(recv) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -17,7 +18,7 @@ FuncMessageTransportImp::~FuncMessageTransportImp() {
 	// TODO Auto-generated destructor stub
 }
 
-void FuncMessageTransportImp::send(const std::string &msg) {
+void FuncMessageTransportImp::send(const nlohmann::json &msg) {
 	m_recv(msg);
 }
 
