@@ -22,7 +22,7 @@ public:
 
 	virtual void load(const nlohmann::json &msg);
 
-	virtual void dump(nlohmann::json &msg);
+	virtual nlohmann::json dump();
 
 protected:
 	ValIntSP				m_id;

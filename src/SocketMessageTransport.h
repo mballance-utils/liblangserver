@@ -9,6 +9,8 @@
 #include <string>
 #include "IMessageTransport.h"
 
+namespace lls {
+
 class SocketMessageTransport : public IMessageTransport {
 public:
 	SocketMessageTransport(
@@ -45,4 +47,6 @@ private:
 	static const std::string	HEADER_PREFIX;
 
 };
+
+}
 

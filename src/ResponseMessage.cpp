@@ -27,12 +27,19 @@ void ResponseMessage::load(const nlohmann::json &msg) {
 	m_id = ValInt::mk(msg["id"]);
 }
 
-void ResponseMessage::dump(nlohmann::json &msg) {
+nlohmann::json ResponseMessage::dump() {
+	nlohmann::json msg;
+
 	Message::dump(msg);
 
 	if (m_id) {
 		msg["id"] = m_id->dump();
 	}
+	if (m_result) {
+		msg["result"] = m_result->dump();
+	}
+
+	return msg;
 }
 
 } /* namespace lls */

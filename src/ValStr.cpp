@@ -22,8 +22,16 @@ ValStr::~ValStr() {
 	// TODO Auto-generated destructor stub
 }
 
+nlohmann::json ValStr::dump() {
+	return nlohmann::json(m_val);
+}
+
 ValStrSP ValStr::mk(const nlohmann::json &msg) {
 	return ValStrSP(new ValStr(msg));
+}
+
+ValStrSP ValStr::mk(const std::string &v) {
+	return ValStrSP(new ValStr(v));
 }
 
 } /* namespace lls */

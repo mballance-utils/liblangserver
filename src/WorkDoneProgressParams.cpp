@@ -10,6 +10,11 @@
 
 namespace lls {
 
+
+WorkDoneProgressParams::WorkDoneProgressParams() {
+
+}
+
 WorkDoneProgressParams::WorkDoneProgressParams(const nlohmann::json &msg) {
 	if (msg.contains("workDoneToken")) {
 		m_workDoneToken = ProgressToken::mk(msg["workDoneToken"]);
@@ -19,6 +24,10 @@ WorkDoneProgressParams::WorkDoneProgressParams(const nlohmann::json &msg) {
 
 WorkDoneProgressParams::~WorkDoneProgressParams() {
 	// TODO Auto-generated destructor stub
+}
+
+void WorkDoneProgressParams::dump(nlohmann::json &msg) {
+	// TODO:
 }
 
 } /* namespace lls */

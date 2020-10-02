@@ -7,36 +7,44 @@
 
 #pragma once
 #include "Message.h"
+#include "Val.h"
+#include "ValInt.h"
+#include "ValStr.h"
 
 namespace lls {
 
 class RequestMessage : public Message {
 public:
-	RequestMessage();
+	RequestMessage(const nlohmann::json &msg);
+
+	RequestMessage(int32_t id, const std::string &method);
 
 	virtual ~RequestMessage();
 
-	int32_t id() const { return m_id; }
+	int64_t id() const { return m_id->val(); }
 
-	void id(int32_t i) { m_id = i; }
+	void id(int64_t i) { m_id->val(i); }
 
-	const std::string &method() const { return m_method; }
+	const std::string &method() const { return m_method->val(); }
 
-	void method(const std::string &m) { m_method = m; }
+	void method(const std::string &m) { m_method->val(m); }
+
+	ValSP params() const { return m_params; }
+
+	void params(ValSP p) { m_params = p; }
 
 	virtual void load(const nlohmann::json &msg);
 
 	virtual void dump(nlohmann::json &msg);
 
-protected:
-	int32_t			m_id;
-	std::string		m_method;
-	// TODO: params
+	virtual nlohmann::json dump();
 
-		/**
-		 * The method's params.
-		 */
-//params?: array | object;
+protected:
+	ValIntSP			m_id;
+	ValStrSP			m_method;
+
+	ValSP				m_params;
+
 };
 
 } /* namespace lls */

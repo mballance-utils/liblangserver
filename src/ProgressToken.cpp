@@ -22,4 +22,8 @@ ProgressToken::~ProgressToken() {
 	// TODO Auto-generated destructor stub
 }
 
+ProgressTokenSP ProgressToken::mk(const nlohmann::json &msg) {
+	return ProgressTokenSP(new ProgressToken(msg));
+}
+
 } /* namespace lls */

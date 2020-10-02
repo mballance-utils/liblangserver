@@ -10,7 +10,7 @@
 #include "IMessageTransport.h"
 #include "nlohmann/json_fwd.hpp"
 
-class FuncMessageTransportImp : public virtual IMessageTransport {
+class FuncMessageTransportImp : public virtual lls::IMessageTransport {
 public:
 	FuncMessageTransportImp(std::function<void(const nlohmann::json &)> recv);
 

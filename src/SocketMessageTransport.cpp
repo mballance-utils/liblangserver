@@ -13,6 +13,8 @@
 #include <sys/socket.h>
 #include "nlohmann/json.hpp"
 
+namespace lls {
+
 SocketMessageTransport::SocketMessageTransport(int32_t socket) :
 	m_msgbuf(0), m_msg_state(0), m_msg_length(0),
 	m_socket(socket), m_in(0) {
@@ -149,4 +151,6 @@ void SocketMessageTransport::msgbuf_resize_append(char c) {
 }
 
 const std::string	SocketMessageTransport::HEADER_PREFIX = "Content-Length: ";
+
+}
 

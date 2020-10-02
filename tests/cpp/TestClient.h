@@ -11,7 +11,7 @@
 #include <pthread.h>
 #include "IMessageTransport.h"
 
-class TestClient : public IMessageTransport {
+class TestClient : public lls::IMessageTransport {
 public:
 	TestClient(int32_t port);
 

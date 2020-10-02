@@ -10,6 +10,8 @@
 
 namespace lls {
 
+class ServerCapabilities;
+typedef std::shared_ptr<ServerCapabilities> ServerCapabilitiesSP;
 class ServerCapabilities : public Val {
 public:
 	ServerCapabilities();
@@ -17,6 +19,8 @@ public:
 	virtual ~ServerCapabilities();
 
 	virtual nlohmann::json dump() override;
+
+	static ServerCapabilitiesSP mk();
 
 private:
 	// TextDocumentSyncOptions

@@ -15,9 +15,13 @@ class WorkDoneProgressParams;
 typedef std::shared_ptr<WorkDoneProgressParams> WorkDoneProgressParamsSP;
 class WorkDoneProgressParams : public Val {
 public:
+	WorkDoneProgressParams();
+
 	WorkDoneProgressParams(const nlohmann::json &msg);
 
 	virtual ~WorkDoneProgressParams();
+
+	virtual void dump(nlohmann::json &msg);
 
 	static WorkDoneProgressParamsSP mk(const nlohmann::json &msg);
 

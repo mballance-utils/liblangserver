@@ -10,6 +10,10 @@
 
 namespace lls {
 
+Message::Message(const nlohmann::json &msg) {
+	;
+}
+
 Message::Message() : m_jsonrpc("2.0") {
 	// TODO Auto-generated constructor stub
 

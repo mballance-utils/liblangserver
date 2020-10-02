@@ -13,6 +13,8 @@ namespace lls {
 
 class Message {
 public:
+	Message(const nlohmann::json &msg);
+
 	Message();
 
 	virtual ~Message();

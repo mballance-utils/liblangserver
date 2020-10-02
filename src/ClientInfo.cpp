@@ -22,4 +22,8 @@ ClientInfo::~ClientInfo() {
 	// TODO Auto-generated destructor stub
 }
 
+ClientInfoSP ClientInfo::mk(const nlohmann::json &msg) {
+	return ClientInfoSP(new ClientInfo(msg));
+}
+
 } /* namespace lls */

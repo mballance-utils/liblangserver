@@ -65,8 +65,6 @@ void TestClient::send(const nlohmann::json &msg) {
 	char header[128];
 
 	std::string body = msg.dump();
-//	body = R"({"jsonrpc":"2.0","id":"2","method":"initialize","params":{"processId":null,"rootUri":null}})";
-	body = R"({"jsonrpc":"2.0","id":"2","method":"initialize"})";
 	fprintf(stdout, "body=%s sz=%d\n", body.c_str(), body.size());
 	int len = sprintf(header, "Content-Length: %d\r\n\r\n", body.size());
 

@@ -25,4 +25,8 @@ nlohmann::json ServerCapabilities::dump() {
 	return ret;
 }
 
+ServerCapabilitiesSP ServerCapabilities::mk() {
+	return ServerCapabilitiesSP(new ServerCapabilities());
+}
+
 } /* namespace lls */
