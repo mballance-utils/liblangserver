@@ -126,11 +126,11 @@ int32_t SocketMessageTransport::process(int timeout_ms) {
 
 void SocketMessageTransport::send(const nlohmann::json &msg) {
 	char tmp[64];
-	std::string body = static_cast<std::string>(msg);
-	sprintf(tmp, "Content-Length: %d\r\n\r\n", msg.size());
+	std::string body = msg.dump();
+	sprintf(tmp, "Content-Length: %d\r\n\r\n", body.size());
 
 	::send(m_socket, tmp, strlen(tmp), 0);
-	::send(m_socket, body.c_str(), msg.size(), 0);
+	::send(m_socket, body.c_str(), body.size(), 0);
 
 }
 

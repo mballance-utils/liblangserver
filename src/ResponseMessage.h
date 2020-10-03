@@ -12,6 +12,8 @@
 
 namespace lls {
 
+class ResponseMessage;
+typedef std::shared_ptr<ResponseMessage> ResponseMessageSP;
 class ResponseMessage : public Message {
 public:
 	ResponseMessage();
@@ -20,9 +22,15 @@ public:
 
 	virtual ~ResponseMessage();
 
+	ValSP result() const { return m_result; }
+
+	void result(ValSP r) { m_result = r; }
+
 	virtual void load(const nlohmann::json &msg);
 
 	virtual nlohmann::json dump();
+
+	static ResponseMessageSP mk(ValIntSP id);
 
 protected:
 	ValIntSP				m_id;

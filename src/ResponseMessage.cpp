@@ -42,4 +42,8 @@ nlohmann::json ResponseMessage::dump() {
 	return msg;
 }
 
+ResponseMessageSP ResponseMessage::mk(ValIntSP id) {
+	return ResponseMessageSP(new ResponseMessage(id));
+}
+
 } /* namespace lls */
