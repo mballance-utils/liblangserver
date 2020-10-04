@@ -36,6 +36,15 @@ include_directories(
 file(GLOB LIBLANGSERVER_SRCS src/*.cpp src/*.h)
 	
 add_library(liblangserver  ${LIBLANGSERVER_SRCS})
+
+install(TARGETS liblangserver
+  DESTINATION lib
+  EXPORT liblangserver-targets)
+
+file(GLOB liblangserver_headers src/*.h)
+install(FILES ${liblangservers_headers}
+  DESTINATION "include/liblangserver")
 	
 add_subdirectory(tests)
+
 
