@@ -6,6 +6,7 @@
  */
 
 #include "ValVectorBase.h"
+#include "nlohmann/json.hpp"
 
 namespace lls {
 
@@ -22,6 +23,12 @@ ValVectorBase::ValVectorBase(
 
 ValVectorBase::~ValVectorBase() {
 	// TODO Auto-generated destructor stub
+}
+
+nlohmann::json ValVectorBase::dump() {
+	nlohmann::json msg;
+
+	return msg;
 }
 
 ValVectorBaseSP ValVectorBase::mk(

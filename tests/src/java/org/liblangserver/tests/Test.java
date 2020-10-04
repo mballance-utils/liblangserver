@@ -1,6 +1,9 @@
 package org.liblangserver.tests;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
@@ -8,8 +11,6 @@ import org.eclipse.lsp4j.MessageActionItem;
 import org.eclipse.lsp4j.MessageParams;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.lsp4j.ShowMessageRequestParams;
-import org.eclipse.lsp4j.jsonrpc.Launcher;
-import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
@@ -85,20 +86,84 @@ public class Test {
 	}
 	
 	public static final void main(String args[]) {
-		MyServer server = new MyServer();
-		MyClient client = new MyClient();
+		MyClient client_i = new MyClient();
+		TestClient client = new TestClient(client_i);
 		
-		Launcher<LanguageServer> client_l = LSPLauncher.createClientLauncher(
-				client, 
-				System.in, 
-				System.out);
+		int port = client.start_server();
+		
+		System.out.println("port=" + port);
+		
+		Runtime rt = Runtime.getRuntime();
+		Process p = null;
+		try {
+			p = rt.exec(new String[] {
+				"./tests/testlangserver",
+				"-port",
+				"" + port
+			});
+		} catch (IOException e) {
+			
+		}
+	
+		final InputStream stdin = p.getInputStream();
+		Thread t = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				while (true) {
+					try {
+						byte data[] = new byte[1024];
+						int sz = stdin.read(data, 0, data.length);
+						if (sz > 0) {
+							System.out.write(data, 0, sz);
+						} else {
+							break;
+						}
+					} catch (IOException e) {
+						break;
+					}
+				}
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		t.start();
+		
 
-		InitializeParams params = new InitializeParams();
-		client_l.getRemoteProxy().initialize(params);
-		client_l.getRemoteProxy().initialize(params);
-		client_l.getRemoteProxy().getTextDocumentService();
-		client_l.startListening();
+		System.out.println("--> connect");
+		try {
+			client.connect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("<-- connect");
 		
+		InitializeParams params = new InitializeParams();
+	
+		try {
+			System.out.println("--> initialize");
+			InitializeResult resp = client.getRemoteProxy().initialize(params).get();
+			System.out.println("<-- initialize");
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		System.exit(0);
+//		MyServer server = new MyServer();
+//		
+//		Launcher<LanguageServer> client_l = LSPLauncher.createClientLauncher(
+//				client, 
+//				System.in, 
+//				System.out);
+//
+//		InitializeParams params = new InitializeParams();
+//		client_l.getRemoteProxy().initialize(params);
+//		client_l.getRemoteProxy().initialize(params);
+//		client_l.getRemoteProxy().getTextDocumentService();
+//		client_l.startListening();
+//		
 	}
 
 }

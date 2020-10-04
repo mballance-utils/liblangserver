@@ -27,10 +27,6 @@ public:
 				ValVectorBase::children(idx));
 	}
 
-	virtual void dump(
-			const std::string	&name,
-			nlohmann::json 		&msg);
-
 	static SP mk(const nlohmann::json &msg) {
 		return std::dynamic_pointer_cast<ValVector<T>>(
 				ValVectorBase::mk(

@@ -16,6 +16,8 @@ class ValInt : public Val {
 public:
 	ValInt(int64_t v);
 
+	ValInt(const nlohmann::json &msg);
+
 	virtual ~ValInt();
 
 	int64_t val() const { return m_val; }

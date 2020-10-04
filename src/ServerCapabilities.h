@@ -7,6 +7,8 @@
 
 #pragma once
 #include "Val.h"
+#include "CompletionOptions.h"
+#include "TextDocumentSyncOptions.h"
 
 namespace lls {
 
@@ -20,11 +22,27 @@ public:
 
 	virtual nlohmann::json dump() override;
 
+	TextDocumentSyncOptionsSP textDocumentSync() const {
+		return m_textDocumentSync;
+	}
+
+	void textDocumentSync(TextDocumentSyncOptionsSP o) {
+		m_textDocumentSync = o;
+	}
+
+	CompletionOptionsSP completionProvider() const {
+		return m_completionProvider;
+	}
+
+	void completionProvider(CompletionOptionsSP o) {
+		m_completionProvider = o;
+	}
+
 	static ServerCapabilitiesSP mk();
 
 private:
-	// TextDocumentSyncOptions
-	// CompletionOptions
+	TextDocumentSyncOptionsSP		m_textDocumentSync;
+	CompletionOptionsSP				m_completionProvider;
 	// HoverOptions
 	// SignatureHelpOptions
 	// DeclarationOptions|DeclarationRegistrationOptions

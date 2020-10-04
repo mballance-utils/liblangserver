@@ -22,6 +22,13 @@ ServerCapabilities::~ServerCapabilities() {
 nlohmann::json ServerCapabilities::dump() {
 	nlohmann::json ret;
 
+	if (m_textDocumentSync) {
+		ret["textDocumentSync"] = m_textDocumentSync->dump();
+	}
+	if (m_completionProvider) {
+		ret["completionProvider"] = m_completionProvider->dump();
+	}
+
 	return ret;
 }
 

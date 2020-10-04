@@ -46,10 +46,10 @@ void LangServerMethodHandler::initialize(const nlohmann::json &msg) {
 	ResponseMessageSP resp = ResponseMessage::mk(ValInt::mk(msg["id"]));
 	resp->result(result);
 
-	m_out->send(resp->dump());
-
 	fprintf(stdout, "response: %s\n",
 			resp->dump().dump().c_str());
+	m_out->send(resp->dump());
+
 }
 
 }

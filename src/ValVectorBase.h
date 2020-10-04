@@ -31,6 +31,8 @@ public:
 		return m_children.at(idx);
 	}
 
+	virtual nlohmann::json dump();
+
 	static ValVectorBaseSP mk(
 			std::function<ValSP(const nlohmann::json &)> 	ctor,
 			const nlohmann::json 							&msg);

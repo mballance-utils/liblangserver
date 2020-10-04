@@ -131,7 +131,6 @@ void SocketMessageTransport::send(const nlohmann::json &msg) {
 
 	::send(m_socket, tmp, strlen(tmp), 0);
 	::send(m_socket, body.c_str(), body.size(), 0);
-
 }
 
 void SocketMessageTransport::msgbuf_resize_append(char c) {

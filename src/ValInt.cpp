@@ -14,6 +14,17 @@ ValInt::ValInt(int64_t v) : m_val(v){
 
 }
 
+ValInt::ValInt(const nlohmann::json &msg) {
+	if (msg.is_number()) {
+		m_val = msg;
+	} else if (msg.is_string()) {
+		m_val =std::stoi(msg.get<std::string>());
+	} else {
+		// ERROR
+		m_val = -1;
+	}
+}
+
 ValInt::~ValInt() {
 	// TODO Auto-generated destructor stub
 }
