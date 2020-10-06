@@ -11,7 +11,9 @@
 namespace lls {
 
 RequestMessage::RequestMessage(const nlohmann::json &msg) : Message(msg) {
-	m_id = ValInt::mk(msg["id"]);
+	if (msg.contains("id")) {
+		m_id = ValInt::mk(msg["id"]);
+	}
 	m_method = ValStr::mk(msg["method"]);
 }
 

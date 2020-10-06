@@ -40,6 +40,8 @@ private:
 
 	virtual void initialize(const nlohmann::json &msg);
 
+	virtual void didOpenTextDocument(const nlohmann::json &msg);
+
 private:
 	IMessageTransport							*m_out;
 	ILangServer									*m_srv;

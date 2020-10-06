@@ -18,4 +18,8 @@ BaseLangServer::~BaseLangServer() {
 	// TODO Auto-generated destructor stub
 }
 
+void BaseLangServer::didOpenTextDocument(DidOpenTextDocumentParamsSP params) {
+	//
+}
+
 } /* namespace lls */

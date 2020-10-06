@@ -7,6 +7,7 @@
 
 #include "LangServerMethodHandler.h"
 
+#include "DidOpenTextDocumentParams.h"
 #include "InitializeParams.h"
 #include "ResponseMessage.h"
 #include "InitializeResult.h"
@@ -25,6 +26,9 @@ LangServerMethodHandler::~LangServerMethodHandler() {
 }
 
 void LangServerMethodHandler::register_methods(IRegisterMethod *dispatcher) {
+	dispatcher->register_method("textDocument/didOpen",
+			std::bind(&LangServerMethodHandler::didOpenTextDocument,
+					this, std::placeholders::_1));
 	dispatcher->register_method("initialize",
 			std::bind(&LangServerMethodHandler::initialize,this,std::placeholders::_1));
 }
@@ -34,10 +38,6 @@ void LangServerMethodHandler::send(const nlohmann::json &msg) {
 }
 
 void LangServerMethodHandler::initialize(const nlohmann::json &msg) {
-	for (nlohmann::json::const_iterator it = msg.begin();
-			it!=msg.end(); it++) {
-		fprintf(stdout, "key: %s\n", it.key().c_str());
-	}
 	InitializeParamsSP params(InitializeParams::mk(msg["params"]));
 
 	ServerCapabilitiesSP capabilities = m_srv->initialize(params);
@@ -50,6 +50,21 @@ void LangServerMethodHandler::initialize(const nlohmann::json &msg) {
 			resp->dump().dump().c_str());
 	m_out->send(resp->dump());
 
+}
+
+void LangServerMethodHandler::didOpenTextDocument(const nlohmann::json &msg) {
+
+	fprintf(stdout, "didOpenTextDocument\n");
+	fflush(stdout);
+
+	fprintf(stdout, "--> construct\n");
+	fflush(stdout);
+	DidOpenTextDocumentParamsSP params =
+			DidOpenTextDocumentParams::mk(msg["params"]);
+	fprintf(stdout, "<-- construct\n");
+	fflush(stdout);
+
+	m_srv->didOpenTextDocument(params);
 }
 
 }

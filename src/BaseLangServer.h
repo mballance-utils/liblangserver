@@ -18,6 +18,8 @@ public:
 
 	// virtual ServerCapabilitiesSP initialize(InitializeParamsSP params) override;
 
+	virtual void didOpenTextDocument(DidOpenTextDocumentParamsSP params) override;
+
 };
 
 } /* namespace lls */

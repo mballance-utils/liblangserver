@@ -6,6 +6,7 @@
  */
 
 #pragma once
+#include "DidOpenTextDocumentParams.h"
 #include "InitializeParams.h"
 #include "ServerCapabilities.h"
 
@@ -17,6 +18,8 @@ public:
 	virtual ~ILangServer() { }
 
 	virtual ServerCapabilitiesSP initialize(InitializeParamsSP params) = 0;
+
+	virtual void didOpenTextDocument(DidOpenTextDocumentParamsSP params) = 0;
 
 };
 
