@@ -154,7 +154,7 @@ TEST_F(TestSocketMessageTransport, end_to_end) {
 
 	// Client runs asynchronously
 	ASSERT_EQ(client.start_client([&] (TestClient *t) {
-		RequestMessage msg(1, "initialize");
+		RequestMessage msg(ValInt::mk(1), ValStr::mk(std::string("initialize")));
 		InitializeParamsSP params(InitializeParamsSP(new InitializeParams()));
 
 		params->rootUri(ValStr::mk(std::string("foobar")));

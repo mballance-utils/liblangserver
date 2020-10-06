@@ -13,12 +13,11 @@ namespace lls {
 ValVectorBase::ValVectorBase(
 		std::function<ValSP(const nlohmann::json &)> 	ctor,
 		const nlohmann::json							&msg) {
-	/*
-	for (uint32_t i=0; ; ) {
-		ValSP v = ctor(msg);
+	for (nlohmann::json::const_iterator
+			it=msg.begin(); it!=msg.end(); it++) {
+		ValSP v = ctor(*it);
+		m_children.push_back(v);
 	}
-	 */
-
 }
 
 ValVectorBase::~ValVectorBase() {

@@ -7,8 +7,10 @@
 
 #include "LangServerMethodHandler.h"
 
+#include "DidChangeTextDocumentParams.h"
 #include "DidOpenTextDocumentParams.h"
 #include "InitializeParams.h"
+#include "RequestMessage.h"
 #include "ResponseMessage.h"
 #include "InitializeResult.h"
 #include "nlohmann/json.hpp"
@@ -26,6 +28,9 @@ LangServerMethodHandler::~LangServerMethodHandler() {
 }
 
 void LangServerMethodHandler::register_methods(IRegisterMethod *dispatcher) {
+	dispatcher->register_method("textDocument/didChange",
+			std::bind(&LangServerMethodHandler::didChangeTextDocument,
+					this, std::placeholders::_1));
 	dispatcher->register_method("textDocument/didOpen",
 			std::bind(&LangServerMethodHandler::didOpenTextDocument,
 					this, std::placeholders::_1));
@@ -37,10 +42,16 @@ void LangServerMethodHandler::send(const nlohmann::json &msg) {
 	// Receive a message
 }
 
+void LangServerMethodHandler::publishDiagnostics(PublishDiagnosticsParamsSP params) {
+	RequestMessage msg(0, ValStr::mk(std::string("textDocument/publishDiagnostics")));
+	msg.params(params);
+	m_out->send(msg.dump());
+}
+
 void LangServerMethodHandler::initialize(const nlohmann::json &msg) {
 	InitializeParamsSP params(InitializeParams::mk(msg["params"]));
 
-	ServerCapabilitiesSP capabilities = m_srv->initialize(params);
+	ServerCapabilitiesSP capabilities = m_srv->initialize(this, params);
 	InitializeResultSP result = InitializeResult::mk(capabilities);
 
 	ResponseMessageSP resp = ResponseMessage::mk(ValInt::mk(msg["id"]));
@@ -50,6 +61,18 @@ void LangServerMethodHandler::initialize(const nlohmann::json &msg) {
 			resp->dump().dump().c_str());
 	m_out->send(resp->dump());
 
+}
+
+void LangServerMethodHandler::didChangeTextDocument(const nlohmann::json &msg) {
+	fprintf(stdout, "--> didChangetextDocument\n");
+	fflush(stdout);
+
+	DidChangeTextDocumentParamsSP params =
+			DidChangeTextDocumentParams::mk(msg["params"]);
+	m_srv->didChangeTextDocument(params);
+
+	fprintf(stdout, "<-- didChangetextDocument\n");
+	fflush(stdout);
 }
 
 void LangServerMethodHandler::didOpenTextDocument(const nlohmann::json &msg) {

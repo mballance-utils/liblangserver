@@ -17,7 +17,7 @@ class RequestMessage : public Message {
 public:
 	RequestMessage(const nlohmann::json &msg);
 
-	RequestMessage(int32_t id, const std::string &method);
+	RequestMessage(ValIntSP id, ValStrSP method);
 
 	virtual ~RequestMessage();
 

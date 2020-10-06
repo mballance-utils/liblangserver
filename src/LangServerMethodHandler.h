@@ -10,6 +10,7 @@
 #include <functional>
 #include <string>
 
+#include "IClientConnection.h"
 #include "ILangServer.h"
 #include "IMessageTransport.h"
 #include "IRegisterMethod.h"
@@ -20,7 +21,9 @@ namespace lls {
 /**
  * Implements processing and handling of LSP messages
  */
-class LangServerMethodHandler : public virtual IMessageTransport {
+class LangServerMethodHandler :
+		public virtual IMessageTransport,
+		public virtual IClientConnection {
 public:
 	LangServerMethodHandler(
 			IMessageTransport 	*out,
@@ -36,9 +39,13 @@ public:
 	 */
 	virtual void send(const nlohmann::json &msg) override;
 
+	virtual void publishDiagnostics(PublishDiagnosticsParamsSP params) override;
+
 private:
 
 	virtual void initialize(const nlohmann::json &msg);
+
+	virtual void didChangeTextDocument(const nlohmann::json &msg);
 
 	virtual void didOpenTextDocument(const nlohmann::json &msg);
 

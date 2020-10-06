@@ -10,6 +10,11 @@
 
 namespace lls {
 
+Position::Position(const nlohmann::json &msg) {
+	m_line = ValInt::mk(msg["line"]);
+	m_character = ValInt::mk(msg["character"]);
+}
+
 Position::Position(
 		ValIntSP			line,
 		ValIntSP			character) :
@@ -28,6 +33,14 @@ nlohmann::json Position::dump() {
 	msg["character"] = m_character->dump();
 
 	return msg;
+}
+
+PositionSP Position::mk(const nlohmann::json &msg) {
+	return PositionSP(new Position(msg));
+}
+
+PositionSP Position::mk(ValIntSP line, ValIntSP character) {
+	return PositionSP(new Position(line, character));
 }
 
 

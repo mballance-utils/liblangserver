@@ -10,6 +10,11 @@
 
 namespace lls {
 
+Range::Range(const nlohmann::json &msg) {
+	m_start = Position::mk(msg["start"]);
+	m_end = Position::mk(msg["end"]);
+}
+
 Range::Range(
 		PositionSP		start,
 		PositionSP		end) : m_start(start), m_end(end) {
@@ -27,6 +32,10 @@ nlohmann::json Range::dump() {
 	msg["end"] = m_end->dump();
 
 	return msg;
+}
+
+RangeSP Range::mk(const nlohmann::json &msg) {
+	return RangeSP(new Range(msg));
 }
 
 }

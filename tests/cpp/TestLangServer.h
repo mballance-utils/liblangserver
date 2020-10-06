@@ -14,7 +14,9 @@ public:
 
 	virtual ~TestLangServer();
 
-	virtual lls::ServerCapabilitiesSP initialize(lls::InitializeParamsSP params) override;
+	virtual lls::ServerCapabilitiesSP initialize(
+			lls::IClientConnection		*connection,
+			lls::InitializeParamsSP params) override;
 
 
 };

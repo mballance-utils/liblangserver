@@ -28,6 +28,14 @@ public:
 
 	void languageId(ValStrSP v) { m_languageId = v; }
 
+	ValIntSP version() const { return m_version; }
+
+	void version(ValIntSP v) { m_version = v; }
+
+	ValStrSP text() const { return m_text; }
+
+	void text(ValStrSP v) { m_text = v; }
+
 	static TextDocumentItemSP mk(const nlohmann::json &msg);
 
 

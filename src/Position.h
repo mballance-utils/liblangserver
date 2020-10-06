@@ -15,6 +15,8 @@ class Position;
 typedef std::shared_ptr<Position> PositionSP;
 class Position : public Val {
 public:
+	Position(const nlohmann::json &msg);
+
 	Position(
 			ValIntSP		line,
 			ValIntSP		character);
@@ -34,6 +36,8 @@ public:
 	static PositionSP mk(
 			ValIntSP line,
 			ValIntSP character);
+
+	static PositionSP mk(const nlohmann::json &msg);
 
 private:
 	ValIntSP			m_line;

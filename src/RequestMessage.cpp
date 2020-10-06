@@ -17,9 +17,9 @@ RequestMessage::RequestMessage(const nlohmann::json &msg) : Message(msg) {
 	m_method = ValStr::mk(msg["method"]);
 }
 
-RequestMessage::RequestMessage(int32_t id, const std::string &method) {
-	m_id = ValInt::mk(id);
-	m_method = ValStr::mk(method);
+RequestMessage::RequestMessage(ValIntSP id, ValStrSP method) {
+	m_id = id;
+	m_method = method;
 }
 
 RequestMessage::~RequestMessage() {

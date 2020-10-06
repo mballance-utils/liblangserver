@@ -18,6 +18,10 @@ BaseLangServer::~BaseLangServer() {
 	// TODO Auto-generated destructor stub
 }
 
+void BaseLangServer::didChangeTextDocument(DidChangeTextDocumentParamsSP params) {
+
+}
+
 void BaseLangServer::didOpenTextDocument(DidOpenTextDocumentParamsSP params) {
 	//
 }

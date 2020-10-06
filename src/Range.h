@@ -15,6 +15,8 @@ class Range;
 typedef std::shared_ptr<Range> RangeSP;
 class Range {
 public:
+	Range(const nlohmann::json &msg);
+
 	Range(
 		PositionSP		start,
 		PositionSP		end);
@@ -32,6 +34,8 @@ public:
 	virtual nlohmann::json dump();
 
 	static RangeSP mk(PositionSP start, PositionSP end);
+
+	static RangeSP mk(const nlohmann::json &msg);
 
 private:
 	PositionSP			m_start;

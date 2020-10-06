@@ -19,6 +19,7 @@ TestLangServer::~TestLangServer() {
 
 
 lls::ServerCapabilitiesSP TestLangServer::initialize(
+		lls::IClientConnection	*connection,
 		lls::InitializeParamsSP params) {
 	lls::ServerCapabilitiesSP ret = lls::ServerCapabilities::mk();
 
