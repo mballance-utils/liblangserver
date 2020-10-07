@@ -47,6 +47,12 @@ public:
 		return m_diagnostics;
 	}
 
+	virtual nlohmann::json dump();
+
+	static PublishDiagnosticsParamsSP mk(
+			ValStrSP 					uri,
+			ValVector<Diagnostic>::SP 	diagnostics);
+
 private:
 	ValStrSP					m_uri;
 	ValVector<Diagnostic>::SP	m_diagnostics;

@@ -49,6 +49,8 @@ public:
 
 	static ValStrSP mk(const std::string &v);
 
+	static ValStrSP mk(const char *v);
+
 private:
 	std::string				m_val;
 };

@@ -61,9 +61,15 @@ void LangServerMethodHandler::send(const nlohmann::json &msg) {
 }
 
 void LangServerMethodHandler::publishDiagnostics(PublishDiagnosticsParamsSP params) {
+	fprintf(stdout, "--> publishDiagnostics\n");
+	fflush(stdout);
 	RequestMessage msg(0, ValStr::mk(std::string("textDocument/publishDiagnostics")));
 	msg.params(params);
+	fprintf(stdout, " -- message: %s\n", msg.dump().dump().c_str());
+	fflush(stdout);
 	m_out->send(msg.dump());
+	fprintf(stdout, "<-- publishDiagnostics\n");
+	fflush(stdout);
 }
 
 void LangServerMethodHandler::initialize(const nlohmann::json &msg) {

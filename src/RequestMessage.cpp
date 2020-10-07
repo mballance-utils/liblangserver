@@ -52,7 +52,9 @@ void RequestMessage::load(const nlohmann::json &msg) {
 
 void RequestMessage::dump(nlohmann::json &msg) {
 	Message::dump(msg);
-	msg["id"] = m_id->dump();
+	if (m_id) {
+		msg["id"] = m_id->dump();
+	}
 	msg["method"] = m_method->dump();
 	msg["params"] = (m_params)?m_params->dump():nlohmann::json(nullptr);
 }

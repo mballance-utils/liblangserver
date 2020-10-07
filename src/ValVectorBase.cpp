@@ -28,6 +28,10 @@
 
 namespace lls {
 
+ValVectorBase::ValVectorBase() {
+
+}
+
 ValVectorBase::ValVectorBase(
 		std::function<ValSP(const nlohmann::json &)> 	ctor,
 		const nlohmann::json							&msg) {
@@ -43,7 +47,12 @@ ValVectorBase::~ValVectorBase() {
 }
 
 nlohmann::json ValVectorBase::dump() {
-	nlohmann::json msg;
+	nlohmann::json msg(nlohmann::json::value_type::array({}));
+
+	for (std::vector<ValSP>::const_iterator
+			it=m_children.begin(); it!=m_children.end(); it++) {
+		msg.push_back((*it)->dump());
+	}
 
 	return msg;
 }
@@ -52,6 +61,10 @@ ValVectorBaseSP ValVectorBase::mk(
 			std::function<ValSP(const nlohmann::json &)> 	ctor,
 			const nlohmann::json 							&msg) {
 	return ValVectorBaseSP(new ValVectorBase(ctor, msg));
+}
+
+ValVectorBaseSP ValVectorBase::mk() {
+	return ValVectorBaseSP(new ValVectorBase());
 }
 
 } /* namespace lls */

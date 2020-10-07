@@ -45,12 +45,20 @@ public:
 				ValVectorBase::children(idx));
 	}
 
+	void push_back(std::shared_ptr<T> it) {
+		ValVectorBase::push_back(it);
+	}
+
 	static SP mk(const nlohmann::json &msg) {
 		return std::dynamic_pointer_cast<ValVector<T>>(
 				ValVectorBase::mk(
 						[&](const nlohmann::json &sm) {
 							return ValSP(new T(sm));
 						}, msg));
+	}
+
+	static SP mk() {
+		return SP(new ValVector());
 	}
 
 };

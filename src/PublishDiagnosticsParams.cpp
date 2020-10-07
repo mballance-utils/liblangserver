@@ -24,6 +24,7 @@
  */
 
 #include "PublishDiagnosticsParams.h"
+#include "nlohmann/json.hpp"
 
 namespace lls {
 
@@ -36,6 +37,22 @@ PublishDiagnosticsParams::PublishDiagnosticsParams(
 
 PublishDiagnosticsParams::~PublishDiagnosticsParams() {
 	// TODO Auto-generated destructor stub
+}
+
+PublishDiagnosticsParamsSP PublishDiagnosticsParams::mk(
+			ValStrSP 					uri,
+			ValVector<Diagnostic>::SP 	diagnostics) {
+	return PublishDiagnosticsParamsSP(
+			new PublishDiagnosticsParams(uri, diagnostics));
+}
+
+nlohmann::json PublishDiagnosticsParams::dump() {
+	nlohmann::json msg;
+
+	msg["uri"] = m_uri->dump();
+	msg["diagnostics"] = m_diagnostics->dump();
+
+	return msg;
 }
 
 } /* namespace lls */

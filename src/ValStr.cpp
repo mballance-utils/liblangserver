@@ -52,4 +52,8 @@ ValStrSP ValStr::mk(const std::string &v) {
 	return ValStrSP(new ValStr(v));
 }
 
+ValStrSP ValStr::mk(const char *v) {
+	return ValStrSP(new ValStr(std::string(v)));
+}
+
 } /* namespace lls */

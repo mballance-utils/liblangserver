@@ -57,4 +57,10 @@ nlohmann::json Diagnostic::dump() {
 	return msg;
 }
 
+DiagnosticSP Diagnostic::mk(
+			RangeSP			range,
+			ValStrSP		message) {
+	return DiagnosticSP(new Diagnostic(range, message));
+}
+
 }

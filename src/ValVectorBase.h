@@ -49,11 +49,17 @@ public:
 		return m_children.at(idx);
 	}
 
+	void push_back(ValSP it) {
+		m_children.push_back(it);
+	}
+
 	virtual nlohmann::json dump();
 
 	static ValVectorBaseSP mk(
 			std::function<ValSP(const nlohmann::json &)> 	ctor,
 			const nlohmann::json 							&msg);
+
+	static ValVectorBaseSP mk();
 
 private:
 	std::vector<ValSP>				m_children;

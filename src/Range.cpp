@@ -52,6 +52,10 @@ nlohmann::json Range::dump() {
 	return msg;
 }
 
+RangeSP Range::mk(PositionSP start, PositionSP end) {
+	return RangeSP(new Range(start, end));
+}
+
 RangeSP Range::mk(const nlohmann::json &msg) {
 	return RangeSP(new Range(msg));
 }
