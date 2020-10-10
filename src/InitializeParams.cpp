@@ -46,7 +46,7 @@ InitializeParams::InitializeParams(const nlohmann::json &msg) :
 	}
 
 	if (msg.contains("rootUri") && !msg["rootUri"].is_null()) {
-		m_rootPath = ValStr::mk(msg["rootUri"]);
+		m_rootUri = ValStr::mk(msg["rootUri"]);
 	}
 
 	if (msg.contains("initializeOptions")) {
