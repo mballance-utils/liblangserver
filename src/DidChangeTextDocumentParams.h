@@ -43,6 +43,10 @@ public:
 		return m_textDocument;
 	}
 
+	ValVector<TextDocumentContentChangeEvent>::SP contentChanges() const {
+		return m_contentChanges;
+	}
+
 	static DidChangeTextDocumentParamsSP mk(const nlohmann::json &msg);
 
 private:

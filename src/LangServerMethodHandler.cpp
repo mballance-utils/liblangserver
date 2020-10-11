@@ -33,6 +33,27 @@
 #include "InitializeResult.h"
 #include "nlohmann/json.hpp"
 
+#undef EN_DEBUG_LANG_SERVER_METHOD_HANDLER
+
+#ifdef EN_DEBUG_LANG_SERVER_METHOD_HANDLER
+#define DEBUG_ENTER(fmt, ...) \
+	fprintf(stdout, "--> LangServerMethodHandler::" fmt, ##__VA_ARGS__); \
+	fprintf(stdout, "\n"); \
+	fflush(stdout);
+#define DEBUG_LEAVE(fmt, ...) \
+	fprintf(stdout, "<-- LangServerMethodHandler::" fmt, ##__VA_ARGS__); \
+	fprintf(stdout, "\n"); \
+	fflush(stdout);
+#define DEBUG_MSG(fmt, ...) \
+	fprintf(stdout, "LangServerMethodHandler:: " fmt, ##__VA_ARGS__); \
+	fprintf(stdout, "\n"); \
+	fflush(stdout);
+#else
+#define DEBUG_ENTER(fmt, ...)
+#define DEBUG_LEAVE(fmt, ...)
+#define DEBUG_MSG(fmt, ...)
+#endif
+
 namespace lls {
 
 LangServerMethodHandler::LangServerMethodHandler(
@@ -61,18 +82,16 @@ void LangServerMethodHandler::send(const nlohmann::json &msg) {
 }
 
 void LangServerMethodHandler::publishDiagnostics(PublishDiagnosticsParamsSP params) {
-	fprintf(stdout, "--> publishDiagnostics\n");
-	fflush(stdout);
+	DEBUG_ENTER("publishDiagnostics");
 	RequestMessage msg(0, ValStr::mk(std::string("textDocument/publishDiagnostics")));
 	msg.params(params);
-	fprintf(stdout, " -- message: %s\n", msg.dump().dump().c_str());
-	fflush(stdout);
+	DEBUG_MSG(" -- message: %s", msg.dump().dump().c_str());
 	m_out->send(msg.dump());
-	fprintf(stdout, "<-- publishDiagnostics\n");
-	fflush(stdout);
+	DEBUG_LEAVE("publishDiagnostics");
 }
 
 void LangServerMethodHandler::initialize(const nlohmann::json &msg) {
+	DEBUG_ENTER("initialize");
 	InitializeParamsSP params(InitializeParams::mk(msg["params"]));
 
 	ServerCapabilitiesSP capabilities = m_srv->initialize(this, params);
@@ -81,37 +100,31 @@ void LangServerMethodHandler::initialize(const nlohmann::json &msg) {
 	ResponseMessageSP resp = ResponseMessage::mk(ValInt::mk(msg["id"]));
 	resp->result(result);
 
-	fprintf(stdout, "response: %s\n",
-			resp->dump().dump().c_str());
+	DEBUG_MSG("response: %s", resp->dump().dump().c_str());
+
 	m_out->send(resp->dump());
 
+	DEBUG_LEAVE("initialize");
 }
 
 void LangServerMethodHandler::didChangeTextDocument(const nlohmann::json &msg) {
-	fprintf(stdout, "--> didChangetextDocument\n");
-	fflush(stdout);
+	DEBUG_ENTER("didChangetextDocument");
 
 	DidChangeTextDocumentParamsSP params =
 			DidChangeTextDocumentParams::mk(msg["params"]);
 	m_srv->didChangeTextDocument(params);
 
-	fprintf(stdout, "<-- didChangetextDocument\n");
-	fflush(stdout);
+	DEBUG_LEAVE("didChangetextDocument");
 }
 
 void LangServerMethodHandler::didOpenTextDocument(const nlohmann::json &msg) {
+	DEBUG_ENTER("didOpenTextDocument");
 
-	fprintf(stdout, "didOpenTextDocument\n");
-	fflush(stdout);
-
-	fprintf(stdout, "--> construct\n");
-	fflush(stdout);
 	DidOpenTextDocumentParamsSP params =
 			DidOpenTextDocumentParams::mk(msg["params"]);
-	fprintf(stdout, "<-- construct\n");
-	fflush(stdout);
 
 	m_srv->didOpenTextDocument(params);
+	DEBUG_LEAVE("didOpenTextDocument");
 }
 
 }

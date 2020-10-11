@@ -26,6 +26,27 @@
 #include "MessageDispatcher.h"
 #include "nlohmann/json.hpp"
 
+#undef EN_DEBUG_MESSAGE_DISPATCHER
+
+#ifdef EN_DEBUG_MESSAGE_DISPATCHER
+#define DEBUG_ENTER(fmt, ...) \
+	fprintf(stdout, "--> MessageDispatcher::" fmt, ##__VA_ARGS__); \
+	fprintf(stdout, "\n"); \
+	fflush(stdout);
+#define DEBUG_LEAVE(fmt, ...) \
+	fprintf(stdout, "<-- MessageDispatcher::" fmt, ##__VA_ARGS__); \
+	fprintf(stdout, "\n"); \
+	fflush(stdout);
+#define DEBUG_MSG(fmt, ...) \
+	fprintf(stdout, "MessageDispatcher:: " fmt, ##__VA_ARGS__); \
+	fprintf(stdout, "\n"); \
+	fflush(stdout);
+#else
+#define DEBUG_ENTER(fmt, ...)
+#define DEBUG_LEAVE(fmt, ...)
+#define DEBUG_MSG(fmt, ...)
+#endif
+
 namespace lls {
 
 MessageDispatcher::MessageDispatcher() {
@@ -44,17 +65,17 @@ void MessageDispatcher::register_method(
 }
 
 void MessageDispatcher::send(const nlohmann::json &msg) {
+	DEBUG_ENTER("send");
 	std::map<std::string,std::function<void(const nlohmann::json&)>>::iterator it;
 
 	if ((it=m_method_m.find(msg["method"])) != m_method_m.end()) {
-		fprintf(stdout, "==> calling method impl\n");
-		fflush(stdout);
+		DEBUG_MSG("==> calling method impl");
 		it->second(msg);
-		fprintf(stdout, "<== calling method impl\n");
-		fflush(stdout);
+		DEBUG_MSG("<== calling method impl");
 	} else {
 		// Send back a response (?)
 	}
+	DEBUG_LEAVE("send");
 }
 
 } /* namespace lls */

@@ -53,6 +53,10 @@ public:
 		m_children.push_back(it);
 	}
 
+	uint32_t size() const {
+		return m_children.size();
+	}
+
 	virtual nlohmann::json dump();
 
 	static ValVectorBaseSP mk(

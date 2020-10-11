@@ -31,6 +31,27 @@
 #include <sys/socket.h>
 #include "nlohmann/json.hpp"
 
+#undef EN_DEBUG_SOCKET_MESSAGE_TRANSPORT
+
+#ifdef EN_DEBUG_SOCKET_MESSAGE_TRANSPORT
+#define DEBUG_ENTER(fmt, ...) \
+	fprintf(stdout, "--> SocketMessageTransport::" fmt, ##__VA_ARGS__); \
+	fprintf(stdout, "\n"); \
+	fflush(stdout);
+#define DEBUG_LEAVE(fmt, ...) \
+	fprintf(stdout, "<-- SocketMessageTransport::" fmt, ##__VA_ARGS__); \
+	fprintf(stdout, "\n"); \
+	fflush(stdout);
+#define DEBUG_MSG(fmt, ...) \
+	fprintf(stdout, "SocketMessageTransport:: " fmt, ##__VA_ARGS__); \
+	fprintf(stdout, "\n"); \
+	fflush(stdout);
+#else
+#define DEBUG_ENTER(fmt, ...)
+#define DEBUG_LEAVE(fmt, ...)
+#define DEBUG_MSG(fmt, ...)
+#endif
+
 namespace lls {
 
 SocketMessageTransport::SocketMessageTransport(int32_t socket) :
@@ -57,22 +78,24 @@ int32_t SocketMessageTransport::process(int timeout_ms) {
 	int32_t sz;
 	int32_t ret = 0;
 
+	DEBUG_ENTER("process");
+
 	// Poll for data
 
 	while (true) {
 
 		sz = ::recv(m_socket, tmp, 1024, 0);
 
-		fprintf(stdout, "sz=%d\n", sz);
+		DEBUG_MSG("sz=%d", sz);
 
 		if (sz <= 0) {
-			fprintf(stdout, "sz=%d errno=%d\n", sz, errno);
+			DEBUG_MSG("sz=%d errno=%d", sz, errno);
 			break;
 		} else {
 			ret = 1;
 		}
 
-		fprintf(stdout, "received %d bytes\n", sz);
+		DEBUG_MSG("received %d bytes", sz);
 
 		// Process data
 		for (uint32_t i=0; i<sz; i++) {
@@ -93,13 +116,13 @@ int32_t SocketMessageTransport::process(int timeout_ms) {
 				if (m_msgbuf_idx == 0 && isspace(tmp[i])) {
 					// Skip leading whitespace
 				} else {
-					fprintf(stdout, "State 1: append %c\n", tmp[i]);
+					DEBUG_MSG("State 1: append %c", tmp[i]);
 					msgbuf_append(tmp[i]);
 					if (isspace(tmp[i])) {
 						msgbuf_append(0);
-						fprintf(stdout, "header=%s\n", m_msgbuf);
+						DEBUG_MSG("header=%s", m_msgbuf);
 						m_msg_length = strtoul(m_msgbuf, 0, 10);
-						fprintf(stdout, "len=%d\n", m_msg_length);
+						DEBUG_MSG("len=%d", m_msg_length);
 						// Reset the buffer to collect the payload
 						m_msgbuf_idx = 0;
 						m_msg_state = 2;
@@ -115,7 +138,7 @@ int32_t SocketMessageTransport::process(int timeout_ms) {
 					msgbuf_append(tmp[i]);
 					if (m_msgbuf_idx >= m_msg_length) {
 						msgbuf_append(0);
-						fprintf(stdout, "Received message: \"%s\"\n", m_msgbuf);
+						DEBUG_MSG("Received message: \"%s\"", m_msgbuf);
 						nlohmann::json msg;
 						try {
 							msg = nlohmann::json::parse(m_msgbuf);
@@ -138,7 +161,7 @@ int32_t SocketMessageTransport::process(int timeout_ms) {
 		}
 	}
 
-	fprintf(stdout, "return ret=%d\n", ret);
+	DEBUG_LEAVE("process %d", ret);
 	return ret;
 }
 

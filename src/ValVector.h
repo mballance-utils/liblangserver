@@ -35,14 +35,24 @@ public:
 
 	ValVector() { }
 
+	ValVector(
+			std::function<std::shared_ptr<T>(const nlohmann::json &)> 	ctor,
+			const nlohmann::json 										&msg) :
+			ValVectorBase(ctor, msg) {
+
+	}
+
 	const std::vector<std::shared_ptr<T>> &children() const {
 		return std::dynamic_pointer_cast<std::vector<std::shared_ptr<T>>>(
 				ValVectorBase::children());
 	}
 
 	std::shared_ptr<T> children(uint32_t idx) const {
-		return std::dynamic_pointer_cast<std::shared_ptr<T>>(
-				ValVectorBase::children(idx));
+		return std::dynamic_pointer_cast<T>(ValVectorBase::children(idx));
+	}
+
+	std::shared_ptr<T> at(uint32_t idx) const {
+		return std::dynamic_pointer_cast<T>(ValVectorBase::children(idx));
 	}
 
 	void push_back(std::shared_ptr<T> it) {
@@ -50,11 +60,10 @@ public:
 	}
 
 	static SP mk(const nlohmann::json &msg) {
-		return std::dynamic_pointer_cast<ValVector<T>>(
-				ValVectorBase::mk(
-						[&](const nlohmann::json &sm) {
-							return ValSP(new T(sm));
-						}, msg));
+		SP ret(new ValVector([&](const nlohmann::json &sm) {
+			return std::shared_ptr<T>(new T(sm));
+		}, msg));
+		return ret;
 	}
 
 	static SP mk() {
