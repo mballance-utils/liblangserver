@@ -25,12 +25,17 @@
 
 #include "TestServer.h"
 #include <stdio.h>
+#ifndef _WIN32
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <string.h>
 #include <unistd.h>
 #include <pthread.h>
+#else
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#endif
+#include <string.h>
 
 TestServer::TestServer() : m_serv_sock(-1) {
 	// TODO Auto-generated constructor stub
@@ -67,7 +72,7 @@ int32_t TestServer::start() {
 int32_t TestServer::accept() {
 	struct sockaddr_in serv_addr;
 
-	unsigned int clilen = sizeof(serv_addr);
+	int clilen = sizeof(serv_addr);
 	int servfd = ::accept(m_serv_sock, (struct sockaddr *)&serv_addr, &clilen);
 
 	fprintf(stdout, "connected\n");

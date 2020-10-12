@@ -25,10 +25,14 @@
 #include <string>
 #include <vector>
 
+#ifndef _WIN32
 #include <pthread.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
+#else
+#include <winsock2.h>
+#endif
 #include <string.h>
 
 #include "MessageDispatcher.h"

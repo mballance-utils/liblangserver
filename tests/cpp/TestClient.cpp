@@ -24,12 +24,16 @@
  */
 
 #include "TestClient.h"
+#ifndef _WIN32
 #include <pthread.h>
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <string.h>
 #include <unistd.h>
+#else
+#include <winsock2.h>
+#endif
+#include <string.h>
 #include "nlohmann/json.hpp"
 
 TestClient::TestClient(int32_t port) :
@@ -62,18 +66,27 @@ int32_t TestClient::start_client(std::function<void (TestClient*)> client) {
 	fprintf(stdout, "connected %d\n", m_sock);
 	fflush(stdout);
 
+#ifndef _WIN32
 	if (pthread_create(&m_thread, 0, &TestClient::thread_main, this) != 0) {
 		return -1;
 	}
+#endif
 
 	return 0;
 }
 
 int32_t TestClient::close() {
+#ifndef _WIN32
 	pthread_join(m_thread, 0);
+#endif
 
 	if (m_sock != -1) {
-		::close(m_sock);
+#ifdef _WIN32
+		::closesocket(
+#else
+		::close(
+#endif
+				m_sock);
 	}
 
 	return 0;
@@ -95,7 +108,12 @@ void *TestClient::thread_main(void *ud) {
 	t->m_client(t);
 
 	if (t->m_close_on_complete) {
-		::close(t->m_sock);
+#ifndef _WIN32
+		::close(
+#else
+		::closesocket(
+#endif
+				t->m_sock);
 		t->m_sock = -1;
 	}
 	return 0;

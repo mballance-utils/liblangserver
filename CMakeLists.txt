@@ -14,24 +14,29 @@ if (NOT PACKAGES_DIR)
   set(PACKAGES_DIR ${CMAKE_SOURCE_DIR}/packages)
 endif()
 
-# TODO: make conditional on developing the package
-enable_testing()
 
 ExternalProject_Add(GOOGLETEST
 	PREFIX googletest
 	SOURCE_DIR "${PACKAGES_DIR}/googletest"
     CMAKE_CACHE_ARGS
     -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_BINARY_DIR}/googletest
-	-DCMAKE_C_COMPILER:STRING=${CMAKE_C_COMPILER}
-	-DCMAKE_CXX_COMPILER:STRING=${CMAKE_CXX_COMPILER}
-	-DCMAKE_C_COMPILER_ID:STRING=${CMAKE_C_COMPILER_ID}
-	-DCMAKE_CXX_COMPILER_ID:STRING=${CMAKE_CXX_COMPILER_ID}
-	-DCMAKE_SYSTEM_NAME:STRING=${CMAKE_SYSTEM_NAME}
 	)
 	
 include_directories(
 	${PACKAGES_DIR}/json/include
 	)
+	
+set(CompilerFlags
+        CMAKE_CXX_FLAGS
+        CMAKE_CXX_FLAGS_DEBUG
+        CMAKE_CXX_FLAGS_RELEASE
+        CMAKE_C_FLAGS
+        CMAKE_C_FLAGS_DEBUG
+        CMAKE_C_FLAGS_RELEASE
+        )
+foreach(CompilerFlag ${CompilerFlags})
+  string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+endforeach()
 	
 file(GLOB LIBLANGSERVER_SRCS src/*.cpp src/*.h)
 	
@@ -45,6 +50,10 @@ file(GLOB liblangserver_headers src/*.h)
 install(FILES ${liblangservers_headers}
   DESTINATION "include/liblangserver")
 	
-add_subdirectory(tests)
+# TODO: make conditional on developing the package
+if (NOT WIN32)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
 
 
