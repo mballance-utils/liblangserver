@@ -28,18 +28,22 @@
 #include "SocketMessageTransport.h"
 #include "TestLangServer.h"
 #include <stdio.h>
+#ifndef _WIN32
 #include <sys/socket.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <string.h>
 #include <unistd.h>
 #include <pthread.h>
+#else
+#include <winsock2.h>
+#endif
+#include <string.h>
 
 int main(int argc, char **argv) {
 	int32_t port = -1;
 	int32_t sock;
 
-	for (uint32_t i=1; i<argc; i++) {
+	for (int32_t i=1; i<argc; i++) {
 		if (argv[i][0] == '-') {
 			if (!strcmp(argv[i], "-port")) {
 				i++;

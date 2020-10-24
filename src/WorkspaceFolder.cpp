@@ -38,7 +38,9 @@ WorkspaceFolder::~WorkspaceFolder() {
 }
 
 nlohmann::json WorkspaceFolder::dump() {
-	;
+	nlohmann::json msg;
+
+	return msg;
 }
 
 WorkspaceFolderSP WorkspaceFolder::mk(const nlohmann::json &msg) {

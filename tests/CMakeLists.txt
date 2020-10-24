@@ -14,15 +14,26 @@ link_directories(
 #********************************************************************
 add_executable(liblangserver_testmain ${TEST_SRCS})
 add_dependencies(liblangserver_testmain GOOGLETEST)
+
+if (WIN32)
+  list(APPEND LIBLANGSERVER_TESTMAIN_LIBS gtestd gtest_maind)	
+else()
+  list(APPEND LIBLANGSERVER_TESTMAIN_LIBS gtest gtest_main)	
+endif()
+
+list(APPEND LIBLANGSERVER_TESTMAIN_LIBS liblangserver)	
+
+if (WIN32)
+  list(APPEND LIBLANGSERVER_TESTMAIN_LIBS ws2_32)	
+else()
+  list(APPEND LIBLANGSERVER_TESTMAIN_LIBS pthread)	
+endif()
+
 target_include_directories(liblangserver_testmain PRIVATE
 	${CMAKE_BINARY_DIR}/googletest/include
 	${PACKAGES_DIR}/googletest/googletest/include
 	${CMAKE_CURRENT_SOURCE_DIR}/../src)
-target_link_libraries(liblangserver_testmain 
-	gtest 
-	gtest_main 
-	liblangserver
-	pthread)
+target_link_libraries(liblangserver_testmain ${LIBLANGSERVER_TESTMAIN_LIBS})
 
 add_test(
 	NAME unit
@@ -43,9 +54,15 @@ target_include_directories(testlangserver PRIVATE
 	${CMAKE_CURRENT_SOURCE_DIR}/cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/../src)
 
-target_link_libraries(testlangserver
-	liblangserver
-	pthread)
+list(APPEND TESTLANGSERVER_LIBS liblangserver)	
+
+if (WIN32)
+  list(APPEND TESTLANGSERVER_LIBS ws2_32)
+else()
+  list(APPEND TESTLANGSERVER_LIBS pthread)
+endif()
+
+target_link_libraries(testlangserver ${TESTLANGSERVER_LIBS})
 
 #********************************************************************
 #* JUnit unit tests

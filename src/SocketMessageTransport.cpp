@@ -28,7 +28,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
+#ifndef _WIN32
 #include <sys/socket.h>
+#else
+#include <winsock.h>
+#endif
 #include "nlohmann/json.hpp"
 
 #undef EN_DEBUG_SOCKET_MESSAGE_TRANSPORT
@@ -98,7 +102,7 @@ int32_t SocketMessageTransport::process(int timeout_ms) {
 		DEBUG_MSG("received %d bytes", sz);
 
 		// Process data
-		for (uint32_t i=0; i<sz; i++) {
+		for (int32_t i=0; i<sz; i++) {
 			switch (m_msg_state) {
 			case 0: { // Waiting for a header
 				if (tmp[i] == HEADER_PREFIX.at(m_msgbuf_idx)) {

@@ -26,7 +26,9 @@
 #pragma once
 #include <stdint.h>
 #include <functional>
+#ifndef _WIN32
 #include <pthread.h>
+#endif
 #include "IMessageTransport.h"
 
 class TestClient : public lls::IMessageTransport {
@@ -47,7 +49,9 @@ private:
 private:
 	int32_t									m_port;
 	int32_t									m_sock;
+#ifndef _WIN32
 	pthread_t								m_thread;
+#endif
 	std::function<void(TestClient*)>		m_client;
 	bool									m_close_on_complete;
 };
