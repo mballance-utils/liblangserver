@@ -56,6 +56,14 @@ public:
 		m_completionProvider = o;
 	}
 
+	ValSP documentSymbolProvider() const {
+		return m_documentSymbolProvider;
+	}
+
+	void documentSymbolProvider(ValSP v) {
+		m_documentSymbolProvider = v;
+	}
+
 	static ServerCapabilitiesSP mk();
 
 private:
@@ -67,6 +75,8 @@ private:
 	// DefinitionOptions
 	// TypeDefinitionOptions|TypeDefinitionRegistrationOptions
 	//
+	// boolean | DocumentSymbolOptions;
+	ValSP							m_documentSymbolProvider;
 
 
 };

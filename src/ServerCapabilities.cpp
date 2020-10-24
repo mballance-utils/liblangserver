@@ -46,6 +46,9 @@ nlohmann::json ServerCapabilities::dump() {
 	if (m_completionProvider) {
 		ret["completionProvider"] = m_completionProvider->dump();
 	}
+	if (m_documentSymbolProvider) {
+		ret["documentSymbolProvider"] = m_documentSymbolProvider->dump();
+	}
 
 	return ret;
 }
