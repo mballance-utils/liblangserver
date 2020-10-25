@@ -29,9 +29,11 @@
 
 namespace lls {
 
+class WorkDoneProgressOptions;
+typedef std::shared_ptr<WorkDoneProgressOptions> WorkDoneProgressOptionsSP;
 class WorkDoneProgressOptions : public Val {
 public:
-	WorkDoneProgressOptions();
+	WorkDoneProgressOptions(ValBoolSP v);
 
 	WorkDoneProgressOptions(const nlohmann::json &msg);
 
@@ -46,6 +48,10 @@ public:
 	}
 
 	virtual void dump(nlohmann::json &msg);
+
+	virtual nlohmann::json dump() override;
+
+	static WorkDoneProgressOptionsSP mk(ValBoolSP v);
 
 private:
 	ValBoolSP			m_workDoneProgress;

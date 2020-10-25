@@ -24,6 +24,7 @@
  */
 
 #include "ValNull.h"
+#include "nlohmann/json.hpp"
 
 namespace lls {
 
@@ -35,5 +36,11 @@ ValNull::ValNull() {
 ValNull::~ValNull() {
 	// TODO Auto-generated destructor stub
 }
+
+nlohmann::json ValNull::dump() {
+	return nlohmann::json(nullptr);
+}
+
+ValNullSP ValNull::null = ValNullSP(new ValNull());
 
 } /* namespace lls */

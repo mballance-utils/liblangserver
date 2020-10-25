@@ -28,11 +28,18 @@
 
 namespace lls {
 
-class ValNull {
+class ValNull;
+typedef std::shared_ptr<ValNull> ValNullSP;
+class ValNull : public Val {
 public:
 	ValNull();
 
 	virtual ~ValNull();
+
+	virtual nlohmann::json dump();
+
+	static ValNullSP		null;
+
 
 };
 

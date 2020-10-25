@@ -27,13 +27,15 @@
 
 #include "DidChangeTextDocumentParams.h"
 #include "DidOpenTextDocumentParams.h"
+#include "HoverParams.h"
 #include "InitializeParams.h"
 #include "RequestMessage.h"
 #include "ResponseMessage.h"
 #include "InitializeResult.h"
 #include "nlohmann/json.hpp"
+#include "ValNull.h"
 
-#undef EN_DEBUG_LANG_SERVER_METHOD_HANDLER
+#define EN_DEBUG_LANG_SERVER_METHOD_HANDLER
 
 #ifdef EN_DEBUG_LANG_SERVER_METHOD_HANDLER
 #define DEBUG_ENTER(fmt, ...) \
@@ -72,6 +74,9 @@ void LangServerMethodHandler::register_methods(IRegisterMethod *dispatcher) {
 					this, std::placeholders::_1));
 	dispatcher->register_method("textDocument/didOpen",
 			std::bind(&LangServerMethodHandler::didOpenTextDocument,
+					this, std::placeholders::_1));
+	dispatcher->register_method("textDocument/hover",
+			std::bind(&LangServerMethodHandler::hoverRequest,
 					this, std::placeholders::_1));
 	dispatcher->register_method("initialize",
 			std::bind(&LangServerMethodHandler::initialize,this,std::placeholders::_1));
@@ -125,6 +130,26 @@ void LangServerMethodHandler::didOpenTextDocument(const nlohmann::json &msg) {
 
 	m_srv->didOpenTextDocument(params);
 	DEBUG_LEAVE("didOpenTextDocument");
+}
+
+void LangServerMethodHandler::hoverRequest(const nlohmann::json &msg) {
+	DEBUG_ENTER("hoverRequest");
+	HoverParamsSP params = HoverParams::mk(msg["params"]);
+
+	HoverSP hover = m_srv->hoverRequest(params);
+
+	ResponseMessageSP resp = ResponseMessage::mk(ValInt::mk(msg["id"]));
+	if (hover) {
+		resp->result(hover);
+	} else {
+		resp->result(ValNull::null);
+	}
+
+	DEBUG_MSG("response: %s", resp->dump().dump().c_str());
+
+	m_out->send(resp->dump());
+
+	DEBUG_LEAVE("hoverRequest");
 }
 
 }

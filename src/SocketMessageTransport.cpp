@@ -35,7 +35,7 @@
 #endif
 #include "nlohmann/json.hpp"
 
-#undef EN_DEBUG_SOCKET_MESSAGE_TRANSPORT
+#define EN_DEBUG_SOCKET_MESSAGE_TRANSPORT
 
 #ifdef EN_DEBUG_SOCKET_MESSAGE_TRANSPORT
 #define DEBUG_ENTER(fmt, ...) \

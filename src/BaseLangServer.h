@@ -40,6 +40,8 @@ public:
 
 	virtual void didOpenTextDocument(DidOpenTextDocumentParamsSP params) override;
 
+	virtual HoverSP hoverRequest(HoverParamsSP params) override;
+
 };
 
 } /* namespace lls */

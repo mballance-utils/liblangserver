@@ -56,6 +56,14 @@ public:
 		m_completionProvider = o;
 	}
 
+	ValSP hoverProvider() const {
+		return m_hoverProvider;
+	}
+
+	void hoverProvider(ValSP v) {
+		m_hoverProvider = v;
+	}
+
 	ValSP documentSymbolProvider() const {
 		return m_documentSymbolProvider;
 	}
@@ -76,6 +84,7 @@ private:
 	// TypeDefinitionOptions|TypeDefinitionRegistrationOptions
 	//
 	// boolean | DocumentSymbolOptions;
+	ValSP							m_hoverProvider;
 	ValSP							m_documentSymbolProvider;
 
 

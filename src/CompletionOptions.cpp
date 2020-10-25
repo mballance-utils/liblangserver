@@ -24,11 +24,12 @@
  */
 
 #include "CompletionOptions.h"
+#include "ValBool.h"
 #include "nlohmann/json.hpp"
 
 namespace lls {
 
-CompletionOptions::CompletionOptions() {
+CompletionOptions::CompletionOptions() : WorkDoneProgressOptions(ValBool::mk(false)) {
 	// TODO Auto-generated constructor stub
 
 }

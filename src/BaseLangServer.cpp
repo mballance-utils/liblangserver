@@ -24,6 +24,7 @@
  */
 
 #include "BaseLangServer.h"
+#include "ValNull.h"
 
 namespace lls {
 
@@ -42,6 +43,11 @@ void BaseLangServer::didChangeTextDocument(DidChangeTextDocumentParamsSP params)
 
 void BaseLangServer::didOpenTextDocument(DidOpenTextDocumentParamsSP params) {
 	//
+}
+
+HoverSP BaseLangServer::hoverRequest(HoverParamsSP params) {
+	// Null response means no hover info
+	return HoverSP();
 }
 
 } /* namespace lls */

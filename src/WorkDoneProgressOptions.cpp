@@ -28,7 +28,7 @@
 
 namespace lls {
 
-WorkDoneProgressOptions::WorkDoneProgressOptions() {
+WorkDoneProgressOptions::WorkDoneProgressOptions(ValBoolSP v) : m_workDoneProgress(v) {
 
 }
 
@@ -47,5 +47,20 @@ void WorkDoneProgressOptions::dump(nlohmann::json &msg) {
 		msg["workDoneProgress"] = m_workDoneProgress->dump();
 	}
 }
+
+nlohmann::json WorkDoneProgressOptions::dump() {
+	nlohmann::json msg = nlohmann::json(
+			nlohmann::json::value_type::object({}));
+	if (m_workDoneProgress) {
+		msg["workDoneProgress"] = m_workDoneProgress->dump();
+	}
+
+	return msg;
+}
+
+WorkDoneProgressOptionsSP WorkDoneProgressOptions::mk(ValBoolSP v) {
+	return WorkDoneProgressOptionsSP(new WorkDoneProgressOptions(v));
+}
+
 
 } /* namespace lls */

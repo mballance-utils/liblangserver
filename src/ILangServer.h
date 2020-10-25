@@ -26,6 +26,8 @@
 #pragma once
 #include "DidChangeTextDocumentParams.h"
 #include "DidOpenTextDocumentParams.h"
+#include "Hover.h"
+#include "HoverParams.h"
 #include "IClientConnection.h"
 #include "InitializeParams.h"
 #include "ServerCapabilities.h"
@@ -44,6 +46,8 @@ public:
 	virtual void didChangeTextDocument(DidChangeTextDocumentParamsSP params) = 0;
 
 	virtual void didOpenTextDocument(DidOpenTextDocumentParamsSP params) = 0;
+
+	virtual HoverSP hoverRequest(HoverParamsSP params) = 0;
 
 };
 
