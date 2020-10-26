@@ -7,6 +7,7 @@ file(GLOB TEST_SRCS
 
 link_directories(
 	${CMAKE_BINARY_DIR}/googletest/lib
+	${CMAKE_BINARY_DIR}/googletest/lib64
 	${CMAKE_BINARY_DIR}/liblangserver)
 
 #********************************************************************

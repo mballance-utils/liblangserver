@@ -73,7 +73,7 @@ int32_t TestServer::accept() {
 	struct sockaddr_in serv_addr;
 
 	int clilen = sizeof(serv_addr);
-	int servfd = ::accept(m_serv_sock, (struct sockaddr *)&serv_addr, &clilen);
+	int servfd = ::accept(m_serv_sock, (struct sockaddr *)&serv_addr, (socklen_t*)&clilen);
 
 	fprintf(stdout, "connected\n");
 
