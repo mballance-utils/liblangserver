@@ -7,6 +7,7 @@ include(ExternalProject)
 find_package(Java REQUIRED)
 include(UseJava)
 
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.8" "-target" "1.8")
 
 
