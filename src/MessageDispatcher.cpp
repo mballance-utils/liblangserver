@@ -26,7 +26,7 @@
 #include "MessageDispatcher.h"
 #include "nlohmann/json.hpp"
 
-#define EN_DEBUG_MESSAGE_DISPATCHER
+#undef EN_DEBUG_MESSAGE_DISPATCHER
 
 #ifdef EN_DEBUG_MESSAGE_DISPATCHER
 #define DEBUG_ENTER(fmt, ...) \

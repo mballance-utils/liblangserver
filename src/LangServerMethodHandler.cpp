@@ -35,7 +35,7 @@
 #include "nlohmann/json.hpp"
 #include "ValNull.h"
 
-#define EN_DEBUG_LANG_SERVER_METHOD_HANDLER
+#undef EN_DEBUG_LANG_SERVER_METHOD_HANDLER
 
 #ifdef EN_DEBUG_LANG_SERVER_METHOD_HANDLER
 #define DEBUG_ENTER(fmt, ...) \
