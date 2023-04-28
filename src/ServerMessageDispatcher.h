@@ -1,5 +1,5 @@
 /**
- * MessageDispatcher.h
+ * ServerMessageDispatcher.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -19,20 +19,31 @@
  *     Author: 
  */
 #pragma once
+#include "dmgr/IDebugMgr.h"
+#include "lls/IFactory.h"
+#include "lls/IMessageDispatcher.h"
+#include "lls/IServer.h"
+#include "lls/IServerMessageDispatcher.h"
 
 namespace lls {
 
 
-/**
- * @brief Provides message-dispatching services for both
- *        client and server messages
- * 
- */
-class MessageDispatcher {
-public:
-    MessageDispatcher();
 
-    virtual ~MessageDispatcher();
+class ServerMessageDispatcher : public virtual IServerMessageDispatcher {
+public:
+    ServerMessageDispatcher(
+        IFactory                    *factory,
+        jrpc::IMessageDispatcher    *dispatch,
+        IServer                     *server
+    );
+
+    virtual ~ServerMessageDispatcher();
+
+private:
+    static dmgr::IDebug             *m_dbg;
+    IFactory                        *m_factory;
+    jrpc::IMessageDispatcher        *m_dispatch;
+    IServer                         *m_server;
 
 };
 

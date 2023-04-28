@@ -1,5 +1,5 @@
 /*
- * MessageDispatcher.cpp
+ * ClientMessageDispatcher.cpp
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -18,17 +18,17 @@
  * Created on:
  *     Author:
  */
-#include "MessageDispatcher.h"
+#include "ClientMessageDispatcher.h"
 
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
+ClientMessageDispatcher::ClientMessageDispatcher() {
 
 }
 
-MessageDispatcher::~MessageDispatcher() {
+ClientMessageDispatcher::~ClientMessageDispatcher() {
 
 }
 

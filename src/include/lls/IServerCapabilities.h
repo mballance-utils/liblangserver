@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * IServerCapabilities.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,21 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
 
-}
+class IServerCapabilities {
+public:
 
-MessageDispatcher::~MessageDispatcher() {
+    virtual ~IServerCapabilities() { }
 
-}
+};
 
-}
+} /* namespace lls */
+
+

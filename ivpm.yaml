@@ -1,0 +1,40 @@
+
+package:
+  name: liblangserver
+
+  setup-deps:
+  - ninja
+  - cython
+
+  dep-sets:
+  - name: default
+    deps:
+    - name: debug-mgr
+      url: https://github.com/mballance-utils/debug-mgr.git
+    - name: json
+      url: https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
+    - name: pygls
+      src: pypi
+    - name: lsprotocol
+      src: pypi
+
+  - name: default-dev
+    deps:
+    - name: debug-mgr
+      url: https://github.com/mballance-utils/debug-mgr.git
+    - name: libjson-rpc
+      url: https://github.com/mballance-utils/libjson-rpc.git
+    - name: json
+      url: https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
+    - name: pygls
+      src: pypi
+    - name: lsprotocol
+      src: pypi
+    - name: ninja
+      src: pypi
+    - name: cython
+      src: pypi
+    - name: ivpm
+      src: pypi
+
+

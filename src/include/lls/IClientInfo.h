@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * IClientInfo.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,21 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
 
-}
+class IClientInfo {
+public:
 
-MessageDispatcher::~MessageDispatcher() {
+    virtual ~IClientInfo() { }
 
-}
+};
 
-}
+} /* namespace lls */
+
+

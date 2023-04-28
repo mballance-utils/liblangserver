@@ -1,5 +1,5 @@
 /*
- * MessageDispatcher.cpp
+ * ServerMessageDispatcher.cpp
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -18,18 +18,26 @@
  * Created on:
  *     Author:
  */
-#include "MessageDispatcher.h"
+#include "dmgr/impl/DebugMacros.h"
+#include "ServerMessageDispatcher.h"
 
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
+ServerMessageDispatcher::ServerMessageDispatcher(
+    IFactory                    *factory,
+    jrpc::IMessageDispatcher    *dispatch,
+    IServer                     *server) :
+        m_factory(factory), m_dispatch(dispatch), 
+        m_server(server) {
+    DEBUG_INIT("ServerMessageDispatcher", factory->getDebugMgr());
+}
+
+ServerMessageDispatcher::~ServerMessageDispatcher() {
 
 }
 
-MessageDispatcher::~MessageDispatcher() {
-
-}
+dmgr::IDebug *ServerMessageDispatcher::m_dbg = 0;
 
 }

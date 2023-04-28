@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * IFactory.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,33 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include "jrpc/IFactory.h"
+#include "lls/IServer.h"
+#include "lls/IServerMessageDispatcher.h"
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
 
-}
+class IFactory {
+public:
 
-MessageDispatcher::~MessageDispatcher() {
+    virtual ~IFactory() { }
 
-}
+    virtual void init(jrpc::IFactory *f) = 0;
 
-}
+    virtual dmgr::IDebugMgr *getDebugMgr() = 0;
+
+    virtual IServerMessageDispatcher *mkNBServerMessageDispatcher(
+        jrpc::IMessageTransport     *transport,
+        IServer                     *server
+    ) = 0;
+
+};
+
+} /* namespace lls */
+
+

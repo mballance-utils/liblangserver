@@ -6,8 +6,8 @@ file(GLOB TEST_SRCS
 	"cpp/*.h")
 
 link_directories(
-	${CMAKE_BINARY_DIR}/googletest/lib
-	${CMAKE_BINARY_DIR}/googletest/lib64
+	${CMAKE_BINARY_DIR}/gtest/lib
+	${CMAKE_BINARY_DIR}/gtest/lib64
 	${CMAKE_BINARY_DIR}/liblangserver)
 
 #********************************************************************
@@ -96,5 +96,11 @@ add_test(
 	COMMAND ${Java_JAVA_EXECUTABLE} -classpath ${CLASSPATH}
 	org.liblangserver.tests.Test)
 	
+ExternalProject_Add(GOOGLETEST
+	PREFIX googletest
+	SOURCE_DIR "${PACKAGES_DIR}/gtest"
+    CMAKE_CACHE_ARGS
+    -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_BINARY_DIR}/gtest
+	)
 
 #include(${PACKAGES_DIR}/googletest)

@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * IMessageDispatcher.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,22 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include <memory>
 
 namespace lls {
 
+class IMessageDispatcher;
+using IMessageDispatcherUP=std::unique_ptr<IMessageDispatcher>;
+class IMessageDispatcher {
+public:
 
-MessageDispatcher::MessageDispatcher() {
+    virtual ~IMessageDispatcher() { }
 
-}
+};
 
-MessageDispatcher::~MessageDispatcher() {
+} /* namespace lls */
 
-}
 
-}

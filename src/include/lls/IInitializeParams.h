@@ -1,5 +1,5 @@
 /**
- * MessageDispatcher.h
+ * IInitializeParams.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -19,23 +19,37 @@
  *     Author: 
  */
 #pragma once
+#include <stdint.h>
+#include <memory>
+#include <string>
+#include <vector>
+#include "lls/IClientInfo.h"
 
 namespace lls {
 
-
-/**
- * @brief Provides message-dispatching services for both
- *        client and server messages
- * 
- */
-class MessageDispatcher {
+class IInitializeParams;
+using IInitializeParamsUP=std::unique_ptr<IInitializeParams>;
+class IInitializeParams {
 public:
-    MessageDispatcher();
 
-    virtual ~MessageDispatcher();
+    virtual ~IInitializeParams() { }
+
+    virtual int32_t getProcessId() = 0;
+
+    virtual IClientInfo *getCientInfo() = 0;
+
+    virtual const std::string &getLocale() = 0;
+
+    virtual const std::string &getRootPath() = 0;
+
+    virtual const std::string &getDocumentUri() = 0;
+
+    // TODO: initializationOptions
+
+    virtual std::vector<std::string> &getWorkspaceFolders() = 0;
 
 };
 
-}
+} /* namespace lls */
 
 

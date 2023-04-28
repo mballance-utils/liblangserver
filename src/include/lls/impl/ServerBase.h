@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * ServerBase.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,28 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include "jrpc/IEventLoop.h"
+#include "lls/IFactory.h"
+#include "lls/IServer.h"
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
+
+class ServerBase : public virtual IServer {
+public:
+    ServerBase(
+        jrpc::IEventLoop            *loop,
+        IFactory                    *factory
+    );
+
+    virtual ~ServerBase();
+
+};
 
 }
 
-MessageDispatcher::~MessageDispatcher() {
 
-}
-
-}
