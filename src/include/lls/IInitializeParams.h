@@ -24,12 +24,13 @@
 #include <string>
 #include <vector>
 #include "lls/IClientInfo.h"
+#include "lls/IJson.h"
 
 namespace lls {
 
 class IInitializeParams;
 using IInitializeParamsUP=std::unique_ptr<IInitializeParams>;
-class IInitializeParams {
+class IInitializeParams : public virtual IJson {
 public:
 
     virtual ~IInitializeParams() { }
@@ -46,7 +47,7 @@ public:
 
     // TODO: initializationOptions
 
-    virtual std::vector<std::string> &getWorkspaceFolders() = 0;
+    virtual const std::vector<std::string> &getWorkspaceFolders() const = 0;
 
 };
 

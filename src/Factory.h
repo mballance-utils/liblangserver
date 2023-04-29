@@ -35,12 +35,30 @@ public:
         m_factory = f;
     }
 
+    virtual jrpc::IFactory *getFactory() override {
+        return m_factory;
+    }
+
     virtual dmgr::IDebugMgr *getDebugMgr();
 
     virtual IServerMessageDispatcher *mkNBServerMessageDispatcher(
         jrpc::IMessageTransport     *transport,
         IServer                     *server
     ) override;
+
+    virtual IInitializeParamsUP mkInitializeParams(
+        int32_t                         pid,
+        IClientInfo                     *client_info,
+        const std::string               &locale,
+        std::string                     &rootPath,
+        std::string                     &documentUri,
+        const std::vector<std::string>  &workspace_folders) override;
+
+    virtual IInitializeParamsUP mkInitializeParams(
+        const nlohmann::json            &params) override;
+
+    virtual IInitializeResultUP mkInitializeResult(
+        const nlohmann::json            &params) override;
 
     static IFactory *inst();
 

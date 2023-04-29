@@ -1,5 +1,5 @@
 /**
- * IServerMessageDispatcher.h
+ * Json.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -19,20 +19,23 @@
  *     Author: 
  */
 #pragma once
-#include <memory>
-#include "lls/IServer.h"
+#include "nlohmann/json.hpp"
 
 namespace lls {
 
-class IServerMessageDispatcher;
-using IServerMessageDispatcherUP=std::unique_ptr<IServerMessageDispatcher>;
-class IServerMessageDispatcher {
-public:
 
-    virtual ~IServerMessageDispatcher() { }
+
+class Json {
+public:
+    Json();
+
+    virtual ~Json();
+
+protected:
+    nlohmann::json              m_json;
 
 };
 
-} /* namespace lls */
+}
 
 

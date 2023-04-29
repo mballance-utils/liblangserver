@@ -19,15 +19,22 @@
  *     Author: 
  */
 #pragma once
+#include "lls/IJson.h"
+#include "lls/IServerCapabilities.h"
+#include "lls/IServerInfo.h"
 
 namespace lls {
 
-
-
-class IInitializeResult {
+class IInitializeResult;
+using IInitializeResultUP=std::unique_ptr<IInitializeResult>;
+class IInitializeResult : public virtual IJson {
 public:
 
     virtual ~IInitializeResult() { }
+
+    virtual IServerCapabilities *getCapabilities() = 0;
+
+    virtual IServerInfo *getServerInfo() = 0;
 
 };
 

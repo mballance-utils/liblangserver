@@ -19,12 +19,13 @@
  *     Author: 
  */
 #pragma once
+#include "lls/IJson.h"
 
 namespace lls {
 
-
-
-class IServerCapabilities {
+class IServerCapabilities;
+using IServerCapabilitiesUP=std::unique_ptr<IServerCapabilities>;
+class IServerCapabilities : public virtual IJson {
 public:
 
     virtual ~IServerCapabilities() { }

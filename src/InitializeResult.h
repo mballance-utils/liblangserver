@@ -1,5 +1,5 @@
 /**
- * IServerMessageDispatcher.h
+ * InitializeResult.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -19,20 +19,35 @@
  *     Author: 
  */
 #pragma once
-#include <memory>
-#include "lls/IServer.h"
+#include "lls/IInitializeResult.h"
+#include "lls/IServerCapabilities.h"
+#include "Json.h"
 
 namespace lls {
 
-class IServerMessageDispatcher;
-using IServerMessageDispatcherUP=std::unique_ptr<IServerMessageDispatcher>;
-class IServerMessageDispatcher {
-public:
 
-    virtual ~IServerMessageDispatcher() { }
+
+class InitializeResult : 
+    public virtual InitializeResult,
+    public virtual Json {
+public:
+    InitializeResult(
+        IServerCapabilities     *capabilities,
+        IServerInfo             *serverInfo
+    );
+
+    virtual ~InitializeResult();
+
+    virtual const nlohmann::json &toJson() override;
+
+    static InitializeResult *mk(const nlohmann::json &params);
+
+private:
+    IServerCapabilitiesUP           m_capabilities;
+    IServerInfoUP                   m_serverInfo;
 
 };
 
-} /* namespace lls */
+}
 
 

@@ -19,17 +19,44 @@
  *     Author: 
  */
 #pragma once
+#include "dmgr/IDebugMgr.h"
+#include "jrpc/IEventLoop.h"
+#include "jrpc/IMessageTransport.h"
+#include "lls/IFactory.h"
+#include "lls/IInitializeResult.h"
+#include "lls/IServer.h"
 
 namespace lls {
 
-
-
-class ClientMessageDispatcher {
+/**
+ * Dispatches client messages and implements the server API
+ * for communicating with a Server
+ * 
+ */
+class ClientMessageDispatcher : 
+    public virtual IServer,
+    public virtual jrpc::IMessageTransport {
 public:
-    ClientMessageDispatcher();
+    ClientMessageDispatcher(
+        IFactory                    *factory,
+        jrpc::IEventLoop            *loop,
+        jrpc::IMessageTransport     *transport);
 
     virtual ~ClientMessageDispatcher();
 
+	virtual IServerCapabilitiesUP initialize(IInitializeParamsUP params) override;
+
+private:
+    jrpc::IRspMsgUP initializeResult(jrpc::IReqMsgUP &msg);
+
+private:
+    static dmgr::IDebug             *m_dbg;
+    IFactory                        *m_factory;
+    jrpc::IEventLoop                *m_loop;
+    jrpc::IMessageTransport         *m_transport;
+    jrpc::IMessageDispatcher        *m_dispatcher;
+
+    lls::IInitializeResultUP        m_initializeResult;
 };
 
 }

@@ -1,5 +1,5 @@
 /**
- * IServerMessageDispatcher.h
+ * IJson.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -20,16 +20,18 @@
  */
 #pragma once
 #include <memory>
-#include "lls/IServer.h"
+#include "nlohmann/json_fwd.hpp"
 
 namespace lls {
 
-class IServerMessageDispatcher;
-using IServerMessageDispatcherUP=std::unique_ptr<IServerMessageDispatcher>;
-class IServerMessageDispatcher {
+
+
+class IJson {
 public:
 
-    virtual ~IServerMessageDispatcher() { }
+    virtual ~IJson() { }
+
+    virtual const nlohmann::json &toJson() = 0;
 
 };
 

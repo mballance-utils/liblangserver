@@ -19,12 +19,13 @@
  *     Author: 
  */
 #pragma once
+#include "lls/IJson.h"
 
 namespace lls {
 
-
-
-class IServerInfo {
+class IServerInfo;
+using IServerInfoUP=std::unique_ptr<IServerInfo>;
+class IServerInfo : public virtual IJson {
 public:
 
     virtual ~IServerInfo() { }

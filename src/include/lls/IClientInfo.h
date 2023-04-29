@@ -19,12 +19,13 @@
  *     Author: 
  */
 #pragma once
+#include "lls/IJson.h"
 
 namespace lls {
 
-
-
-class IClientInfo {
+class IClientInfo;
+using IClientInfoUP=std::unique_ptr<IClientInfo>;
+class IClientInfo : public virtual IJson {
 public:
 
     virtual ~IClientInfo() { }

@@ -41,9 +41,11 @@ public:
         jrpc::IEventLoop            *loop,
         IFactory                    *factory,
         IClientConnection           *connection) = 0;
+ */
 
 	virtual IServerCapabilitiesUP initialize(IInitializeParamsUP params) = 0;
 
+/*
 	virtual void didChangeTextDocument(DidChangeTextDocumentParamsSP params) = 0;
 
 	virtual void didOpenTextDocument(DidOpenTextDocumentParamsSP params) = 0;

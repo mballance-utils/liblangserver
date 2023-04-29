@@ -18,18 +18,49 @@
  * Created on:
  *     Author:
  */
+#include "dmgr/impl/DebugMacros.h"
+#include "nlohmann/json.hpp"
 #include "ClientMessageDispatcher.h"
 
 
 namespace lls {
 
 
-ClientMessageDispatcher::ClientMessageDispatcher() {
+ClientMessageDispatcher::ClientMessageDispatcher(
+        IFactory                    *factory,
+        jrpc::IEventLoop            *loop,
+        jrpc::IMessageTransport     *transport) :
+            m_factory(factory), m_loop(loop), m_transport(transport) {
+    DEBUG_INIT("ClientMessageDispatcher", factory->getDebugMgr());
+
+    m_dispatcher = m_factory->getFactory()->mkNBSocketServerMessageDispatcher(
+        m_transport
+    );
+
+    // initializeResult
+    m_dispatcher->registerMethod(
+        "initializeResult", 
+        std::bind(&ClientMessageDispatcher::initializeResult, this, std::placeholders::_1));
 
 }
 
 ClientMessageDispatcher::~ClientMessageDispatcher() {
 
 }
+
+IServerCapabilitiesUP ClientMessageDispatcher::initialize(IInitializeParamsUP params) {
+    params->toJson();
+
+    // Send a request and poll waiting for a response
+
+}
+
+jrpc::IRspMsgUP ClientMessageDispatcher::initializeResult(jrpc::IReqMsgUP &msg) {
+    m_initializeResult = m_factory->mkInitializeResult(msg->getParams());
+
+    return jrpc::IRspMsgUP();
+}
+
+dmgr::IDebug *ClientMessageDispatcher::m_dbg = 0;
 
 }

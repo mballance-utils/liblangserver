@@ -20,6 +20,7 @@
  */
 #include "Factory.h"
 #include "lls/FactoryExt.h"
+#include "InitializeParams.h"
 #include "ServerMessageDispatcher.h"
 
 namespace lls {
@@ -44,6 +45,32 @@ IServerMessageDispatcher *Factory::mkNBServerMessageDispatcher(
         this, 
         m_factory->mkNBSocketServerMessageDispatcher(transport),
         server);
+}
+
+IInitializeParamsUP Factory::mkInitializeParams(
+        int32_t                         pid,
+        IClientInfo                     *client_info,
+        const std::string               &locale,
+        std::string                     &rootPath,
+        std::string                     &documentUri,
+        const std::vector<std::string>  &workspace_folders) {
+    return IInitializeParamsUP(new InitializeParams(
+        pid,
+        client_info,
+        locale,
+        rootPath,
+        documentUri,
+        workspace_folders));
+}
+
+IInitializeParamsUP Factory::mkInitializeParams(
+        const nlohmann::json            &params) {
+    return IInitializeParamsUP(InitializeParams::mk(params));
+}
+
+IInitializeResultUP Factory::mkInitializeResult(
+        const nlohmann::json            &params) {
+    // TODO:
 }
 
 IFactory *Factory::inst() {

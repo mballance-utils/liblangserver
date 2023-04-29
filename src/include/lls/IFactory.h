@@ -20,6 +20,9 @@
  */
 #pragma once
 #include "jrpc/IFactory.h"
+#include "lls/IClientInfo.h"
+#include "lls/IInitializeParams.h"
+#include "lls/IInitializeResult.h"
 #include "lls/IServer.h"
 #include "lls/IServerMessageDispatcher.h"
 
@@ -34,12 +37,28 @@ public:
 
     virtual void init(jrpc::IFactory *f) = 0;
 
+    virtual jrpc::IFactory *getFactory() = 0;
+
     virtual dmgr::IDebugMgr *getDebugMgr() = 0;
 
     virtual IServerMessageDispatcher *mkNBServerMessageDispatcher(
         jrpc::IMessageTransport     *transport,
         IServer                     *server
     ) = 0;
+
+    virtual IInitializeParamsUP mkInitializeParams(
+        int32_t                         pid,
+        IClientInfo                     *client_info,
+        const std::string               &locale,
+        std::string                     &rootPath,
+        std::string                     &documentUri,
+        const std::vector<std::string>  &workspace_folders) = 0;
+
+    virtual IInitializeParamsUP mkInitializeParams(
+        const nlohmann::json            &params) = 0;
+
+    virtual IInitializeResultUP mkInitializeResult(
+        const nlohmann::json            &params) = 0;
 
 };
 

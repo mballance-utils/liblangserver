@@ -19,6 +19,8 @@
  *     Author: 
  */
 #pragma once
+#include "lls/IInitializeParams.h"
+#include "lls/IServerCapabilities.h"
 
 namespace lls {
 
@@ -28,6 +30,9 @@ class IClient {
 public:
 
     virtual ~IClient() { }
+
+//    virtual IServerCapabilitiesUP initialize(IInitializeParamsUP params) = 0;
+
 
 };
 
