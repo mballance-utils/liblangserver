@@ -31,10 +31,27 @@ class ServerBase : public virtual IServer {
 public:
     ServerBase(
         jrpc::IEventLoop            *loop,
-        IFactory                    *factory
-    );
+        IFactory                    *factory) : 
+            m_loop(loop), m_factory(factory) {
 
-    virtual ~ServerBase();
+    }
+
+    virtual ~ServerBase() { }
+
+	virtual IInitializeResultUP initialize(IInitializeParamsUP &params) override {
+        IServerCapabilitiesUP capabilites;
+        IServerInfoUP serverInfo;
+
+        IInitializeResultUP ret(m_factory->mkInitializeResult(
+            capabilites,
+            serverInfo));
+
+        return ret;
+    }
+
+protected:
+    jrpc::IEventLoop                *m_loop;
+    IFactory                        *m_factory;
 
 };
 

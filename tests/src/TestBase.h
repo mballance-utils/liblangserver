@@ -1,5 +1,5 @@
 /**
- * ServerMessageDispatcher.h
+ * TestBase.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -19,34 +19,30 @@
  *     Author: 
  */
 #pragma once
-#include "dmgr/IDebugMgr.h"
+#include "gtest/gtest.h"
 #include "lls/IFactory.h"
-#include "lls/IMessageDispatcher.h"
-#include "lls/IServer.h"
-#include "lls/IServerMessageDispatcher.h"
 
 namespace lls {
 
 
 
-class ServerMessageDispatcher : public virtual IServerMessageDispatcher {
+class TestBase : public ::testing::Test {
 public:
-    ServerMessageDispatcher(
-        IFactory                    *factory,
-        jrpc::IMessageDispatcher    *dispatch,
-        IServer                     *server
-    );
+    TestBase();
 
-    virtual ~ServerMessageDispatcher();
+    virtual ~TestBase();
 
-private:
-    jrpc::IRspMsgUP initializeRequest(jrpc::IReqMsgUP &msg);
+    virtual void SetUp() override;
 
-private:
-    static dmgr::IDebug             *m_dbg;
-    IFactory                        *m_factory;
-    jrpc::IMessageDispatcher        *m_dispatch;
-    IServer                         *m_server;
+protected: 
+
+    void enableDebug(bool en);
+
+    std::pair<jrpc::IMessageTransportUP, jrpc::IMessageTransportUP> mkTransportPair(
+        jrpc::IEventLoop    *loop);
+
+protected:
+    IFactory                *m_factory;
 
 };
 

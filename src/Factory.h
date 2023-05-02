@@ -46,19 +46,30 @@ public:
         IServer                     *server
     ) override;
 
+    virtual IClientMessageDispatcherUP mkClientMessageDispatcher(
+        jrpc::IMessageTransport     *transport,
+        IClient                     *client
+    ) override;
+
     virtual IInitializeParamsUP mkInitializeParams(
         int32_t                         pid,
         IClientInfo                     *client_info,
         const std::string               &locale,
-        std::string                     &rootPath,
-        std::string                     &documentUri,
+        const std::string               &rootPath,
+        const std::string               &documentUri,
         const std::vector<std::string>  &workspace_folders) override;
 
     virtual IInitializeParamsUP mkInitializeParams(
         const nlohmann::json            &params) override;
 
     virtual IInitializeResultUP mkInitializeResult(
+        IServerCapabilitiesUP           &capabilities,
+        IServerInfoUP                   &serverInfo) override;
+
+    virtual IInitializeResultUP mkInitializeResult(
         const nlohmann::json            &params) override;
+
+    virtual IServerCapabilitiesUP mkServerCapabilities() override;
 
     static IFactory *inst();
 

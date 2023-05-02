@@ -21,6 +21,7 @@
 #include "dmgr/impl/DebugMacros.h"
 #include "nlohmann/json.hpp"
 #include "ClientMessageDispatcher.h"
+#include "InitializeResult.h"
 
 
 namespace lls {
@@ -28,19 +29,20 @@ namespace lls {
 
 ClientMessageDispatcher::ClientMessageDispatcher(
         IFactory                    *factory,
-        jrpc::IEventLoop            *loop,
-        jrpc::IMessageTransport     *transport) :
-            m_factory(factory), m_loop(loop), m_transport(transport) {
+        jrpc::IMessageTransport     *transport,
+        IClient                     *client) :
+            m_factory(factory), m_loop(0), 
+            m_transport(transport), m_client(client) {
     DEBUG_INIT("ClientMessageDispatcher", factory->getDebugMgr());
+
+    m_loop = transport->getLoop();
 
     m_dispatcher = m_factory->getFactory()->mkNBSocketServerMessageDispatcher(
         m_transport
     );
-
-    // initializeResult
-    m_dispatcher->registerMethod(
-        "initializeResult", 
-        std::bind(&ClientMessageDispatcher::initializeResult, this, std::placeholders::_1));
+    m_dispatcher->setResponseHandler(
+        std::bind(&ClientMessageDispatcher::handleResult, this, 
+            std::placeholders::_1, std::placeholders::_2));
 
 }
 
@@ -48,17 +50,46 @@ ClientMessageDispatcher::~ClientMessageDispatcher() {
 
 }
 
-IServerCapabilitiesUP ClientMessageDispatcher::initialize(IInitializeParamsUP params) {
-    params->toJson();
+IInitializeResultUP ClientMessageDispatcher::initialize(IInitializeParamsUP &params) {
+    DEBUG_ENTER("initialize");
 
     // Send a request and poll waiting for a response
+    jrpc::IRspMsgUP rsp(sendMethodRequest("initialize", params->toJson()));
 
+    IInitializeResultUP ret = InitializeResult::mk(rsp->getResult());
+
+    DEBUG_LEAVE("initialize");
+
+    return ret;
 }
 
-jrpc::IRspMsgUP ClientMessageDispatcher::initializeResult(jrpc::IReqMsgUP &msg) {
-    m_initializeResult = m_factory->mkInitializeResult(msg->getParams());
+jrpc::IRspMsgUP ClientMessageDispatcher::sendMethodRequest(const std::string &method, const nlohmann::json &params) {
+    DEBUG_ENTER("sendMethodRequest: %s", method.c_str());
+    nlohmann::json msg;
+    msg["jsonrpc"] = "2.0";
+    msg["id"] = m_req_id;
+    m_req_id++;
+    msg["method"] = method;
+    msg["params"] = params;
 
-    return jrpc::IRspMsgUP();
+    m_rsp.release();
+    
+    m_transport->send(msg);
+
+    while (!m_rsp) {
+        if (!m_loop->process_one_event(-1)) {
+            break;
+        }
+    }
+
+    DEBUG_LEAVE("sendMethodRequest: %s", method.c_str());
+    return std::move(m_rsp);
+}
+
+void ClientMessageDispatcher::handleResult(int32_t id, jrpc::IRspMsgUP &rsp) {
+    DEBUG_ENTER("handleResult %d", id);
+    m_rsp = std::move(rsp);
+    DEBUG_LEAVE("handleResult %d", id);
 }
 
 dmgr::IDebug *ClientMessageDispatcher::m_dbg = 0;

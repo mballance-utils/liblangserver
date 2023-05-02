@@ -19,16 +19,17 @@
  *     Author:
  */
 #include "InitializeResult.h"
+#include "ServerCapabilities.h"
 
 
 namespace lls {
 
 
 InitializeResult::InitializeResult(
-        IServerCapabilities     *capabilities,
-        IServerInfo             *serverInfo) :
-            m_capabilities(capabilities),
-            m_serverInfo(serverInfo) {
+        IServerCapabilitiesUP   &capabilities,
+        IServerInfoUP           &serverInfo) :
+            m_capabilities(capabilities.release()),
+            m_serverInfo(serverInfo.release()) {
 
 }
 
@@ -45,6 +46,24 @@ const nlohmann::json &InitializeResult::toJson() {
     }
 
     return m_json;
+}
+
+IInitializeResultUP InitializeResult::mk(const nlohmann::json &params) {
+    IServerCapabilitiesUP capabilities;
+    if (params.contains("capabilities")) {
+        capabilities = ServerCapabilities::mk(params["capabilities"]);
+
+    }
+
+    IServerInfoUP serverInfo;
+
+
+    InitializeResult *ret = new InitializeResult(
+        capabilities,
+        serverInfo
+    );
+
+    return IInitializeResultUP(ret);
 }
 
 }

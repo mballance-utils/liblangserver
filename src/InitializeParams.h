@@ -34,8 +34,8 @@ public:
         int32_t                         pid,
         IClientInfo                     *client_info,
         const std::string               &locale,
-        std::string                     &rootPath,
-        std::string                     &documentUri,
+        const std::string               &rootPath,
+        const std::string               &documentUri,
         const std::vector<std::string>  &workspace_folders);
 
     virtual ~InitializeParams();

@@ -32,10 +32,30 @@ ServerMessageDispatcher::ServerMessageDispatcher(
         m_factory(factory), m_dispatch(dispatch), 
         m_server(server) {
     DEBUG_INIT("ServerMessageDispatcher", factory->getDebugMgr());
+
+    m_dispatch->registerMethod("initialize",
+        std::bind(&ServerMessageDispatcher::initializeRequest, this, std::placeholders::_1));
 }
 
 ServerMessageDispatcher::~ServerMessageDispatcher() {
 
+}
+
+jrpc::IRspMsgUP ServerMessageDispatcher::initializeRequest(jrpc::IReqMsgUP &msg) {
+    DEBUG_ENTER("initializeRequest");
+    IInitializeParamsUP params(m_factory->mkInitializeParams(msg->getParams()));
+    IInitializeResultUP result(m_server->initialize(params));
+    jrpc::IRspMsgUP rsp;
+
+    if (result) {
+        rsp = jrpc::IRspMsgUP(m_factory->getFactory()->mkRspMsgSuccess(
+            msg->getId(),
+            result->toJson()
+        ));
+    }
+
+    DEBUG_LEAVE("initializeRequest");
+    return rsp;
 }
 
 dmgr::IDebug *ServerMessageDispatcher::m_dbg = 0;

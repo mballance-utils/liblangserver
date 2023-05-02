@@ -29,8 +29,8 @@ InitializeParams::InitializeParams(
         int32_t                         pid,
         IClientInfo                     *client_info,
         const std::string               &locale,
-        std::string                     &rootPath,
-        std::string                     &documentUri,
+        const std::string               &rootPath,
+        const std::string               &documentUri,
         const std::vector<std::string>  &workspace_folders) :
             m_pid(pid), m_client_info(client_info), m_locale(locale),
             m_rootPath(rootPath), m_documentUri(documentUri),

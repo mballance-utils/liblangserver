@@ -20,7 +20,10 @@
  */
 #include "Factory.h"
 #include "lls/FactoryExt.h"
+#include "ClientMessageDispatcher.h"
 #include "InitializeParams.h"
+#include "InitializeResult.h"
+#include "ServerCapabilities.h"
 #include "ServerMessageDispatcher.h"
 
 namespace lls {
@@ -47,12 +50,22 @@ IServerMessageDispatcher *Factory::mkNBServerMessageDispatcher(
         server);
 }
 
+IClientMessageDispatcherUP Factory::mkClientMessageDispatcher(
+        jrpc::IMessageTransport     *transport,
+        IClient                     *client) {
+    return IClientMessageDispatcherUP(new ClientMessageDispatcher(
+        this,
+        transport,
+        client
+    ));
+}
+
 IInitializeParamsUP Factory::mkInitializeParams(
         int32_t                         pid,
         IClientInfo                     *client_info,
         const std::string               &locale,
-        std::string                     &rootPath,
-        std::string                     &documentUri,
+        const std::string               &rootPath,
+        const std::string               &documentUri,
         const std::vector<std::string>  &workspace_folders) {
     return IInitializeParamsUP(new InitializeParams(
         pid,
@@ -69,8 +82,18 @@ IInitializeParamsUP Factory::mkInitializeParams(
 }
 
 IInitializeResultUP Factory::mkInitializeResult(
+        IServerCapabilitiesUP           &capabilities,
+        IServerInfoUP                   &serverInfo) {
+    return IInitializeResultUP(new InitializeResult(capabilities, serverInfo));
+}
+
+IInitializeResultUP Factory::mkInitializeResult(
         const nlohmann::json            &params) {
     // TODO:
+}
+
+IServerCapabilitiesUP Factory::mkServerCapabilities() {
+    return IServerCapabilitiesUP(new ServerCapabilities());
 }
 
 IFactory *Factory::inst() {

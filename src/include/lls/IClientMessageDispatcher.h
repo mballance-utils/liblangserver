@@ -1,5 +1,5 @@
 /**
- * ServerMessageDispatcher.h
+ * IClientMessageDispatcher.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -19,37 +19,20 @@
  *     Author: 
  */
 #pragma once
-#include "dmgr/IDebugMgr.h"
-#include "lls/IFactory.h"
-#include "lls/IMessageDispatcher.h"
+#include <memory>
 #include "lls/IServer.h"
-#include "lls/IServerMessageDispatcher.h"
 
 namespace lls {
 
-
-
-class ServerMessageDispatcher : public virtual IServerMessageDispatcher {
+class IClientMessageDispatcher;
+using IClientMessageDispatcherUP=std::unique_ptr<IClientMessageDispatcher>;
+class IClientMessageDispatcher : public virtual IServer {
 public:
-    ServerMessageDispatcher(
-        IFactory                    *factory,
-        jrpc::IMessageDispatcher    *dispatch,
-        IServer                     *server
-    );
 
-    virtual ~ServerMessageDispatcher();
-
-private:
-    jrpc::IRspMsgUP initializeRequest(jrpc::IReqMsgUP &msg);
-
-private:
-    static dmgr::IDebug             *m_dbg;
-    IFactory                        *m_factory;
-    jrpc::IMessageDispatcher        *m_dispatch;
-    IServer                         *m_server;
+    virtual ~IClientMessageDispatcher() { }
 
 };
 
-}
+} /* namespace lls */
 
 

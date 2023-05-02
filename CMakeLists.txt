@@ -10,6 +10,7 @@ include(ExternalProject)
 
 if (NOT PACKAGES_DIR)
   set(PACKAGES_DIR ${CMAKE_SOURCE_DIR}/packages)
+  set(ENABLE_TESTING True)
 endif()
 
 if (WIN32)
@@ -38,6 +39,7 @@ ExternalProject_Add(JRPC
     SOURCE_DIR "${PACKAGES_DIR}/libjson-rpc" 
     CMAKE_CACHE_ARGS 
     -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_BINARY_DIR}/jrpc
+    -DCMAKE_BUILD_TYPE:String=${CMAKE_BUILD_TYPE}
     )
 	
 set(CompilerFlags
@@ -71,9 +73,9 @@ add_subdirectory(src)
 #   DESTINATION "include/liblangserver")
 	
 # TODO: make conditional on developing the package
-if (NOT WIN32)
-#  enable_testing()
-#  add_subdirectory(tests)
+if (ENABLE_TESTING)
+    enable_testing()
+    add_subdirectory(tests)
 endif()
 
 

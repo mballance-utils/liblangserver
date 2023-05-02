@@ -24,13 +24,14 @@
  */
 
 #pragma once
-#include "jrpc/IEventLoop.h"
-#include "lls/IFactory.h"
+#include <memory>
 #include "lls/IInitializeParams.h"
+#include "lls/IInitializeResult.h"
 #include "lls/IServerCapabilities.h"
 
 namespace lls {
-
+class IServer;
+using IServerUP=std::unique_ptr<IServer>;
 class IServer {
 public:
 
@@ -43,7 +44,7 @@ public:
         IClientConnection           *connection) = 0;
  */
 
-	virtual IServerCapabilitiesUP initialize(IInitializeParamsUP params) = 0;
+	virtual IInitializeResultUP initialize(IInitializeParamsUP &params) = 0;
 
 /*
 	virtual void didChangeTextDocument(DidChangeTextDocumentParamsSP params) = 0;

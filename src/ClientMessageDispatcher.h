@@ -22,9 +22,10 @@
 #include "dmgr/IDebugMgr.h"
 #include "jrpc/IEventLoop.h"
 #include "jrpc/IMessageTransport.h"
+#include "lls/IClient.h"
+#include "lls/IClientMessageDispatcher.h"
 #include "lls/IFactory.h"
 #include "lls/IInitializeResult.h"
-#include "lls/IServer.h"
 
 namespace lls {
 
@@ -34,29 +35,52 @@ namespace lls {
  * 
  */
 class ClientMessageDispatcher : 
-    public virtual IServer,
+    public virtual IClientMessageDispatcher,
     public virtual jrpc::IMessageTransport {
 public:
     ClientMessageDispatcher(
         IFactory                    *factory,
-        jrpc::IEventLoop            *loop,
-        jrpc::IMessageTransport     *transport);
+        jrpc::IMessageTransport     *transport,
+        IClient                     *client);
 
     virtual ~ClientMessageDispatcher();
 
-	virtual IServerCapabilitiesUP initialize(IInitializeParamsUP params) override;
+    virtual void init(IMessageTransport   *peer) override {
+        // ..
+    }
+
+    /**
+     * Send an outbound message via this transport
+     */
+	virtual void send(const nlohmann::json &msg) override {
+        m_transport->send(msg);
+    }
+
+    /**
+     * Get the event loop that this transport uses
+     */
+    virtual jrpc::IEventLoop *getLoop() override {
+        return m_transport->getLoop();
+    }
+
+	virtual IInitializeResultUP initialize(IInitializeParamsUP &params) override;
 
 private:
-    jrpc::IRspMsgUP initializeResult(jrpc::IReqMsgUP &msg);
+
+    jrpc::IRspMsgUP sendMethodRequest(const std::string &method, const nlohmann::json &params);
+
+    void handleResult(int32_t id, jrpc::IRspMsgUP &rsp);
 
 private:
     static dmgr::IDebug             *m_dbg;
+    int32_t                         m_req_id;
     IFactory                        *m_factory;
     jrpc::IEventLoop                *m_loop;
     jrpc::IMessageTransport         *m_transport;
+    IClient                         *m_client;
     jrpc::IMessageDispatcher        *m_dispatcher;
 
-    lls::IInitializeResultUP        m_initializeResult;
+    jrpc::IRspMsgUP                 m_rsp;
 };
 
 }

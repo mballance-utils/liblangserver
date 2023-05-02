@@ -1,5 +1,5 @@
 /**
- * InitializeResult.h
+ * ServerCapabilities.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -19,7 +19,6 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IInitializeResult.h"
 #include "lls/IServerCapabilities.h"
 #include "Json.h"
 
@@ -27,32 +26,17 @@ namespace lls {
 
 
 
-class InitializeResult : 
-    public virtual IInitializeResult,
+class ServerCapabilities :
+    public virtual IServerCapabilities,
     public virtual Json {
 public:
-    InitializeResult(
-        IServerCapabilitiesUP   &capabilities,
-        IServerInfoUP           &serverInfo
-    );
+    ServerCapabilities();
 
-    virtual ~InitializeResult();
-
-    virtual IServerCapabilities *getCapabilities() override {
-        return m_capabilities.get();
-    }
-
-    virtual IServerInfo *getServerInfo() override {
-        return m_serverInfo.get();
-    }
+    virtual ~ServerCapabilities();
 
     virtual const nlohmann::json &toJson() override;
 
-    static IInitializeResultUP mk(const nlohmann::json &params);
-
-private:
-    IServerCapabilitiesUP           m_capabilities;
-    IServerInfoUP                   m_serverInfo;
+    static IServerCapabilitiesUP mk(const nlohmann::json &params);
 
 };
 
