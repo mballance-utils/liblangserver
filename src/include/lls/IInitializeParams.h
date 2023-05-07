@@ -1,5 +1,5 @@
 /**
- * ServerCapabilities.h
+ * IInitializeParams.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -19,27 +19,38 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IServerCapabilities.h"
-#include "Json.h"
+#include <stdint.h>
+#include <memory>
+#include <string>
+#include <vector>
+#include "lls/IClientInfo.h"
+#include "lls/IJson.h"
 
 namespace lls {
 
-
-
-class ServerCapabilities :
-    public virtual IServerCapabilities,
-    public virtual Json {
+class IInitializeParams;
+using IInitializeParamsUP=std::unique_ptr<IInitializeParams>;
+class IInitializeParams : public virtual IJson {
 public:
-    ServerCapabilities();
 
-    virtual ~ServerCapabilities();
+    virtual ~IInitializeParams() { }
 
-    virtual const nlohmann::json &toJson() override;
+    virtual int32_t getProcessId() = 0;
 
-    static IServerCapabilitiesUP mk(const nlohmann::json &params);
+    virtual IClientInfo *getCientInfo() = 0;
+
+    virtual const std::string &getLocale() = 0;
+
+    virtual const std::string &getRootPath() = 0;
+
+    virtual const std::string &getDocumentUri() = 0;
+
+    // TODO: initializationOptions
+
+    virtual const std::vector<std::string> &getWorkspaceFolders() const = 0;
 
 };
 
-}
+} /* namespace lls */
 
 

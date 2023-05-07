@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * IJson.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,25 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include <memory>
+#include "nlohmann/json_fwd.hpp"
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
 
-}
+class IJson {
+public:
 
-MessageDispatcher::~MessageDispatcher() {
+    virtual ~IJson() { }
 
-}
+    virtual const nlohmann::json &toJson() = 0;
 
-}
+};
+
+} /* namespace lls */
+
+

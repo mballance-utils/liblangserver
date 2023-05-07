@@ -1,0 +1,11 @@
+
+- Split langserver code into two pieces
+  - Base JSON-RPC infrastructure to handle
+    - Message infrastructure
+    - Background tasks
+    - Timed tasks
+  - LSP infrastructure to implement 
+    - base language-server messages
+    - dispatching messages to a pure-interface implementation
+  - 
+  - LSP utilities to manage document updates, etc

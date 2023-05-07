@@ -1,5 +1,5 @@
 /*
- * MessageDispatcher.cpp
+ * Json.cpp
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -18,17 +18,17 @@
  * Created on:
  *     Author:
  */
-#include "MessageDispatcher.h"
+#include "Json.h"
 
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
+Json::Json() {
 
 }
 
-MessageDispatcher::~MessageDispatcher() {
+Json::~Json() {
 
 }
 

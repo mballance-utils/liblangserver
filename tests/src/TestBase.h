@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * TestBase.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,36 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include "gtest/gtest.h"
+#include "lls/IFactory.h"
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
+
+class TestBase : public ::testing::Test {
+public:
+    TestBase();
+
+    virtual ~TestBase();
+
+    virtual void SetUp() override;
+
+protected: 
+
+    void enableDebug(bool en);
+
+    std::pair<jrpc::IMessageTransportUP, jrpc::IMessageTransportUP> mkTransportPair(
+        jrpc::IEventLoop    *loop);
+
+protected:
+    IFactory                *m_factory;
+
+};
 
 }
 
-MessageDispatcher::~MessageDispatcher() {
 
-}
-
-}

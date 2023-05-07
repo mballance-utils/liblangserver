@@ -1,31 +1,46 @@
 
-cmake_minimum_required(VERSION 2.8.8)
+cmake_minimum_required(VERSION 3.11)
 
 project(liblangserver)
 
 include(ExternalProject)
-find_package(Java REQUIRED)
-include(UseJava)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.8" "-target" "1.8")
+#find_package(Java REQUIRED)
+#include(UseJava)
 
 
 if (NOT PACKAGES_DIR)
   set(PACKAGES_DIR ${CMAKE_SOURCE_DIR}/packages)
+  set(ENABLE_TESTING True)
 endif()
 
+if (WIN32)
+  set(PYTHON ${PACKAGES_DIR}/python/Scripts/python.exe)
+else()
+  set(PYTHON ${PACKAGES_DIR}/python/bin/python)
+endif()
 
-ExternalProject_Add(GOOGLETEST
-	PREFIX googletest
-	SOURCE_DIR "${PACKAGES_DIR}/googletest"
-    CMAKE_CACHE_ARGS
-    -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_BINARY_DIR}/googletest
-	)
-	
+execute_process(COMMAND ${PYTHON} -m ivpm share cmake OUTPUT_VARIABLE IVPM_CMAKE_PATH)
+list(APPEND CMAKE_MODULE_PATH ${IVPM_CMAKE_PATH})
+message("IVPM_CMAKE_PATH: ${IVPM_CMAKE_PATH} ${CMAKE_MODULE_PATH}")
+
+include(ivpm)
+
+Ivpm_AddPythonExtProject(debug-mgr debug_mgr)
+
+set(CMAKE_CXX_STANDARD 11)
+#set(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.8" "-target" "1.8")
+
 include_directories(
 	${PACKAGES_DIR}/json/include
 	)
+
+ExternalProject_Add(JRPC
+    PREFIX jrpc 
+    SOURCE_DIR "${PACKAGES_DIR}/libjson-rpc" 
+    CMAKE_CACHE_ARGS 
+    -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_BINARY_DIR}/jrpc
+    -DCMAKE_BUILD_TYPE:String=${CMAKE_BUILD_TYPE}
+    )
 	
 set(CompilerFlags
         CMAKE_CXX_FLAGS
@@ -39,22 +54,28 @@ foreach(CompilerFlag ${CompilerFlags})
   string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
 endforeach()
 	
-file(GLOB LIBLANGSERVER_SRCS src/*.cpp src/*.h)
+# file(GLOB LIBLANGSERVER_SRCS src/*.cpp src/*.h)
 	
-add_library(liblangserver  ${LIBLANGSERVER_SRCS})
+# add_library(liblangserver  ${LIBLANGSERVER_SRCS})
 
-install(TARGETS liblangserver
-  DESTINATION lib
-  EXPORT liblangserver-targets)
+# target_include_directories(liblangserver PRIVATE
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src 
+#     ${CMAKE_CURRENT_SOURCE_DIR}/src/include
+# ) 
+add_subdirectory(src)
 
-file(GLOB liblangserver_headers src/*.h)
-install(FILES ${liblangservers_headers}
-  DESTINATION "include/liblangserver")
+# install(TARGETS liblangserver
+#   DESTINATION lib
+#   EXPORT liblangserver-targets)
+
+# file(GLOB liblangserver_headers src/*.h)
+# install(FILES ${liblangservers_headers}
+#   DESTINATION "include/liblangserver")
 	
 # TODO: make conditional on developing the package
-if (NOT WIN32)
-  enable_testing()
-  add_subdirectory(tests)
+if (ENABLE_TESTING)
+    enable_testing()
+    add_subdirectory(tests)
 endif()
 
 

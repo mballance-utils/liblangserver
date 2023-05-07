@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * IClient.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,26 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include "lls/IInitializeParams.h"
+#include "lls/IServerCapabilities.h"
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
 
-}
+class IClient {
+public:
 
-MessageDispatcher::~MessageDispatcher() {
+    virtual ~IClient() { }
 
-}
+//    virtual IServerCapabilitiesUP initialize(IInitializeParamsUP params) = 0;
 
-}
+
+};
+
+} /* namespace lls */
+
+

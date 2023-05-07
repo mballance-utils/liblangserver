@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * IServerInfo.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,22 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include "lls/IJson.h"
 
 namespace lls {
 
+class IServerInfo;
+using IServerInfoUP=std::unique_ptr<IServerInfo>;
+class IServerInfo : public virtual IJson {
+public:
 
-MessageDispatcher::MessageDispatcher() {
+    virtual ~IServerInfo() { }
 
-}
+};
 
-MessageDispatcher::~MessageDispatcher() {
+} /* namespace lls */
 
-}
 
-}

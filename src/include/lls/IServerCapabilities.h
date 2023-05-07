@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * IServerCapabilities.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,22 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include "lls/IJson.h"
 
 namespace lls {
 
+class IServerCapabilities;
+using IServerCapabilitiesUP=std::unique_ptr<IServerCapabilities>;
+class IServerCapabilities : public virtual IJson {
+public:
 
-MessageDispatcher::MessageDispatcher() {
+    virtual ~IServerCapabilities() { }
 
-}
+};
 
-MessageDispatcher::~MessageDispatcher() {
+} /* namespace lls */
 
-}
 
-}

@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * Json.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,26 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include "nlohmann/json.hpp"
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
+
+class Json {
+public:
+    Json();
+
+    virtual ~Json();
+
+protected:
+    nlohmann::json              m_json;
+
+};
 
 }
 
-MessageDispatcher::~MessageDispatcher() {
 
-}
-
-}

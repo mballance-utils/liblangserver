@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * TestInitialize.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,23 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include "TestBase.h"
 
 namespace lls {
 
 
-MessageDispatcher::MessageDispatcher() {
+
+class TestInitialize : public TestBase {
+public:
+    TestInitialize();
+
+    virtual ~TestInitialize();
+
+};
 
 }
 
-MessageDispatcher::~MessageDispatcher() {
 
-}
-
-}

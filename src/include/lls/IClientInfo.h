@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * IClientInfo.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,22 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include "lls/IJson.h"
 
 namespace lls {
 
+class IClientInfo;
+using IClientInfoUP=std::unique_ptr<IClientInfo>;
+class IClientInfo : public virtual IJson {
+public:
 
-MessageDispatcher::MessageDispatcher() {
+    virtual ~IClientInfo() { }
 
-}
+};
 
-MessageDispatcher::~MessageDispatcher() {
+} /* namespace lls */
 
-}
 
-}

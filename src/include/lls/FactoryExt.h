@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * FactoryExt.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,12 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
+#pragma once
+#include "lls/IFactory.h"
 
 
-namespace lls {
+extern "C" lls::IFactory *lls_getFactory();
 
 
-MessageDispatcher::MessageDispatcher() {
-
-}
-
-MessageDispatcher::~MessageDispatcher() {
-
-}
-
-}

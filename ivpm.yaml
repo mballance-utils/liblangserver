@@ -2,19 +2,40 @@
 #* ivpm.yaml
 #*****************************************************************************
 package:
-   name: liblangserver
-   version: 0.0.1
+  name: liblangserver
 
-   deps: 
-     - name: json
-       url: https://github.com/nlohmann/json/archive/v3.9.1.tar.gz
-   
-   dev-deps:
-     - name: json
-       url: https://github.com/nlohmann/json/archive/v3.9.1.tar.gz
-     - name: debug-mgr
-       utl: https://github.com/mballance-utils/debug-mgr.git
-     - name: gtest
-       url: https://github.com/google/googletest/archive/release-1.10.0.tar.gz
+  setup-deps:
+  - ninja
+  - cython
 
-  
+  dep-sets:
+  - name: default
+    deps:
+    - name: debug-mgr
+      url: https://github.com/mballance-utils/debug-mgr.git
+    - name: json
+      url: https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
+    - name: pygls
+      src: pypi
+    - name: lsprotocol
+      src: pypi
+
+  - name: default-dev
+    deps:
+    - name: debug-mgr
+      url: https://github.com/mballance-utils/debug-mgr.git
+    - name: libjson-rpc
+      url: https://github.com/mballance-utils/libjson-rpc.git
+    - name: json
+      url: https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
+    - name: pygls
+      src: pypi
+    - name: lsprotocol
+      src: pypi
+    - name: ninja
+      src: pypi
+    - name: cython
+      src: pypi
+    - name: ivpm
+      src: pypi
+

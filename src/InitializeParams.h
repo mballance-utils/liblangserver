@@ -1,73 +1,83 @@
 /**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-/*
  * InitializeParams.h
  *
- *  Created on: Sep 30, 2020
- *      Author: ballance
+ * Copyright 2022 Matthew Ballance and Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may 
+ * not use this file except in compliance with the License.  
+ * You may obtain a copy of the License at:
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
+ * See the License for the specific language governing permissions and 
+ * limitations under the License.
+ *
+ * Created on:
+ *     Author: 
  */
-
 #pragma once
-#include "ClientInfo.h"
-#include "ValInt.h"
-#include "ValStr.h"
-#include "ValVector.h"
-#include "WorkDoneProgressParams.h"
-#include "WorkspaceFolder.h"
+#include "lls/IClientInfo.h"
+#include "lls/IInitializeParams.h"
+#include "Json.h"
 
 namespace lls {
 
-class InitializeParams;
-typedef std::shared_ptr<InitializeParams> InitializeParamsSP;
 
-class InitializeParams : public WorkDoneProgressParams {
+class InitializeParams : 
+    public virtual IInitializeParams,
+    public virtual Json {
 public:
-	InitializeParams();
+    InitializeParams(
+        int32_t                         pid,
+        IClientInfo                     *client_info,
+        const std::string               &locale,
+        const std::string               &rootPath,
+        const std::string               &documentUri,
+        const std::vector<std::string>  &workspace_folders);
 
-	InitializeParams(const nlohmann::json &msg);
+    virtual ~InitializeParams();
 
-	virtual ~InitializeParams();
+    virtual int32_t getProcessId() override { return m_pid; }
 
-	ClientInfoSP clientInfo() const { return m_clientInfo; }
+    virtual IClientInfo *getCientInfo() override { 
+        return m_client_info.get(); 
+    }
 
-	ValStrSP rootPath() const { return m_rootPath; }
+    virtual const std::string &getLocale() override {
+        return m_locale;
+    }
 
-	void rootPath(ValStrSP v) {  m_rootPath = v; }
+    virtual const std::string &getRootPath() override {
+        return m_rootPath;
+    }
 
-	ValStrSP rootUri() const { return m_rootUri; }
+    virtual const std::string &getDocumentUri() override {
+        return m_documentUri;
+    }
 
-	void rootUri(ValStrSP v) {  m_rootUri = v; }
+    // TODO: initializationOptions
 
-	virtual nlohmann::json dump();
+    virtual const std::vector<std::string> &getWorkspaceFolders() const override {
+        return m_workspace_folders;
+    }
 
-	static InitializeParamsSP mk(const nlohmann::json &msg);
+    virtual const nlohmann::json &toJson() override;
+
+    static IInitializeParams *mk(const nlohmann::json &params);
 
 private:
-	ClientInfoSP					m_clientInfo;
-	ValIntSP						m_processId;
-	ValStrSP						m_rootPath;
-	ValStrSP						m_rootUri;
-	ValStrSP						m_trace;
-	ValVector<WorkspaceFolder>::SP	m_workspaceFolders;
-
+    int32_t                         m_pid;
+    IClientInfoUP                   m_client_info;
+    const std::string               m_locale;
+    std::string                     m_rootPath;
+    std::string                     m_documentUri;
+    std::vector<std::string>        m_workspace_folders;
 
 };
 
-} /* namespace lls */
+}
+
 

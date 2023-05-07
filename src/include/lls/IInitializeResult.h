@@ -1,5 +1,5 @@
-/*
- * MessageDispatcher.cpp
+/**
+ * IInitializeResult.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -16,20 +16,28 @@
  * limitations under the License.
  *
  * Created on:
- *     Author:
+ *     Author: 
  */
-#include "MessageDispatcher.h"
-
+#pragma once
+#include "lls/IJson.h"
+#include "lls/IServerCapabilities.h"
+#include "lls/IServerInfo.h"
 
 namespace lls {
 
+class IInitializeResult;
+using IInitializeResultUP=std::unique_ptr<IInitializeResult>;
+class IInitializeResult : public virtual IJson {
+public:
 
-MessageDispatcher::MessageDispatcher() {
+    virtual ~IInitializeResult() { }
 
-}
+    virtual IServerCapabilities *getCapabilities() = 0;
 
-MessageDispatcher::~MessageDispatcher() {
+    virtual IServerInfo *getServerInfo() = 0;
 
-}
+};
 
-}
+} /* namespace lls */
+
+

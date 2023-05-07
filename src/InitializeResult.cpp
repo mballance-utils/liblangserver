@@ -1,54 +1,69 @@
-/**
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 /*
  * InitializeResult.cpp
  *
- *  Created on: Oct 1, 2020
- *      Author: ballance
+ * Copyright 2022 Matthew Ballance and Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may 
+ * not use this file except in compliance with the License.  
+ * You may obtain a copy of the License at:
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  
+ * See the License for the specific language governing permissions and 
+ * limitations under the License.
+ *
+ * Created on:
+ *     Author:
  */
-
 #include "InitializeResult.h"
+#include "ServerCapabilities.h"
+
 
 namespace lls {
 
-InitializeResult::InitializeResult(ServerCapabilitiesSP capabilities) :
-	m_capabilities(capabilities) {
-	// TODO Auto-generated constructor stub
+
+InitializeResult::InitializeResult(
+        IServerCapabilitiesUP   &capabilities,
+        IServerInfoUP           &serverInfo) :
+            m_capabilities(capabilities.release()),
+            m_serverInfo(serverInfo.release()) {
 
 }
 
 InitializeResult::~InitializeResult() {
-	// TODO Auto-generated destructor stub
+
 }
 
-nlohmann::json InitializeResult::dump() {
-	nlohmann::json msg;
-	msg["capabilities"] = m_capabilities->dump();
-	if (m_info) {
-		msg["serverInfo"] = m_info->dump();
-	}
+const nlohmann::json &InitializeResult::toJson() {
+    m_json.clear();
+    m_json["capabiities"] = m_capabilities->toJson();
 
-	return msg;
+    if (m_serverInfo) {
+        m_json["serverInfo"] = m_serverInfo->toJson();
+    }
+
+    return m_json;
 }
 
-InitializeResultSP InitializeResult::mk(ServerCapabilitiesSP capabilities) {
-	return InitializeResultSP(new InitializeResult(capabilities));
+IInitializeResultUP InitializeResult::mk(const nlohmann::json &params) {
+    IServerCapabilitiesUP capabilities;
+    if (params.contains("capabilities")) {
+        capabilities = ServerCapabilities::mk(params["capabilities"]);
+
+    }
+
+    IServerInfoUP serverInfo;
+
+
+    InitializeResult *ret = new InitializeResult(
+        capabilities,
+        serverInfo
+    );
+
+    return IInitializeResultUP(ret);
 }
 
-} /* namespace lls */
+}
