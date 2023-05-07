@@ -1,0 +1,20 @@
+#*****************************************************************************
+#* ivpm.yaml
+#*****************************************************************************
+package:
+   name: liblangserver
+   version: 0.0.1
+
+   deps: 
+     - name: json
+       url: https://github.com/nlohmann/json/archive/v3.9.1.tar.gz
+   
+   dev-deps:
+     - name: json
+       url: https://github.com/nlohmann/json/archive/v3.9.1.tar.gz
+     - name: debug-mgr
+       utl: https://github.com/mballance-utils/debug-mgr.git
+     - name: gtest
+       url: https://github.com/google/googletest/archive/release-1.10.0.tar.gz
+
+  
