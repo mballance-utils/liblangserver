@@ -1,7 +1,7 @@
-/**
- * IServerCapabilities.h
+/*
+ * Position.cpp
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -16,25 +16,35 @@
  * limitations under the License.
  *
  * Created on:
- *     Author: 
+ *     Author:
  */
-#pragma once
-#include "lls/IJson.h"
-#include "lls/ITextDocumentSyncOptions.h"
+#include "Position.h"
+
 
 namespace lls {
 
-class IServerCapabilities;
-using IServerCapabilitiesUP=std::unique_ptr<IServerCapabilities>;
-class IServerCapabilities : public virtual IJson {
-public:
 
-    virtual ~IServerCapabilities() { }
+Position::Position(
+    int32_t         line,
+    int32_t         character) : m_line(line), m_character(character) {
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() = 0;
+}
 
-};
+Position::~Position() {
 
-} /* namespace lls */
+}
 
+const nlohmann::json &Position::toJson() {
+    m_json.clear();
+    m_json["line"] = m_line;
+    m_json["character"] = m_character;
+    return m_json;
+}
 
+IPositionUP Position::mk(const nlohmann::json &m) {
+    int32_t line = m["line"];
+    int32_t character = m["character"];
+    return IPositionUP(new Position(line, character));
+}
+
+}

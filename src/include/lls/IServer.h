@@ -28,6 +28,8 @@
 #include "lls/IInitializeParams.h"
 #include "lls/IInitializeResult.h"
 #include "lls/IServerCapabilities.h"
+#include "lls/IDidChangeTextDocumentParams.h"
+#include "lls/IDidOpenTextDocumentParams.h"
 
 namespace lls {
 class IServer;
@@ -45,6 +47,12 @@ public:
  */
 
 	virtual IInitializeResultUP initialize(IInitializeParamsUP &params) = 0;
+
+    virtual void initialized() = 0;
+
+    virtual void didOpen(IDidOpenTextDocumentParamsUP &params) = 0;
+
+    virtual void didChange(IDidChangeTextDocumentParamsUP &params) = 0;
 
 /*
 	virtual void didChangeTextDocument(DidChangeTextDocumentParamsSP params) = 0;

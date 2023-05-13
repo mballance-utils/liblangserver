@@ -1,5 +1,5 @@
 /**
- * IServerCapabilities.h
+ * ITextDocumentSyncOptions.h
  *
  * Copyright 2022 Matthew Ballance and Contributors
  *
@@ -20,18 +20,29 @@
  */
 #pragma once
 #include "lls/IJson.h"
-#include "lls/ITextDocumentSyncOptions.h"
 
 namespace lls {
 
-class IServerCapabilities;
-using IServerCapabilitiesUP=std::unique_ptr<IServerCapabilities>;
-class IServerCapabilities : public virtual IJson {
+enum class TextDocumentSyncKind {
+    None,
+    Full,
+    Incremental
+};
+
+class ITextDocumentSyncOptions;
+using ITextDocumentSyncOptionsUP=std::unique_ptr<ITextDocumentSyncOptions>;
+class ITextDocumentSyncOptions : public virtual IJson {
 public:
 
-    virtual ~IServerCapabilities() { }
+    virtual ~ITextDocumentSyncOptions() { }
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() = 0;
+    virtual bool getOpenClose() = 0;
+
+    virtual void setOpenClose(bool e) = 0;
+
+    virtual TextDocumentSyncKind getChange() = 0;
+
+    virtual void setChange(TextDocumentSyncKind kind) = 0;
 
 };
 

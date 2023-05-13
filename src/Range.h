@@ -1,7 +1,7 @@
 /**
- * IServerCapabilities.h
+ * Range.h
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -19,22 +19,42 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IJson.h"
-#include "lls/ITextDocumentSyncOptions.h"
+#include "lls/IRange.h"
+#include "Json.h"
 
 namespace lls {
 
-class IServerCapabilities;
-using IServerCapabilitiesUP=std::unique_ptr<IServerCapabilities>;
-class IServerCapabilities : public virtual IJson {
+
+
+class Range : 
+    public virtual IRange,
+    public virtual Json {
 public:
+    Range(
+        IPositionUP     &start,
+        IPositionUP     &end);
 
-    virtual ~IServerCapabilities() { }
+    virtual ~Range();
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() = 0;
+    virtual IPosition *getStart() override {
+        return m_start.get();
+    }
+
+    virtual IPosition *getEnd() override {
+        return m_end.get();
+    }
+
+    virtual const nlohmann::json &toJson() override;
+
+    static IRangeUP mk(const nlohmann::json &m);
+
+
+private:
+    IPositionUP          m_start;
+    IPositionUP          m_end;
 
 };
 
-} /* namespace lls */
+}
 
 

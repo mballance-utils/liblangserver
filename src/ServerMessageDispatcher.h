@@ -42,6 +42,12 @@ public:
 private:
     jrpc::IRspMsgUP initializeRequest(jrpc::IReqMsgUP &msg);
 
+    jrpc::IRspMsgUP initializedRequest(jrpc::IReqMsgUP &msg);
+
+    jrpc::IRspMsgUP didOpenNotification(jrpc::IReqMsgUP &msg);
+
+    jrpc::IRspMsgUP didChangeNotification(jrpc::IReqMsgUP &msg);
+
 private:
     static dmgr::IDebug             *m_dbg;
     IFactory                        *m_factory;

@@ -1,7 +1,7 @@
 /**
- * ServerCapabilities.h
+ * VersionedTextDocumentIdentifier.h
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -19,33 +19,33 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IServerCapabilities.h"
-#include "Json.h"
+#include "lls/IVersionedTextDocumentIdentifier.h"
+#include "TextDocumentIdentifier.h"
 
 namespace lls {
 
 
-
-class ServerCapabilities :
-    public virtual IServerCapabilities,
-    public virtual Json {
+class VersionedTextDocumentIdentifier :
+    public virtual IVersionedTextDocumentIdentifier,
+    public virtual TextDocumentIdentifier  {
 public:
-    ServerCapabilities(
-        ITextDocumentSyncOptionsUP      &textDocumentSync
+    VersionedTextDocumentIdentifier(
+        const std::string       &uri,
+        int32_t                 version
     );
 
-    virtual ~ServerCapabilities();
+    virtual ~VersionedTextDocumentIdentifier();
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() override {
-        return m_textDocumentSync.get();
+    virtual int32_t getVersion() override {
+        return m_version;
     }
 
     virtual const nlohmann::json &toJson() override;
 
-    static IServerCapabilitiesUP mk(const nlohmann::json &params);
+    static IVersionedTextDocumentIdentifierUP mk(const nlohmann::json &m);
 
 private:
-    ITextDocumentSyncOptionsUP          m_textDocumentSync;
+    int32_t                     m_version;
 
 };
 

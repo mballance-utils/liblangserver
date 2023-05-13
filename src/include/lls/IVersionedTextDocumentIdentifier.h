@@ -1,7 +1,7 @@
 /**
- * IServerCapabilities.h
+ * IVersionedTextDocumentIdentifier.h
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -19,19 +19,19 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IJson.h"
-#include "lls/ITextDocumentSyncOptions.h"
+#include "lls/ITextDocumentIdentifier.h"
 
 namespace lls {
 
-class IServerCapabilities;
-using IServerCapabilitiesUP=std::unique_ptr<IServerCapabilities>;
-class IServerCapabilities : public virtual IJson {
+class IVersionedTextDocumentIdentifier;
+using IVersionedTextDocumentIdentifierUP=std::unique_ptr<IVersionedTextDocumentIdentifier>;
+class IVersionedTextDocumentIdentifier : 
+    public virtual ITextDocumentIdentifier {
 public:
 
-    virtual ~IServerCapabilities() { }
+    virtual ~IVersionedTextDocumentIdentifier() { }
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() = 0;
+    virtual int32_t getVersion() = 0;
 
 };
 

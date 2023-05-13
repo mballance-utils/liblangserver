@@ -1,7 +1,7 @@
 /**
- * IServerCapabilities.h
+ * IDidChangeTextDocumentParams.h
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -19,19 +19,23 @@
  *     Author: 
  */
 #pragma once
+#include <vector>
 #include "lls/IJson.h"
-#include "lls/ITextDocumentSyncOptions.h"
+#include "lls/ITextDocumentContentChangeEvent.h"
+#include "lls/IVersionedTextDocumentIdentifier.h"
 
 namespace lls {
 
-class IServerCapabilities;
-using IServerCapabilitiesUP=std::unique_ptr<IServerCapabilities>;
-class IServerCapabilities : public virtual IJson {
+class IDidChangeTextDocumentParams;
+using IDidChangeTextDocumentParamsUP=std::unique_ptr<IDidChangeTextDocumentParams>;
+class IDidChangeTextDocumentParams : public virtual IJson {
 public:
 
-    virtual ~IServerCapabilities() { }
+    virtual ~IDidChangeTextDocumentParams() { }
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() = 0;
+    virtual IVersionedTextDocumentIdentifier *getTextDocument() = 0;
+
+    virtual const std::vector<ITextDocumentContentChangeEventUP> &getChanges() = 0;
 
 };
 

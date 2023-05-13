@@ -63,6 +63,29 @@ IInitializeResultUP ClientMessageDispatcher::initialize(IInitializeParamsUP &par
     return ret;
 }
 
+void ClientMessageDispatcher::initialized() {
+    DEBUG_ENTER("initialized");
+    nlohmann::json params;
+
+    sendNotification("initialized", params);
+
+    DEBUG_LEAVE("initialized");
+}
+
+void ClientMessageDispatcher::didOpen(IDidOpenTextDocumentParamsUP &params) {
+    DEBUG_ENTER("didOpen");
+    nlohmann::json msg_params = params->toJson();
+    sendNotification("textDocument/didOpen", msg_params);
+    DEBUG_LEAVE("didOpen");
+}
+
+void ClientMessageDispatcher::didChange(IDidChangeTextDocumentParamsUP &params) {
+    DEBUG_ENTER("didChange");
+    nlohmann::json msg_params = params->toJson();
+    sendNotification("textDocument/didChange", msg_params);
+    DEBUG_LEAVE("didChange");
+}
+
 jrpc::IRspMsgUP ClientMessageDispatcher::sendMethodRequest(const std::string &method, const nlohmann::json &params) {
     DEBUG_ENTER("sendMethodRequest: %s", method.c_str());
     nlohmann::json msg;
@@ -84,6 +107,20 @@ jrpc::IRspMsgUP ClientMessageDispatcher::sendMethodRequest(const std::string &me
 
     DEBUG_LEAVE("sendMethodRequest: %s", method.c_str());
     return std::move(m_rsp);
+}
+
+void ClientMessageDispatcher::sendNotification(const std::string &method, const nlohmann::json &params) {
+    DEBUG_ENTER("sendNotification");
+    nlohmann::json msg;
+    msg["jsonrpc"] = "2.0";
+    msg["method"] = method;
+    msg["params"] = params;
+
+    m_rsp.release();
+    
+    m_transport->send(msg);
+
+    DEBUG_LEAVE("sendNotification");
 }
 
 void ClientMessageDispatcher::handleResult(int32_t id, jrpc::IRspMsgUP &rsp) {

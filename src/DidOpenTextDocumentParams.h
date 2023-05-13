@@ -1,7 +1,7 @@
 /**
- * ServerCapabilities.h
+ * DidOpenTextDocumentParams.h
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -19,33 +19,31 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IServerCapabilities.h"
+#include "lls/IDidOpenTextDocumentParams.h"
 #include "Json.h"
 
 namespace lls {
 
 
 
-class ServerCapabilities :
-    public virtual IServerCapabilities,
+class DidOpenTextDocumentParams :
+    public virtual IDidOpenTextDocumentParams,
     public virtual Json {
 public:
-    ServerCapabilities(
-        ITextDocumentSyncOptionsUP      &textDocumentSync
-    );
+    DidOpenTextDocumentParams(ITextDocumentItemUP &textDocument);
 
-    virtual ~ServerCapabilities();
+    virtual ~DidOpenTextDocumentParams();
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() override {
-        return m_textDocumentSync.get();
+    virtual ITextDocumentItem *getTextDocument() override {
+        return m_textDocument.get();
     }
 
     virtual const nlohmann::json &toJson() override;
 
-    static IServerCapabilitiesUP mk(const nlohmann::json &params);
+    static IDidOpenTextDocumentParamsUP mk(const nlohmann::json &m);
 
 private:
-    ITextDocumentSyncOptionsUP          m_textDocumentSync;
+    ITextDocumentItemUP                         m_textDocument;
 
 };
 

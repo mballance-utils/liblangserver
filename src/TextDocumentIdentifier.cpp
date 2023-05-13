@@ -1,7 +1,7 @@
-/**
- * IServerCapabilities.h
+/*
+ * TextDocumentIdentifier.cpp
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -16,25 +16,31 @@
  * limitations under the License.
  *
  * Created on:
- *     Author: 
+ *     Author:
  */
-#pragma once
-#include "lls/IJson.h"
-#include "lls/ITextDocumentSyncOptions.h"
+#include "TextDocumentIdentifier.h"
+
 
 namespace lls {
 
-class IServerCapabilities;
-using IServerCapabilitiesUP=std::unique_ptr<IServerCapabilities>;
-class IServerCapabilities : public virtual IJson {
-public:
 
-    virtual ~IServerCapabilities() { }
+TextDocumentIdentifier::TextDocumentIdentifier(const std::string &uri) 
+    : m_uri(uri) {
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() = 0;
+}
 
-};
+TextDocumentIdentifier::~TextDocumentIdentifier() {
 
-} /* namespace lls */
+}
 
+const nlohmann::json &TextDocumentIdentifier::toJson() {
+    m_json.clear();
+    m_json["uri"] = m_uri;
+    return m_json;
+}
 
+ITextDocumentIdentifierUP TextDocumentIdentifier::mk(const nlohmann::json &m) {
+    return ITextDocumentIdentifierUP(new TextDocumentIdentifier(m["uri"]));
+}
+
+}

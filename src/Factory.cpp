@@ -25,6 +25,7 @@
 #include "InitializeResult.h"
 #include "ServerCapabilities.h"
 #include "ServerMessageDispatcher.h"
+#include "TextDocumentSyncOptions.h"
 
 namespace lls {
 
@@ -90,10 +91,20 @@ IInitializeResultUP Factory::mkInitializeResult(
 IInitializeResultUP Factory::mkInitializeResult(
         const nlohmann::json            &params) {
     // TODO:
+    return 0;
 }
 
-IServerCapabilitiesUP Factory::mkServerCapabilities() {
-    return IServerCapabilitiesUP(new ServerCapabilities());
+IServerCapabilitiesUP Factory::mkServerCapabilities(
+        ITextDocumentSyncOptionsUP      &textDocumentSync) {
+    return IServerCapabilitiesUP(new ServerCapabilities(
+        textDocumentSync
+    ));
+}
+
+ITextDocumentSyncOptionsUP Factory::mkTextDocumentSyncOptions(
+        bool                            open_close,
+        TextDocumentSyncKind            sync_kind) {
+    return ITextDocumentSyncOptionsUP(new TextDocumentSyncOptions(open_close, sync_kind));
 }
 
 IFactory *Factory::inst() {

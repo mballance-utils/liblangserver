@@ -1,7 +1,7 @@
 /**
- * ServerCapabilities.h
+ * TextDocumentContentChangeEvent.h
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -19,33 +19,38 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IServerCapabilities.h"
+#include "lls/ITextDocumentContentChangeEvent.h"
 #include "Json.h"
 
 namespace lls {
 
 
 
-class ServerCapabilities :
-    public virtual IServerCapabilities,
+class TextDocumentContentChangeEvent :
+    public virtual ITextDocumentContentChangeEvent,
     public virtual Json {
 public:
-    ServerCapabilities(
-        ITextDocumentSyncOptionsUP      &textDocumentSync
-    );
+    TextDocumentContentChangeEvent(
+        IRangeUP            &range,
+        const std::string   &text);
 
-    virtual ~ServerCapabilities();
+    virtual ~TextDocumentContentChangeEvent();
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() override {
-        return m_textDocumentSync.get();
+    virtual IRange *getRange() override {
+        return m_range.get();
+    }
+
+    virtual const std::string &getText() override {
+        return m_text;
     }
 
     virtual const nlohmann::json &toJson() override;
 
-    static IServerCapabilitiesUP mk(const nlohmann::json &params);
+    static ITextDocumentContentChangeEventUP mk(const nlohmann::json &m);
 
 private:
-    ITextDocumentSyncOptionsUP          m_textDocumentSync;
+    IRangeUP                m_range;
+    std::string             m_text;
 
 };
 

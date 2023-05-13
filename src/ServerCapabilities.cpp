@@ -24,7 +24,9 @@
 namespace lls {
 
 
-ServerCapabilities::ServerCapabilities() {
+ServerCapabilities::ServerCapabilities(
+    ITextDocumentSyncOptionsUP      &textDocumentSync) :
+        m_textDocumentSync(textDocumentSync.release()) {
 
 }
 
@@ -35,13 +37,22 @@ ServerCapabilities::~ServerCapabilities() {
 const nlohmann::json &ServerCapabilities::toJson() {
     m_json.clear();
 
-    m_json = {};
+    m_json["textDocumentSync"] = m_textDocumentSync->toJson();
 
     return m_json;
 }
 
 IServerCapabilitiesUP ServerCapabilities::mk(const nlohmann::json &params) {
-    return IServerCapabilitiesUP(new ServerCapabilities());
+
+    ITextDocumentSyncOptionsUP textDocumentSync;
+
+    if (params.contains("textDocumentSync")) {
+        // TODO:
+    }
+
+    return IServerCapabilitiesUP(new ServerCapabilities(
+        textDocumentSync
+    ));
 }
 
 }

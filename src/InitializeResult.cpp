@@ -39,7 +39,11 @@ InitializeResult::~InitializeResult() {
 
 const nlohmann::json &InitializeResult::toJson() {
     m_json.clear();
-    m_json["capabiities"] = m_capabilities->toJson();
+    if (m_capabilities) {
+        m_json["capabilities"] = m_capabilities->toJson();
+    } else {
+        m_json["capabilities"] = {};
+    }
 
     if (m_serverInfo) {
         m_json["serverInfo"] = m_serverInfo->toJson();

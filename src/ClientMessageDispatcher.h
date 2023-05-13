@@ -65,9 +65,17 @@ public:
 
 	virtual IInitializeResultUP initialize(IInitializeParamsUP &params) override;
 
+    virtual void initialized() override;
+
+    virtual void didOpen(IDidOpenTextDocumentParamsUP &params) override;
+
+    virtual void didChange(IDidChangeTextDocumentParamsUP &params) override;
+
 private:
 
     jrpc::IRspMsgUP sendMethodRequest(const std::string &method, const nlohmann::json &params);
+
+    void sendNotification(const std::string &method, const nlohmann::json &params);
 
     void handleResult(int32_t id, jrpc::IRspMsgUP &rsp);
 

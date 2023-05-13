@@ -1,7 +1,7 @@
 /**
- * IServerCapabilities.h
+ * IRange.h
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -20,18 +20,20 @@
  */
 #pragma once
 #include "lls/IJson.h"
-#include "lls/ITextDocumentSyncOptions.h"
+#include "lls/IPosition.h"
 
 namespace lls {
 
-class IServerCapabilities;
-using IServerCapabilitiesUP=std::unique_ptr<IServerCapabilities>;
-class IServerCapabilities : public virtual IJson {
+class IRange;
+using IRangeUP=std::unique_ptr<IRange>;
+class IRange : public virtual IJson {
 public:
 
-    virtual ~IServerCapabilities() { }
+    virtual ~IRange() { }
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() = 0;
+    virtual IPosition *getStart() = 0;
+
+    virtual IPosition *getEnd() = 0;
 
 };
 

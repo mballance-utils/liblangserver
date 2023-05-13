@@ -27,6 +27,7 @@
 #include "lls/IInitializeResult.h"
 #include "lls/IServer.h"
 #include "lls/IServerMessageDispatcher.h"
+#include "lls/ITextDocumentSyncOptions.h"
 
 namespace lls {
 
@@ -72,7 +73,14 @@ public:
     virtual IInitializeResultUP mkInitializeResult(
         const nlohmann::json            &params) = 0;
 
-    virtual IServerCapabilitiesUP mkServerCapabilities() = 0;
+    virtual IServerCapabilitiesUP mkServerCapabilities(
+        ITextDocumentSyncOptionsUP      &textDocumentSync
+    ) = 0;
+
+    virtual ITextDocumentSyncOptionsUP mkTextDocumentSyncOptions(
+        bool                            open_close,
+        TextDocumentSyncKind            sync_kind
+    ) = 0;
 
 };
 

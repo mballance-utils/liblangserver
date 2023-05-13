@@ -69,7 +69,14 @@ public:
     virtual IInitializeResultUP mkInitializeResult(
         const nlohmann::json            &params) override;
 
-    virtual IServerCapabilitiesUP mkServerCapabilities() override;
+    virtual IServerCapabilitiesUP mkServerCapabilities(
+        ITextDocumentSyncOptionsUP      &textDocumentSync
+    ) override;
+
+    virtual ITextDocumentSyncOptionsUP mkTextDocumentSyncOptions(
+        bool                            open_close,
+        TextDocumentSyncKind            sync_kind
+    ) override;
 
     static IFactory *inst();
 

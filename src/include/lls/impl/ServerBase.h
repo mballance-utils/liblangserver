@@ -49,6 +49,18 @@ public:
         return ret;
     }
 
+    virtual void initialized() override {
+        // 
+    }
+
+    virtual void didOpen(IDidOpenTextDocumentParamsUP &params) override {
+
+    }
+
+    virtual void didChange(IDidChangeTextDocumentParamsUP &params) override {
+
+    }
+
 protected:
     jrpc::IEventLoop                *m_loop;
     IFactory                        *m_factory;

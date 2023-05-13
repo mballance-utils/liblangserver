@@ -55,11 +55,7 @@ const nlohmann::json &InitializeParams::toJson() {
     if (m_rootPath != "") {
         m_json["rootPath"] = m_rootPath;
     }
-    if (m_documentUri != "") {
-        m_json["documentUri"] = m_documentUri;
-    } else {
-        m_json["documentUri"] = nlohmann::json();
-    }
+    m_json["documentUri"] = m_documentUri;
 
     if (m_workspace_folders.size() > 0) {
         nlohmann::json &ws_folders = m_json["workspace_folders"];
