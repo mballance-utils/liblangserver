@@ -69,6 +69,13 @@ IMarkedStringUP Factory::mkContentMarkedString(
     return IMarkedStringUP(new MarkedString(language, value));
 }
 
+IDiagnosticUP Factory::mkDiagnostic(
+        IRangeUP                        &range,
+        DiagnosticSeverity              severity,
+        const std::string               &message) {
+
+}
+
 IHoverUP Factory::mkHover(
         IContentUP                      &contents,
         IRangeUP                        &range) {
@@ -109,12 +116,20 @@ IInitializeResultUP Factory::mkInitializeResult(
     return 0;
 }
 
+IPublishDiagnosticsParamsUP Factory::mkPublishDiagnosticsParams(
+        const std::string               &uri,
+        int32_t                         version,
+        std::vector<IDiagnosticUP>      &diagnostics) {
+
+}
+
 IServerCapabilitiesUP Factory::mkServerCapabilities(
         ITextDocumentSyncOptionsUP      &textDocumentSync) {
     return IServerCapabilitiesUP(new ServerCapabilities(
         textDocumentSync
     ));
 }
+
 
 ITextDocumentSyncOptionsUP Factory::mkTextDocumentSyncOptions(
         bool                            open_close,

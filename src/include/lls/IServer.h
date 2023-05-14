@@ -27,6 +27,7 @@
 #include <memory>
 #include "lls/IHover.h"
 #include "lls/IHoverParams.h"
+#include "lls/IClient.h"
 #include "lls/IInitializeParams.h"
 #include "lls/IInitializeResult.h"
 #include "lls/IServerCapabilities.h"
@@ -41,6 +42,8 @@ class IServer {
 public:
 
 	virtual ~IServer() { }
+
+    virtual void init(IClient *client) = 0;
 
 /*
     virtual void init(

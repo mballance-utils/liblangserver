@@ -1,7 +1,7 @@
 /**
- * IClient.h
+ * IDiagnostic.h
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -19,24 +19,30 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IInitializeParams.h"
-#include "lls/IPublishDiagnosticsParams.h"
-#include "lls/IServerCapabilities.h"
+#include "lls/IJson.h"
+#include "lls/IRange.h"
 
 namespace lls {
 
+enum class DiagnosticSeverity {
+    Error,
+    Warning,
+    Information,
+    Hint
+};
 
-
-class IClient {
+class IDiagnostic;
+using IDiagnosticUP=std::unique_ptr<IDiagnostic>;
+class IDiagnostic {
 public:
 
-    virtual ~IClient() { }
+    virtual ~IDiagnostic() { }
 
-//    virtual IServerCapabilitiesUP initialize(IInitializeParamsUP params) = 0;
+    virtual IRange *getRange() = 0;
 
-    virtual void publishDiagnosticsNotification(
-        IPublishDiagnosticsParamsUP         &params) = 0;
+    virtual DiagnosticSeverity getSeverity() = 0;
 
+    virtual const std::string &getMessage() = 0;
 
 };
 

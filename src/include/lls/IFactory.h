@@ -24,10 +24,12 @@
 #include "lls/IClientInfo.h"
 #include "lls/IClientMessageDispatcher.h"
 #include "lls/IContent.h"
+#include "lls/IDiagnostic.h"
 #include "lls/IHover.h"
 #include "lls/IInitializeParams.h"
 #include "lls/IInitializeResult.h"
 #include "lls/IMarkedString.h"
+#include "lls/IPublishDiagnosticsParams.h"
 #include "lls/IServer.h"
 #include "lls/IServerMessageDispatcher.h"
 #include "lls/ITextDocumentSyncOptions.h"
@@ -61,6 +63,11 @@ public:
         IClient                     *client
     ) = 0;
 
+    virtual IDiagnosticUP mkDiagnostic(
+        IRangeUP                        &range,
+        DiagnosticSeverity              severity,
+        const std::string               &message) = 0;
+
     virtual IHoverUP mkHover(
         IContentUP                      &contents,
         IRangeUP                        &range) = 0;
@@ -83,6 +90,11 @@ public:
 
     virtual IInitializeResultUP mkInitializeResult(
         const nlohmann::json            &params) = 0;
+
+    virtual IPublishDiagnosticsParamsUP mkPublishDiagnosticsParams(
+        const std::string               &uri,
+        int32_t                         version,
+        std::vector<IDiagnosticUP>      &diagnostics) = 0;
 
     virtual IServerCapabilitiesUP mkServerCapabilities(
         ITextDocumentSyncOptionsUP      &textDocumentSync

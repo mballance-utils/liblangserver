@@ -37,6 +37,10 @@ public:
     }
 
     virtual ~ServerBase() { }
+    
+    virtual void init(IClient *client) override {
+        m_client = client;
+    }
 
 	virtual IInitializeResultUP initialize(IInitializeParamsUP &params) override {
         IServerCapabilitiesUP capabilites;
@@ -71,6 +75,7 @@ public:
     }
 
 protected:
+    IClient                         *m_client;
     jrpc::IEventLoop                *m_loop;
     IFactory                        *m_factory;
 

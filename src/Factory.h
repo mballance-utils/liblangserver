@@ -54,6 +54,11 @@ public:
         jrpc::IMessageTransport     *transport,
         IClient                     *client
     ) override;
+    
+    virtual IDiagnosticUP mkDiagnostic(
+        IRangeUP                        &range,
+        DiagnosticSeverity              severity,
+        const std::string               &message) override;
 
     virtual IHoverUP mkHover(
         IContentUP                      &contents,
@@ -76,6 +81,11 @@ public:
 
     virtual IInitializeResultUP mkInitializeResult(
         const nlohmann::json            &params) override;
+
+    virtual IPublishDiagnosticsParamsUP mkPublishDiagnosticsParams(
+        const std::string               &uri,
+        int32_t                         version,
+        std::vector<IDiagnosticUP>      &diagnostics) override;
 
     virtual IServerCapabilitiesUP mkServerCapabilities(
         ITextDocumentSyncOptionsUP      &textDocumentSync

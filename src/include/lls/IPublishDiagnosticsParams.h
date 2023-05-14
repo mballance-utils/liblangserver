@@ -1,7 +1,7 @@
 /**
- * IClient.h
+ * IPublishDiagnosticsParams.h
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -19,23 +19,25 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IInitializeParams.h"
-#include "lls/IPublishDiagnosticsParams.h"
-#include "lls/IServerCapabilities.h"
+#include <string>
+#include <vector>
+#include "lls/IDiagnostic.h"
+#include "lls/IJson.h"
 
 namespace lls {
 
-
-
-class IClient {
+class IPublishDiagnosticsParams;
+using IPublishDiagnosticsParamsUP=std::unique_ptr<IPublishDiagnosticsParams>;
+class IPublishDiagnosticsParams : public virtual IJson {
 public:
 
-    virtual ~IClient() { }
+    virtual ~IPublishDiagnosticsParams() { }
 
-//    virtual IServerCapabilitiesUP initialize(IInitializeParamsUP params) = 0;
+    virtual const std::string &getUri() = 0;
 
-    virtual void publishDiagnosticsNotification(
-        IPublishDiagnosticsParamsUP         &params) = 0;
+    virtual int32_t getVersion() = 0;
+
+    virtual const std::vector<IDiagnosticUP> &getDiagnostics() = 0;
 
 
 };

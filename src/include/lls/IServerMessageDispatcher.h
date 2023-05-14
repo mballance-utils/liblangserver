@@ -20,13 +20,14 @@
  */
 #pragma once
 #include <memory>
+#include "lls/IClient.h"
 #include "lls/IServer.h"
 
 namespace lls {
 
 class IServerMessageDispatcher;
 using IServerMessageDispatcherUP=std::unique_ptr<IServerMessageDispatcher>;
-class IServerMessageDispatcher {
+class IServerMessageDispatcher : public virtual IClient {
 public:
 
     virtual ~IServerMessageDispatcher() { }

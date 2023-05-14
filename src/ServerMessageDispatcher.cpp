@@ -37,6 +37,9 @@ ServerMessageDispatcher::ServerMessageDispatcher(
         m_server(server) {
     DEBUG_INIT("ServerMessageDispatcher", factory->getDebugMgr());
 
+    // The dispatcher implements the Client API
+    server->init(this);
+
     m_dispatch->registerMethod("initialize",
         std::bind(&ServerMessageDispatcher::initializeRequest, this, std::placeholders::_1));
     m_dispatch->registerMethod("initialized",
@@ -53,6 +56,16 @@ ServerMessageDispatcher::ServerMessageDispatcher(
 
 ServerMessageDispatcher::~ServerMessageDispatcher() {
 
+}
+
+void ServerMessageDispatcher::publishDiagnosticsNotification(
+        IPublishDiagnosticsParamsUP         &params) {
+    nlohmann::json msg;
+
+    msg["method"] = "textDocument/publishDiagnostics";
+    msg["params"] = params->toJson();
+
+    m_dispatch->send(msg);
 }
 
 jrpc::IRspMsgUP ServerMessageDispatcher::initializeRequest(jrpc::IReqMsgUP &msg) {

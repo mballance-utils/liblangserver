@@ -49,6 +49,10 @@ public:
         // ..
     }
 
+    virtual void init(IClient *client) override {
+ //       m_client = client;
+    }
+
     /**
      * Send an outbound message via this transport
      */

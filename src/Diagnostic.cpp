@@ -1,7 +1,7 @@
-/**
- * IClient.h
+/*
+ * Diagnostic.cpp
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -16,30 +16,20 @@
  * limitations under the License.
  *
  * Created on:
- *     Author: 
+ *     Author:
  */
-#pragma once
-#include "lls/IInitializeParams.h"
-#include "lls/IPublishDiagnosticsParams.h"
-#include "lls/IServerCapabilities.h"
+#include "Diagnostic.h"
+
 
 namespace lls {
 
 
+Diagnostic::Diagnostic() {
 
-class IClient {
-public:
+}
 
-    virtual ~IClient() { }
+Diagnostic::~Diagnostic() {
 
-//    virtual IServerCapabilitiesUP initialize(IInitializeParamsUP params) = 0;
+}
 
-    virtual void publishDiagnosticsNotification(
-        IPublishDiagnosticsParamsUP         &params) = 0;
-
-
-};
-
-} /* namespace lls */
-
-
+}

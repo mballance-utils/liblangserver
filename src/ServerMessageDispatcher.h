@@ -39,6 +39,11 @@ public:
 
     virtual ~ServerMessageDispatcher();
 
+    // Client API implementation
+
+    virtual void publishDiagnosticsNotification(
+        IPublishDiagnosticsParamsUP         &params) override;
+
 private:
     jrpc::IRspMsgUP initializeRequest(jrpc::IReqMsgUP &msg);
 
