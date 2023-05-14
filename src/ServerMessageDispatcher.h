@@ -48,6 +48,10 @@ private:
 
     jrpc::IRspMsgUP didChangeNotification(jrpc::IReqMsgUP &msg);
 
+    jrpc::IRspMsgUP didCloseNotification(jrpc::IReqMsgUP &msg);
+
+    jrpc::IRspMsgUP hoverRequest(jrpc::IReqMsgUP &msg);
+
 private:
     static dmgr::IDebug             *m_dbg;
     IFactory                        *m_factory;

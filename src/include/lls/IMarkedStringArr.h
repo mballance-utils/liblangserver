@@ -1,5 +1,5 @@
 /**
- * IDidCloseTextDocumentParams.h
+ * IMarkedStringArr.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -19,19 +19,20 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IJson.h"
-#include "lls/ITextDocumentItem.h"
+#include <vector>
+#include "lls/IContent.h"
+#include "lls/IMarkedString.h"
 
 namespace lls {
 
-class IDidCloseTextDocumentParams;
-using IDidCloseTextDocumentParamsUP=std::unique_ptr<IDidCloseTextDocumentParams>;
-class IDidCloseTextDocumentParams : public virtual IJson {
+
+
+class IMarkedStringArr : public virtual IContent {
 public:
 
-    virtual ~IDidCloseTextDocumentParams() { }
+    virtual ~IMarkedStringArr() { }
 
-    virtual ITextDocumentItem *getTextDocument() = 0;
+    virtual const std::vector<IMarkedStringUP> &getContent() = 0;
 
 };
 

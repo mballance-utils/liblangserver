@@ -25,10 +25,13 @@
 
 #pragma once
 #include <memory>
+#include "lls/IHover.h"
+#include "lls/IHoverParams.h"
 #include "lls/IInitializeParams.h"
 #include "lls/IInitializeResult.h"
 #include "lls/IServerCapabilities.h"
 #include "lls/IDidChangeTextDocumentParams.h"
+#include "lls/IDidCloseTextDocumentParams.h"
 #include "lls/IDidOpenTextDocumentParams.h"
 
 namespace lls {
@@ -53,6 +56,10 @@ public:
     virtual void didOpen(IDidOpenTextDocumentParamsUP &params) = 0;
 
     virtual void didChange(IDidChangeTextDocumentParamsUP &params) = 0;
+
+    virtual void didClose(IDidCloseTextDocumentParamsUP &params) = 0;
+
+    virtual IHoverUP hover(IHoverParamsUP &params) = 0;
 
 /*
 	virtual void didChangeTextDocument(DidChangeTextDocumentParamsSP params) = 0;

@@ -1,5 +1,5 @@
 /**
- * IDidCloseTextDocumentParams.h
+ * IHoverParams.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -19,19 +19,16 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IJson.h"
-#include "lls/ITextDocumentItem.h"
+#include "lls/ITextDocumentPositionParams.h"
 
 namespace lls {
 
-class IDidCloseTextDocumentParams;
-using IDidCloseTextDocumentParamsUP=std::unique_ptr<IDidCloseTextDocumentParams>;
-class IDidCloseTextDocumentParams : public virtual IJson {
+class IHoverParams;
+using IHoverParamsUP=std::unique_ptr<IHoverParams>;
+class IHoverParams : public virtual ITextDocumentPositionParams {
 public:
 
-    virtual ~IDidCloseTextDocumentParams() { }
-
-    virtual ITextDocumentItem *getTextDocument() = 0;
+    virtual ~IHoverParams() { }
 
 };
 

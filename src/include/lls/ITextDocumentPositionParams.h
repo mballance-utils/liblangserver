@@ -1,5 +1,5 @@
 /**
- * IDidCloseTextDocumentParams.h
+ * ITextDocumentPositionParams.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -20,18 +20,22 @@
  */
 #pragma once
 #include "lls/IJson.h"
-#include "lls/ITextDocumentItem.h"
+#include "lls/IPosition.h"
+#include "lls/ITextDocumentIdentifier.h"
 
 namespace lls {
 
-class IDidCloseTextDocumentParams;
-using IDidCloseTextDocumentParamsUP=std::unique_ptr<IDidCloseTextDocumentParams>;
-class IDidCloseTextDocumentParams : public virtual IJson {
+class ITextDocumentPositionParams;
+using ITextDocumentPositionParamsUP=std::unique_ptr<ITextDocumentPositionParams>;
+class ITextDocumentPositionParams : public virtual IJson {
 public:
 
-    virtual ~IDidCloseTextDocumentParams() { }
+    virtual ~ITextDocumentPositionParams() { }
 
-    virtual ITextDocumentItem *getTextDocument() = 0;
+    virtual ITextDocumentIdentifier *getTextDocument() = 0;
+
+    virtual IPosition *getPosition() = 0;
+
 
 };
 

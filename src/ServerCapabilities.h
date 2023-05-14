@@ -40,12 +40,21 @@ public:
         return m_textDocumentSync.get();
     }
 
+    virtual bool getHoverProvider() override {
+        return m_hover_provider;
+    }
+
+    virtual void setHoverProvider(bool have) override {
+        m_hover_provider = have;
+    }
+
     virtual const nlohmann::json &toJson() override;
 
     static IServerCapabilitiesUP mk(const nlohmann::json &params);
 
 private:
     ITextDocumentSyncOptionsUP          m_textDocumentSync;
+    bool                                m_hover_provider;
 
 };
 

@@ -1,5 +1,5 @@
 /**
- * IDidCloseTextDocumentParams.h
+ * IMarkupContent.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -19,19 +19,23 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IJson.h"
-#include "lls/ITextDocumentItem.h"
+#include "lls/IContent.h"
 
 namespace lls {
 
-class IDidCloseTextDocumentParams;
-using IDidCloseTextDocumentParamsUP=std::unique_ptr<IDidCloseTextDocumentParams>;
-class IDidCloseTextDocumentParams : public virtual IJson {
+enum class MarkupKind {
+    PlainText,
+    Markdown
+};
+
+class IMarkupContent : public virtual IContent {
 public:
 
-    virtual ~IDidCloseTextDocumentParams() { }
+    virtual ~IMarkupContent() { }
 
-    virtual ITextDocumentItem *getTextDocument() = 0;
+    virtual MarkupKind getMarkupKind() = 0;
+
+    virtual const std::string &getValue() = 0;
 
 };
 

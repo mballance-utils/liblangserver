@@ -21,7 +21,9 @@
 #include "dmgr/impl/DebugMacros.h"
 #include "ServerMessageDispatcher.h"
 #include "DidChangeTextDocumentParams.h"
+#include "DidCloseTextDocumentParams.h"
 #include "DidOpenTextDocumentParams.h"
+#include "HoverParams.h"
 
 
 namespace lls {
@@ -43,6 +45,10 @@ ServerMessageDispatcher::ServerMessageDispatcher(
         std::bind(&ServerMessageDispatcher::didOpenNotification, this, std::placeholders::_1));
     m_dispatch->registerMethod("textDocument/didChange",
         std::bind(&ServerMessageDispatcher::didChangeNotification, this, std::placeholders::_1));
+    m_dispatch->registerMethod("textDocument/didClose",
+        std::bind(&ServerMessageDispatcher::didCloseNotification, this, std::placeholders::_1));
+    m_dispatch->registerMethod("textDocument/hover",
+        std::bind(&ServerMessageDispatcher::hoverRequest, this, std::placeholders::_1));
 }
 
 ServerMessageDispatcher::~ServerMessageDispatcher() {
@@ -90,6 +96,33 @@ jrpc::IRspMsgUP ServerMessageDispatcher::didChangeNotification(jrpc::IReqMsgUP &
     return 0;
 }
 
-dmgr::IDebug *ServerMessageDispatcher::m_dbg = 0;
+jrpc::IRspMsgUP ServerMessageDispatcher::didCloseNotification(jrpc::IReqMsgUP &msg) {
+    DEBUG_ENTER("didCloseNotification");
+    IDidCloseTextDocumentParamsUP params(DidCloseTextDocumentParams::mk(msg->getParams()));
+    m_server->didClose(params);
+    DEBUG_LEAVE("didCloseNotification");
+    return 0;
+}
 
+jrpc::IRspMsgUP ServerMessageDispatcher::hoverRequest(jrpc::IReqMsgUP &msg) {
+    DEBUG_ENTER("hoverRequest");
+    IHoverParamsUP params(HoverParams::mk(msg->getParams()));
+    jrpc::IRspMsgUP rsp;
+
+    IHoverUP result(m_server->hover(params));
+
+    DEBUG("result: %p", result.get());
+    if (result.get()) {
+        rsp = jrpc::IRspMsgUP(m_factory->getFactory()->mkRspMsgSuccess(
+            msg->getId(),
+            result->toJson()
+        ));
+    }
+
+    DEBUG_LEAVE("hoverRequest");
+    return rsp;
+}
+
+dmgr::IDebug *ServerMessageDispatcher::m_dbg = 0;
+ 
 }

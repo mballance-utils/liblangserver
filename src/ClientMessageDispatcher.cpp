@@ -86,6 +86,19 @@ void ClientMessageDispatcher::didChange(IDidChangeTextDocumentParamsUP &params) 
     DEBUG_LEAVE("didChange");
 }
 
+void ClientMessageDispatcher::didClose(IDidCloseTextDocumentParamsUP &params) {
+    DEBUG_ENTER("didClose");
+    DEBUG("TODO");
+    DEBUG_LEAVE("didClose");
+}
+
+IHoverUP ClientMessageDispatcher::hover(IHoverParamsUP &params) {
+    DEBUG_ENTER("hover");
+    DEBUG("TODO: hover");
+    DEBUG_LEAVE("hover");
+    return 0;
+}
+
 jrpc::IRspMsgUP ClientMessageDispatcher::sendMethodRequest(const std::string &method, const nlohmann::json &params) {
     DEBUG_ENTER("sendMethodRequest: %s", method.c_str());
     nlohmann::json msg;

@@ -1,5 +1,5 @@
 /**
- * IDidCloseTextDocumentParams.h
+ * Content.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -19,22 +19,31 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IJson.h"
-#include "lls/ITextDocumentItem.h"
+#include "lls/IContent.h"
+#include "Json.h"
 
 namespace lls {
 
-class IDidCloseTextDocumentParams;
-using IDidCloseTextDocumentParamsUP=std::unique_ptr<IDidCloseTextDocumentParams>;
-class IDidCloseTextDocumentParams : public virtual IJson {
+
+
+class Content :
+    public virtual IContent,
+    public virtual Json {
 public:
+    Content(ContentKind kind);
 
-    virtual ~IDidCloseTextDocumentParams() { }
+    virtual ~Content();
 
-    virtual ITextDocumentItem *getTextDocument() = 0;
+    virtual ContentKind getKind() override {
+        return m_kind;
+    }
 
+    static IContentUP mk(const nlohmann::json &m);
+
+protected:
+    ContentKind             m_kind;
 };
 
-} /* namespace lls */
+}
 
 

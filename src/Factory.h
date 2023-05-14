@@ -41,6 +41,10 @@ public:
 
     virtual dmgr::IDebugMgr *getDebugMgr();
 
+    virtual IMarkedStringUP mkContentMarkedString(
+        const std::string       &language,
+        const std::string       &value) override;
+
     virtual IServerMessageDispatcher *mkNBServerMessageDispatcher(
         jrpc::IMessageTransport     *transport,
         IServer                     *server
@@ -50,6 +54,10 @@ public:
         jrpc::IMessageTransport     *transport,
         IClient                     *client
     ) override;
+
+    virtual IHoverUP mkHover(
+        IContentUP                      &contents,
+        IRangeUP                        &range) override;
 
     virtual IInitializeParamsUP mkInitializeParams(
         int32_t                         pid,

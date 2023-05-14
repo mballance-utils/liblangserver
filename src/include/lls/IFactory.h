@@ -23,8 +23,11 @@
 #include "lls/IClient.h"
 #include "lls/IClientInfo.h"
 #include "lls/IClientMessageDispatcher.h"
+#include "lls/IContent.h"
+#include "lls/IHover.h"
 #include "lls/IInitializeParams.h"
 #include "lls/IInitializeResult.h"
+#include "lls/IMarkedString.h"
 #include "lls/IServer.h"
 #include "lls/IServerMessageDispatcher.h"
 #include "lls/ITextDocumentSyncOptions.h"
@@ -44,6 +47,10 @@ public:
 
     virtual dmgr::IDebugMgr *getDebugMgr() = 0;
 
+    virtual IMarkedStringUP mkContentMarkedString(
+        const std::string       &language,
+        const std::string       &value) = 0;
+
     virtual IServerMessageDispatcher *mkNBServerMessageDispatcher(
         jrpc::IMessageTransport     *transport,
         IServer                     *server
@@ -53,6 +60,10 @@ public:
         jrpc::IMessageTransport     *transport,
         IClient                     *client
     ) = 0;
+
+    virtual IHoverUP mkHover(
+        IContentUP                      &contents,
+        IRangeUP                        &range) = 0;
 
     virtual IInitializeParamsUP mkInitializeParams(
         int32_t                         pid,

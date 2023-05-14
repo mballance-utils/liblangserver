@@ -61,6 +61,15 @@ public:
 
     }
 
+    virtual void didClose(IDidCloseTextDocumentParamsUP &params) override {
+
+    }
+    virtual IHoverUP hover(IHoverParamsUP &params) override {
+        IContentUP contents;
+        IRangeUP range;
+        return m_factory->mkHover(contents, range);
+    }
+
 protected:
     jrpc::IEventLoop                *m_loop;
     IFactory                        *m_factory;

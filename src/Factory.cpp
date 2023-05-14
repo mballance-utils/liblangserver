@@ -21,8 +21,10 @@
 #include "Factory.h"
 #include "lls/FactoryExt.h"
 #include "ClientMessageDispatcher.h"
+#include "Hover.h"
 #include "InitializeParams.h"
 #include "InitializeResult.h"
+#include "MarkedString.h"
 #include "ServerCapabilities.h"
 #include "ServerMessageDispatcher.h"
 #include "TextDocumentSyncOptions.h"
@@ -60,6 +62,19 @@ IClientMessageDispatcherUP Factory::mkClientMessageDispatcher(
         client
     ));
 }
+
+IMarkedStringUP Factory::mkContentMarkedString(
+        const std::string       &language,
+        const std::string       &value) {
+    return IMarkedStringUP(new MarkedString(language, value));
+}
+
+IHoverUP Factory::mkHover(
+        IContentUP                      &contents,
+        IRangeUP                        &range) {
+    return IHoverUP(new Hover(contents, range));
+}
+
 
 IInitializeParamsUP Factory::mkInitializeParams(
         int32_t                         pid,

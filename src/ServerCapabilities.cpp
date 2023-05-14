@@ -26,7 +26,8 @@ namespace lls {
 
 ServerCapabilities::ServerCapabilities(
     ITextDocumentSyncOptionsUP      &textDocumentSync) :
-        m_textDocumentSync(textDocumentSync.release()) {
+        m_textDocumentSync(textDocumentSync.release()),
+        m_hover_provider(false) {
 
 }
 
@@ -38,6 +39,7 @@ const nlohmann::json &ServerCapabilities::toJson() {
     m_json.clear();
 
     m_json["textDocumentSync"] = m_textDocumentSync->toJson();
+    m_json["hoverProvider"] = m_hover_provider;
 
     return m_json;
 }

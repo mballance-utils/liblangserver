@@ -1,5 +1,5 @@
 /**
- * IDidCloseTextDocumentParams.h
+ * DidCloseTextDocumentParams.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -19,22 +19,34 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IJson.h"
-#include "lls/ITextDocumentItem.h"
+#include "lls/IDidCloseTextDocumentParams.h"
+#include "Json.h"
 
 namespace lls {
 
-class IDidCloseTextDocumentParams;
-using IDidCloseTextDocumentParamsUP=std::unique_ptr<IDidCloseTextDocumentParams>;
-class IDidCloseTextDocumentParams : public virtual IJson {
+
+class DidCloseTextDocumentParams :
+    public virtual IDidCloseTextDocumentParams,
+    public virtual Json {
 public:
+    DidCloseTextDocumentParams(ITextDocumentItemUP &textDocument);
 
-    virtual ~IDidCloseTextDocumentParams() { }
+    virtual ~DidCloseTextDocumentParams();
 
-    virtual ITextDocumentItem *getTextDocument() = 0;
+    virtual ITextDocumentItem *getTextDocument() override {
+        return m_textDocument.get();
+    }
+
+    virtual const nlohmann::json &toJson() override;
+
+    static IDidCloseTextDocumentParamsUP mk(const nlohmann::json &m);
+
+private:
+    ITextDocumentItemUP                 m_textDocument;
+
 
 };
 
-} /* namespace lls */
+}
 
 

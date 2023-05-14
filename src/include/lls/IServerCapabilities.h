@@ -33,6 +33,10 @@ public:
 
     virtual ITextDocumentSyncOptions *getTextDocumentSync() = 0;
 
+    virtual bool getHoverProvider() = 0;
+
+    virtual void setHoverProvider(bool have) = 0;
+
 };
 
 } /* namespace lls */

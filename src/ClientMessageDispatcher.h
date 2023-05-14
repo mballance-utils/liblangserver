@@ -71,6 +71,10 @@ public:
 
     virtual void didChange(IDidChangeTextDocumentParamsUP &params) override;
 
+    virtual void didClose(IDidCloseTextDocumentParamsUP &params) override;
+
+    virtual IHoverUP hover(IHoverParamsUP &params) override;
+
 private:
 
     jrpc::IRspMsgUP sendMethodRequest(const std::string &method, const nlohmann::json &params);
