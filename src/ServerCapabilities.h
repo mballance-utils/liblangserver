@@ -47,6 +47,14 @@ public:
     virtual void setHoverProvider(bool have) override {
         m_hover_provider = have;
     }
+    
+    virtual bool getDocumentSymbolProvider() override {
+        return m_documentSymbolProvider;
+    }
+
+    virtual void setDocumentSymbolProvider(bool have) override {
+        m_documentSymbolProvider = have;
+    }
 
     virtual const nlohmann::json &toJson() override;
 
@@ -55,6 +63,7 @@ public:
 private:
     ITextDocumentSyncOptionsUP          m_textDocumentSync;
     bool                                m_hover_provider;
+    bool                                m_documentSymbolProvider;
 
 };
 

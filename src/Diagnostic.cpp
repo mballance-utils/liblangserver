@@ -24,12 +24,44 @@
 namespace lls {
 
 
-Diagnostic::Diagnostic() {
+Diagnostic::Diagnostic(
+    IRangeUP            &range,
+    DiagnosticSeverity  severity,
+    const std::string   &message) :
+        m_range(std::move(range)),
+        m_severity(severity),
+        m_message(message) {
+
 
 }
 
 Diagnostic::~Diagnostic() {
 
+}
+
+const nlohmann::json &Diagnostic::toJson() {
+    m_json.clear();
+    m_json["range"] = m_range->toJson();
+
+    int severity_n = -1;
+    switch (m_severity) {
+        case DiagnosticSeverity::Error:
+            severity_n = 1;
+            break;
+        case DiagnosticSeverity::Warning:
+            severity_n = 2;
+            break;
+        case DiagnosticSeverity::Information:
+            severity_n = 3;
+            break;
+        case DiagnosticSeverity::Hint:
+            severity_n = 4;
+            break;
+    }
+    m_json["severity"] = severity_n;
+    m_json["message"] = m_message;
+
+    return m_json;
 }
 
 }

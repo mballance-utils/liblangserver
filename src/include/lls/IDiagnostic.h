@@ -33,7 +33,7 @@ enum class DiagnosticSeverity {
 
 class IDiagnostic;
 using IDiagnosticUP=std::unique_ptr<IDiagnostic>;
-class IDiagnostic {
+class IDiagnostic : public virtual IJson {
 public:
 
     virtual ~IDiagnostic() { }

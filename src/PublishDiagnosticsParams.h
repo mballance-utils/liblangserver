@@ -19,17 +19,42 @@
  *     Author: 
  */
 #pragma once
+#include "Json.h"
+#include "lls/IPublishDiagnosticsParams.h"
 
 namespace lls {
 
 
-
-class PublishDiagnosticsParams {
+class PublishDiagnosticsParams : 
+    public virtual IPublishDiagnosticsParams,
+    public virtual Json {
 public:
-    PublishDiagnosticsParams();
+    PublishDiagnosticsParams(
+        const std::string           &uri,
+        int32_t                     version,
+        std::vector<IDiagnosticUP>  &diagnostics
+    );
 
     virtual ~PublishDiagnosticsParams();
 
+    virtual const std::string &getUri() override {
+        return m_uri;
+    }
+
+    virtual int32_t getVersion() override {
+        return m_version;
+    }
+
+    virtual const std::vector<IDiagnosticUP> &getDiagnostics() override {
+        return m_diagnostics;
+    }
+
+    virtual const nlohmann::json &toJson() override;
+
+private:
+    std::string                     m_uri;
+    int32_t                         m_version;
+    std::vector<IDiagnosticUP>      m_diagnostics;
 };
 
 }

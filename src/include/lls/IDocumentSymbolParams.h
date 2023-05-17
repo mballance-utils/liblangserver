@@ -1,7 +1,7 @@
 /**
- * IServerCapabilities.h
+ * IDocumentSymbolParams.h
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -20,26 +20,18 @@
  */
 #pragma once
 #include "lls/IJson.h"
-#include "lls/ITextDocumentSyncOptions.h"
+#include "lls/ITextDocumentIdentifier.h"
 
 namespace lls {
 
-class IServerCapabilities;
-using IServerCapabilitiesUP=std::unique_ptr<IServerCapabilities>;
-class IServerCapabilities : public virtual IJson {
+class IDocumentSymbolParams;
+using IDocumentSymbolParamsUP=std::unique_ptr<IDocumentSymbolParams>;
+class IDocumentSymbolParams : public virtual IJson {
 public:
 
-    virtual ~IServerCapabilities() { }
+    virtual ~IDocumentSymbolParams() { }
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() = 0;
-
-    virtual bool getHoverProvider() = 0;
-
-    virtual void setHoverProvider(bool have) = 0;
-
-    virtual bool getDocumentSymbolProvider() = 0;
-
-    virtual void setDocumentSymbolProvider(bool have) = 0;
+    virtual ITextDocumentIdentifier *getTextDocument() = 0;
 
 };
 

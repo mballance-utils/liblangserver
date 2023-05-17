@@ -21,10 +21,17 @@
 #include "Factory.h"
 #include "lls/FactoryExt.h"
 #include "ClientMessageDispatcher.h"
+#include "Diagnostic.h"
+#include "DocumentSymbol.h"
+#include "DocumentSymbolParams.h"
+#include "DocumentSymbolResponse.h"
 #include "Hover.h"
 #include "InitializeParams.h"
 #include "InitializeResult.h"
 #include "MarkedString.h"
+#include "Position.h"
+#include "PublishDiagnosticsParams.h"
+#include "Range.h"
 #include "ServerCapabilities.h"
 #include "ServerMessageDispatcher.h"
 #include "TextDocumentSyncOptions.h"
@@ -73,7 +80,20 @@ IDiagnosticUP Factory::mkDiagnostic(
         IRangeUP                        &range,
         DiagnosticSeverity              severity,
         const std::string               &message) {
+    return IDiagnosticUP(new Diagnostic(range, severity, message));
+}
 
+IDocumentSymbolUP Factory::mkDocumentSymbol(
+        const std::string               &name,
+        SymbolKind                      kind,
+        IRangeUP                        &range,
+        IRangeUP                        &selectionRange) {
+    return IDocumentSymbolUP(new DocumentSymbol(name, kind, range, selectionRange));
+}
+
+IDocumentSymbolResponseUP Factory::mkDocumentSymbolResponse(
+        std::vector<IDocumentSymbolUP>  &symbols) {
+    return IDocumentSymbolResponseUP(new DocumentSymbolResponse(symbols));
 }
 
 IHoverUP Factory::mkHover(
@@ -116,11 +136,24 @@ IInitializeResultUP Factory::mkInitializeResult(
     return 0;
 }
 
+IPositionUP Factory::mkPosition(
+        int32_t                         line,
+        int32_t                         character) {
+    return IPositionUP(new Position(line, character));
+}
+
 IPublishDiagnosticsParamsUP Factory::mkPublishDiagnosticsParams(
         const std::string               &uri,
         int32_t                         version,
         std::vector<IDiagnosticUP>      &diagnostics) {
+    return IPublishDiagnosticsParamsUP(
+        new PublishDiagnosticsParams(uri, version, diagnostics));
+}
 
+IRangeUP Factory::mkRange(
+        IPositionUP                     &start,
+        IPositionUP                     &end) {
+    return IRangeUP(new Range(start, end));
 }
 
 IServerCapabilitiesUP Factory::mkServerCapabilities(

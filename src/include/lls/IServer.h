@@ -34,6 +34,9 @@
 #include "lls/IDidChangeTextDocumentParams.h"
 #include "lls/IDidCloseTextDocumentParams.h"
 #include "lls/IDidOpenTextDocumentParams.h"
+#include "lls/IDocumentSymbolParams.h"
+#include "lls/IDocumentSymbolResponse.h"
+
 
 namespace lls {
 class IServer;
@@ -61,6 +64,9 @@ public:
     virtual void didChange(IDidChangeTextDocumentParamsUP &params) = 0;
 
     virtual void didClose(IDidCloseTextDocumentParamsUP &params) = 0;
+
+    virtual IDocumentSymbolResponseUP documentSymbols(
+            IDocumentSymbolParamsUP &params) = 0;
 
     virtual IHoverUP hover(IHoverParamsUP &params) = 0;
 

@@ -25,6 +25,9 @@
 #include "lls/IClientMessageDispatcher.h"
 #include "lls/IContent.h"
 #include "lls/IDiagnostic.h"
+#include "lls/IDocumentSymbol.h"
+#include "lls/IDocumentSymbolParams.h"
+#include "lls/IDocumentSymbolResponse.h"
 #include "lls/IHover.h"
 #include "lls/IInitializeParams.h"
 #include "lls/IInitializeResult.h"
@@ -68,6 +71,17 @@ public:
         DiagnosticSeverity              severity,
         const std::string               &message) = 0;
 
+    virtual IDocumentSymbolUP mkDocumentSymbol(
+        const std::string               &name,
+        SymbolKind                      kind,
+        IRangeUP                        &range,
+        IRangeUP                        &selectionRange
+    ) = 0;
+
+    virtual IDocumentSymbolResponseUP mkDocumentSymbolResponse(
+        std::vector<IDocumentSymbolUP>  &symbols
+    ) = 0;
+
     virtual IHoverUP mkHover(
         IContentUP                      &contents,
         IRangeUP                        &range) = 0;
@@ -91,10 +105,18 @@ public:
     virtual IInitializeResultUP mkInitializeResult(
         const nlohmann::json            &params) = 0;
 
+    virtual IPositionUP mkPosition(
+        int32_t                         line,
+        int32_t                         character) = 0;
+
     virtual IPublishDiagnosticsParamsUP mkPublishDiagnosticsParams(
         const std::string               &uri,
         int32_t                         version,
         std::vector<IDiagnosticUP>      &diagnostics) = 0;
+
+    virtual IRangeUP mkRange(
+        IPositionUP                     &start,
+        IPositionUP                     &end) = 0;
 
     virtual IServerCapabilitiesUP mkServerCapabilities(
         ITextDocumentSyncOptionsUP      &textDocumentSync

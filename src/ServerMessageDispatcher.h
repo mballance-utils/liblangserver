@@ -55,7 +55,10 @@ private:
 
     jrpc::IRspMsgUP didCloseNotification(jrpc::IReqMsgUP &msg);
 
+    jrpc::IRspMsgUP documentSymbolRequest(jrpc::IReqMsgUP &msg);
+
     jrpc::IRspMsgUP hoverRequest(jrpc::IReqMsgUP &msg);
+
 
 private:
     static dmgr::IDebug             *m_dbg;

@@ -92,6 +92,14 @@ void ClientMessageDispatcher::didClose(IDidCloseTextDocumentParamsUP &params) {
     DEBUG_LEAVE("didClose");
 }
 
+IDocumentSymbolResponseUP ClientMessageDispatcher::documentSymbols(
+            IDocumentSymbolParamsUP &params) {
+    DEBUG_ENTER("documentSymbols");
+    DEBUG("TODO");
+    DEBUG_LEAVE("documentSymbols");
+    return 0;
+}
+
 IHoverUP ClientMessageDispatcher::hover(IHoverParamsUP &params) {
     DEBUG_ENTER("hover");
     DEBUG("TODO: hover");

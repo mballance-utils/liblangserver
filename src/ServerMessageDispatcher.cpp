@@ -23,6 +23,7 @@
 #include "DidChangeTextDocumentParams.h"
 #include "DidCloseTextDocumentParams.h"
 #include "DidOpenTextDocumentParams.h"
+#include "DocumentSymbolParams.h"
 #include "HoverParams.h"
 
 
@@ -52,6 +53,8 @@ ServerMessageDispatcher::ServerMessageDispatcher(
         std::bind(&ServerMessageDispatcher::didCloseNotification, this, std::placeholders::_1));
     m_dispatch->registerMethod("textDocument/hover",
         std::bind(&ServerMessageDispatcher::hoverRequest, this, std::placeholders::_1));
+    m_dispatch->registerMethod("textDocument/documentSymbol",
+        std::bind(&ServerMessageDispatcher::documentSymbolRequest, this, std::placeholders::_1));
 }
 
 ServerMessageDispatcher::~ServerMessageDispatcher() {
@@ -65,7 +68,7 @@ void ServerMessageDispatcher::publishDiagnosticsNotification(
     msg["method"] = "textDocument/publishDiagnostics";
     msg["params"] = params->toJson();
 
-    m_dispatch->send(msg);
+    m_dispatch->getPeer()->send(msg);
 }
 
 jrpc::IRspMsgUP ServerMessageDispatcher::initializeRequest(jrpc::IReqMsgUP &msg) {
@@ -115,6 +118,22 @@ jrpc::IRspMsgUP ServerMessageDispatcher::didCloseNotification(jrpc::IReqMsgUP &m
     m_server->didClose(params);
     DEBUG_LEAVE("didCloseNotification");
     return 0;
+}
+
+jrpc::IRspMsgUP ServerMessageDispatcher::documentSymbolRequest(jrpc::IReqMsgUP &msg) {
+    DEBUG_ENTER("documentSymbolRequest");
+    jrpc::IRspMsgUP rsp;
+
+    IDocumentSymbolParamsUP params(DocumentSymbolParams::mk(msg->getParams()));
+    IDocumentSymbolResponseUP result(m_server->documentSymbols(params));
+
+    rsp = jrpc::IRspMsgUP(m_factory->getFactory()->mkRspMsgSuccess(
+        msg->getId(),
+        result->toJson()));
+
+    DEBUG_LEAVE("documentSymbolRequest");
+
+    return rsp;
 }
 
 jrpc::IRspMsgUP ServerMessageDispatcher::hoverRequest(jrpc::IReqMsgUP &msg) {

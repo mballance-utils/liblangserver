@@ -19,17 +19,43 @@
  *     Author: 
  */
 #pragma once
+#include "lls/IDiagnostic.h"
+#include "Json.h"
 
 namespace lls {
 
 
 
-class Diagnostic {
+class Diagnostic :
+    public virtual IDiagnostic,
+    public virtual Json {
 public:
-    Diagnostic();
+    Diagnostic(
+        IRangeUP            &range,
+        DiagnosticSeverity  severity,
+        const std::string   &message
+    );
 
     virtual ~Diagnostic();
 
+    virtual IRange *getRange() override {
+        return m_range.get();
+    }
+
+    virtual DiagnosticSeverity getSeverity() override {
+        return m_severity;
+    }
+
+    virtual const std::string &getMessage() override {
+        return m_message;
+    }
+
+    virtual const nlohmann::json &toJson() override;
+
+private:
+    IRangeUP                m_range;
+    DiagnosticSeverity      m_severity;
+    std::string             m_message;
 };
 
 }

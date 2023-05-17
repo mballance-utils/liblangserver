@@ -24,12 +24,40 @@
 namespace lls {
 
 
-PublishDiagnosticsParams::PublishDiagnosticsParams() {
+PublishDiagnosticsParams::PublishDiagnosticsParams(
+    const std::string           &uri,
+    int32_t                     version,
+    std::vector<IDiagnosticUP>  &diagnostics) :
+    m_uri(uri), m_version(version) {
 
+    for (std::vector<IDiagnosticUP>::iterator
+        it=diagnostics.begin();
+        it!=diagnostics.end(); it++) {
+        m_diagnostics.push_back(std::move(*it));
+    }
 }
 
 PublishDiagnosticsParams::~PublishDiagnosticsParams() {
 
+}
+
+const nlohmann::json &PublishDiagnosticsParams::toJson() {
+    m_json.clear();
+    m_json["uri"] = m_uri;
+
+    if (m_version >= 0) {
+        m_json["version"] = m_version;
+    }
+
+    m_json["diagnostics"] = nlohmann::json::array(); 
+    nlohmann::json &diagnostics = m_json["diagnostics"];
+    for (std::vector<IDiagnosticUP>::const_iterator
+        it=m_diagnostics.begin();
+        it!=m_diagnostics.end(); it++) {
+        diagnostics.push_back((*it)->toJson());
+    }
+
+    return m_json;
 }
 
 }

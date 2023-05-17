@@ -1,7 +1,7 @@
 /**
- * IServerCapabilities.h
+ * DocumentSymbolResponse.h
  *
- * Copyright 2022 Matthew Ballance and Contributors
+ * Copyright 2023 Matthew Ballance and Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may 
  * not use this file except in compliance with the License.  
@@ -19,30 +19,31 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IJson.h"
-#include "lls/ITextDocumentSyncOptions.h"
+#include "lls/IDocumentSymbolResponse.h"
+#include "Json.h"
 
 namespace lls {
 
-class IServerCapabilities;
-using IServerCapabilitiesUP=std::unique_ptr<IServerCapabilities>;
-class IServerCapabilities : public virtual IJson {
+
+class DocumentSymbolResponse :
+    public virtual IDocumentSymbolResponse,
+    public virtual Json {
 public:
+    DocumentSymbolResponse(
+        std::vector<IDocumentSymbolUP>  &symbols);
 
-    virtual ~IServerCapabilities() { }
+    virtual ~DocumentSymbolResponse();
 
-    virtual ITextDocumentSyncOptions *getTextDocumentSync() = 0;
+    virtual const std::vector<IDocumentSymbolUP> &getSymbols() override {
+        return m_symbols;
+    }
+    
+    virtual const nlohmann::json &toJson() override;
 
-    virtual bool getHoverProvider() = 0;
-
-    virtual void setHoverProvider(bool have) = 0;
-
-    virtual bool getDocumentSymbolProvider() = 0;
-
-    virtual void setDocumentSymbolProvider(bool have) = 0;
-
+private:
+    std::vector<IDocumentSymbolUP>      m_symbols;
 };
 
-} /* namespace lls */
+}
 
 

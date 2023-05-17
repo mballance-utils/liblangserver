@@ -59,6 +59,16 @@ public:
         IRangeUP                        &range,
         DiagnosticSeverity              severity,
         const std::string               &message) override;
+        
+    virtual IDocumentSymbolUP mkDocumentSymbol(
+        const std::string               &name,
+        SymbolKind                      kind,
+        IRangeUP                        &range,
+        IRangeUP                        &selectionRange) override;
+
+    virtual IDocumentSymbolResponseUP mkDocumentSymbolResponse(
+        std::vector<IDocumentSymbolUP>  &symbols) override;
+
 
     virtual IHoverUP mkHover(
         IContentUP                      &contents,
@@ -82,10 +92,18 @@ public:
     virtual IInitializeResultUP mkInitializeResult(
         const nlohmann::json            &params) override;
 
+    virtual IPositionUP mkPosition(
+        int32_t                         line,
+        int32_t                         character) override;
+
     virtual IPublishDiagnosticsParamsUP mkPublishDiagnosticsParams(
         const std::string               &uri,
         int32_t                         version,
         std::vector<IDiagnosticUP>      &diagnostics) override;
+
+    virtual IRangeUP mkRange(
+        IPositionUP                     &start,
+        IPositionUP                     &end) override;
 
     virtual IServerCapabilitiesUP mkServerCapabilities(
         ITextDocumentSyncOptionsUP      &textDocumentSync
