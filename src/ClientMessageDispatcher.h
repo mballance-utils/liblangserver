@@ -40,6 +40,7 @@ class ClientMessageDispatcher :
 public:
     ClientMessageDispatcher(
         IFactory                    *factory,
+        jrpc::ITaskQueue            *queue,
         jrpc::IMessageTransport     *transport,
         IClient                     *client);
 
@@ -88,7 +89,7 @@ private:
 
     void sendNotification(const std::string &method, const nlohmann::json &params);
 
-    void handleResult(int32_t id, jrpc::IRspMsgUP &rsp);
+    void handleResult(const std::string &id, jrpc::IRspMsgUP &rsp);
 
 private:
     static dmgr::IDebug             *m_dbg;

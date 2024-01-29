@@ -46,11 +46,13 @@ public:
         const std::string       &value) override;
 
     virtual IServerMessageDispatcher *mkNBServerMessageDispatcher(
+        jrpc::ITaskQueue            *queue,
         jrpc::IMessageTransport     *transport,
         IServer                     *server
     ) override;
 
     virtual IClientMessageDispatcherUP mkClientMessageDispatcher(
+        jrpc::ITaskQueue            *queue,
         jrpc::IMessageTransport     *transport,
         IClient                     *client
     ) override;

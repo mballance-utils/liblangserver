@@ -45,6 +45,15 @@ const nlohmann::json &DocumentSymbol::toJson() {
     m_json["range"] = m_range->toJson();
     m_json["selectionRange"] = m_selectionRange->toJson();
 
+    if (m_children.size()) {
+        nlohmann::json &children = (m_json["children"]=nlohmann::json::array());
+        for (std::vector<IDocumentSymbolUP>::iterator
+            it=m_children.begin();
+            it!=m_children.end(); it++) {
+            children.push_back((*it)->toJson());
+        }
+    }
+
     return m_json;
 }
 

@@ -52,19 +52,22 @@ dmgr::IDebugMgr *Factory::getDebugMgr() {
 }
 
 IServerMessageDispatcher *Factory::mkNBServerMessageDispatcher(
+        jrpc::ITaskQueue            *queue,
         jrpc::IMessageTransport     *transport,
         IServer                     *server) {
     return new ServerMessageDispatcher(
         this, 
-        m_factory->mkNBSocketServerMessageDispatcher(transport),
+        m_factory->mkNBSocketServerMessageDispatcher(queue, transport),
         server);
 }
 
 IClientMessageDispatcherUP Factory::mkClientMessageDispatcher(
+        jrpc::ITaskQueue            *queue,
         jrpc::IMessageTransport     *transport,
         IClient                     *client) {
     return IClientMessageDispatcherUP(new ClientMessageDispatcher(
         this,
+        queue,
         transport,
         client
     ));

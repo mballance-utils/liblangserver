@@ -29,6 +29,7 @@ namespace lls {
 
 ClientMessageDispatcher::ClientMessageDispatcher(
         IFactory                    *factory,
+        jrpc::ITaskQueue            *queue,
         jrpc::IMessageTransport     *transport,
         IClient                     *client) :
             m_factory(factory), m_loop(0), 
@@ -38,6 +39,7 @@ ClientMessageDispatcher::ClientMessageDispatcher(
     m_loop = transport->getLoop();
 
     m_dispatcher = m_factory->getFactory()->mkNBSocketServerMessageDispatcher(
+        queue,
         m_transport
     );
     m_dispatcher->setResponseHandler(
@@ -144,10 +146,10 @@ void ClientMessageDispatcher::sendNotification(const std::string &method, const 
     DEBUG_LEAVE("sendNotification");
 }
 
-void ClientMessageDispatcher::handleResult(int32_t id, jrpc::IRspMsgUP &rsp) {
-    DEBUG_ENTER("handleResult %d", id);
+void ClientMessageDispatcher::handleResult(const std::string &id, jrpc::IRspMsgUP &rsp) {
+    DEBUG_ENTER("handleResult %s", id.c_str());
     m_rsp = std::move(rsp);
-    DEBUG_LEAVE("handleResult %d", id);
+    DEBUG_LEAVE("handleResult %s", id.c_str());
 }
 
 dmgr::IDebug *ClientMessageDispatcher::m_dbg = 0;

@@ -57,11 +57,13 @@ public:
         const std::string       &value) = 0;
 
     virtual IServerMessageDispatcher *mkNBServerMessageDispatcher(
+        jrpc::ITaskQueue            *queue,
         jrpc::IMessageTransport     *transport,
         IServer                     *server
     ) = 0;
 
     virtual IClientMessageDispatcherUP mkClientMessageDispatcher(
+        jrpc::ITaskQueue            *queue,
         jrpc::IMessageTransport     *transport,
         IClient                     *client
     ) = 0;
