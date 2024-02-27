@@ -65,10 +65,16 @@ public:
 
     virtual void didClose(IDidCloseTextDocumentParamsUP &params) = 0;
 
+    /*
+     * Expected to submit a response of DocumentSymbolResponse
+     */
     virtual IDocumentSymbolResponseUP documentSymbols(
-            IDocumentSymbolParamsUP &params) = 0;
+        const std::string           &id,
+        IDocumentSymbolParamsUP     &params) = 0;
 
-    virtual IHoverUP hover(IHoverParamsUP &params) = 0;
+    virtual IHoverUP hover(
+        const std::string           &id,
+        IHoverParamsUP              &params) = 0;
 
 /*
 	virtual void didChangeTextDocument(DidChangeTextDocumentParamsSP params) = 0;

@@ -79,9 +79,12 @@ public:
     virtual void didClose(IDidCloseTextDocumentParamsUP &params) override;
 
     virtual IDocumentSymbolResponseUP documentSymbols(
+            const std::string       &id,
             IDocumentSymbolParamsUP &params) override;
 
-    virtual IHoverUP hover(IHoverParamsUP &params) override;
+    virtual IHoverUP hover(
+            const std::string       &id,
+            IHoverParamsUP          &params) override;
 
 private:
 

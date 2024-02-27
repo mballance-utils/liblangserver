@@ -71,6 +71,49 @@ void ServerMessageDispatcher::publishDiagnosticsNotification(
     m_dispatch->getPeer()->send(msg);
 }
 
+void ServerMessageDispatcher::sendNotification(
+        const std::string               &method,
+        IJson                           *params) {
+    nlohmann::json msg;
+
+    msg["method"] = method;
+    msg["params"] = params->toJson();
+
+    m_dispatch->getPeer()->send(msg);
+
+    delete params;
+}
+
+void ServerMessageDispatcher::sendRspSuccess(
+        const std::string               &id,
+        IJson                           *result) {
+    nlohmann::json msg;
+
+    msg["id"] = id;
+    msg["result"] = result->toJson();
+
+    m_dispatch->getPeer()->send(msg);
+
+    delete result;
+}
+
+void ServerMessageDispatcher::sendRspError(
+        const std::string               &id,
+        int32_t                         code,
+        const std::string               &msg,
+        IJson                           *data) {
+    nlohmann::json rsp;
+
+    rsp["id"] = id;
+    rsp["code"] = code;
+    rsp["message"] = msg;
+    rsp["data"] = data->toJson();
+
+    m_dispatch->getPeer()->send(rsp);
+
+    delete data;
+}
+
 jrpc::IRspMsgUP ServerMessageDispatcher::initializeRequest(jrpc::IReqMsgUP &msg) {
     DEBUG_ENTER("initializeRequest");
     IInitializeParamsUP params(m_factory->mkInitializeParams(msg->getParams()));
@@ -125,11 +168,13 @@ jrpc::IRspMsgUP ServerMessageDispatcher::documentSymbolRequest(jrpc::IReqMsgUP &
     jrpc::IRspMsgUP rsp;
 
     IDocumentSymbolParamsUP params(DocumentSymbolParams::mk(msg->getParams()));
-    IDocumentSymbolResponseUP result(m_server->documentSymbols(params));
+    IDocumentSymbolResponseUP result(m_server->documentSymbols(msg->getId(), params));
 
-    rsp = jrpc::IRspMsgUP(m_factory->getFactory()->mkRspMsgSuccess(
-        msg->getId(),
-        result->toJson()));
+    if (result) {
+        rsp = jrpc::IRspMsgUP(m_factory->getFactory()->mkRspMsgSuccess(
+            msg->getId(),
+            result->toJson()));
+    }
 
     DEBUG_LEAVE("documentSymbolRequest");
 
@@ -141,7 +186,7 @@ jrpc::IRspMsgUP ServerMessageDispatcher::hoverRequest(jrpc::IReqMsgUP &msg) {
     IHoverParamsUP params(HoverParams::mk(msg->getParams()));
     jrpc::IRspMsgUP rsp;
 
-    IHoverUP result(m_server->hover(params));
+    IHoverUP result(m_server->hover(msg->getId(), params));
 
     DEBUG("result: %p", result.get());
     if (result.get()) {

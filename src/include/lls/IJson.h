@@ -24,8 +24,8 @@
 
 namespace lls {
 
-
-
+class IJson;
+using IJsonUP=std::unique_ptr<IJson>;
 class IJson {
 public:
 

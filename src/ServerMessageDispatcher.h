@@ -44,6 +44,20 @@ public:
     virtual void publishDiagnosticsNotification(
         IPublishDiagnosticsParamsUP         &params) override;
 
+    virtual void sendNotification(
+        const std::string               &method,
+        IJson                           *params) override;
+
+    virtual void sendRspSuccess(
+        const std::string               &id,
+        IJson                           *result) override;
+
+    virtual void sendRspError(
+        const std::string               &id,
+        int32_t                         code,
+        const std::string               &msg,
+        IJson                           *data) override;
+
 private:
     jrpc::IRspMsgUP initializeRequest(jrpc::IReqMsgUP &msg);
 

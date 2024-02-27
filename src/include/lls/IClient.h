@@ -35,7 +35,21 @@ public:
 //    virtual IServerCapabilitiesUP initialize(IInitializeParamsUP params) = 0;
 
     virtual void publishDiagnosticsNotification(
-        IPublishDiagnosticsParamsUP         &params) = 0;
+        IPublishDiagnosticsParamsUP     &params) = 0;
+
+    virtual void sendNotification(
+        const std::string               &method,
+        IJson                           *params) = 0;
+
+    virtual void sendRspSuccess(
+        const std::string               &id,
+        IJson                           *result) = 0;
+
+    virtual void sendRspError(
+        const std::string               &id,
+        int32_t                         code,
+        const std::string               &msg,
+        IJson                           *data) = 0;
 
 
 };

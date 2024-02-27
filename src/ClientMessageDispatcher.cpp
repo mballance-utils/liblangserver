@@ -95,14 +95,17 @@ void ClientMessageDispatcher::didClose(IDidCloseTextDocumentParamsUP &params) {
 }
 
 IDocumentSymbolResponseUP ClientMessageDispatcher::documentSymbols(
-            IDocumentSymbolParamsUP &params) {
+    const std::string               &id,
+    IDocumentSymbolParamsUP         &params) {
     DEBUG_ENTER("documentSymbols");
     DEBUG("TODO");
     DEBUG_LEAVE("documentSymbols");
     return 0;
 }
 
-IHoverUP ClientMessageDispatcher::hover(IHoverParamsUP &params) {
+IHoverUP ClientMessageDispatcher::hover(
+    const std::string               &id,
+    IHoverParamsUP                  &params) {
     DEBUG_ENTER("hover");
     DEBUG("TODO: hover");
     DEBUG_LEAVE("hover");

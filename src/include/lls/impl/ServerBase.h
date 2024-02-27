@@ -70,12 +70,15 @@ public:
     }
 
     virtual IDocumentSymbolResponseUP documentSymbols(
-            IDocumentSymbolParamsUP &params) override {
+        const std::string       &id,
+        IDocumentSymbolParamsUP &params) override {
         std::vector<IDocumentSymbolUP> symbols;
         return m_factory->mkDocumentSymbolResponse(symbols);
     }
 
-    virtual IHoverUP hover(IHoverParamsUP &params) override {
+    virtual IHoverUP hover(
+        const std::string   &id,
+        IHoverParamsUP      &params) override {
         IContentUP contents;
         IRangeUP range;
         return m_factory->mkHover(contents, range);
