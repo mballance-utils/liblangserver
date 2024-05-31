@@ -20,6 +20,7 @@
  */
 #include "dmgr/impl/DebugMacros.h"
 #include "ServerMessageDispatcher.h"
+#include "DeclarationParams.h"
 #include "DidChangeTextDocumentParams.h"
 #include "DidCloseTextDocumentParams.h"
 #include "DidOpenTextDocumentParams.h"
@@ -53,8 +54,14 @@ ServerMessageDispatcher::ServerMessageDispatcher(
         std::bind(&ServerMessageDispatcher::didCloseNotification, this, std::placeholders::_1));
     m_dispatch->registerMethod("textDocument/hover",
         std::bind(&ServerMessageDispatcher::hoverRequest, this, std::placeholders::_1));
+    m_dispatch->registerMethod("textDocument/declaration",
+        std::bind(&ServerMessageDispatcher::declaration, this, std::placeholders::_1));
+    m_dispatch->registerMethod("textDocument/definition",
+        std::bind(&ServerMessageDispatcher::definition, this, std::placeholders::_1));
     m_dispatch->registerMethod("textDocument/documentSymbol",
         std::bind(&ServerMessageDispatcher::documentSymbolRequest, this, std::placeholders::_1));
+    m_dispatch->registerMethod("shutdown",
+        std::bind(&ServerMessageDispatcher::shutdown, this, std::placeholders::_1));
 }
 
 ServerMessageDispatcher::~ServerMessageDispatcher() {
@@ -65,6 +72,7 @@ void ServerMessageDispatcher::publishDiagnosticsNotification(
         IPublishDiagnosticsParamsUP         &params) {
     nlohmann::json msg;
 
+    msg["jsonrpc"] = "2.0";
     msg["method"] = "textDocument/publishDiagnostics";
     msg["params"] = params->toJson();
 
@@ -76,6 +84,7 @@ void ServerMessageDispatcher::sendNotification(
         IJson                           *params) {
     nlohmann::json msg;
 
+    msg["jsonrpc"] = "2.0";
     msg["method"] = method;
     msg["params"] = params->toJson();
 
@@ -90,6 +99,7 @@ void ServerMessageDispatcher::sendRspSuccess(
     nlohmann::json msg;
 
     msg["id"] = id;
+    msg["jsonrpc"] = "2.0";
     msg["result"] = result->toJson();
 
     m_dispatch->getPeer()->send(msg);
@@ -105,6 +115,7 @@ void ServerMessageDispatcher::sendRspError(
     nlohmann::json rsp;
 
     rsp["id"] = id;
+    rsp["jsonrpc"] = "2.0";
     rsp["code"] = code;
     rsp["message"] = msg;
     rsp["data"] = data->toJson();
@@ -114,90 +125,80 @@ void ServerMessageDispatcher::sendRspError(
     delete data;
 }
 
-jrpc::IRspMsgUP ServerMessageDispatcher::initializeRequest(jrpc::IReqMsgUP &msg) {
+void ServerMessageDispatcher::initializeRequest(jrpc::IReqMsgUP &msg) {
     DEBUG_ENTER("initializeRequest");
     IInitializeParamsUP params(m_factory->mkInitializeParams(msg->getParams()));
-    IInitializeResultUP result(m_server->initialize(params));
-    jrpc::IRspMsgUP rsp;
-
-    DEBUG("result: %p", result.get());
-    if (result.get()) {
-        rsp = jrpc::IRspMsgUP(m_factory->getFactory()->mkRspMsgSuccess(
-            msg->getId(),
-            result->toJson()
-        ));
-    }
+    m_server->initialize(msg->getId(), params);
 
     DEBUG_LEAVE("initializeRequest");
-    return rsp;
 }
 
-jrpc::IRspMsgUP ServerMessageDispatcher::initializedRequest(jrpc::IReqMsgUP &msg) {
+void ServerMessageDispatcher::initializedRequest(jrpc::IReqMsgUP &msg) {
     DEBUG_ENTER("initializedRequest");
     m_server->initialized();
     DEBUG_LEAVE("initializedRequest");
-    return 0;
 };
 
-jrpc::IRspMsgUP ServerMessageDispatcher::didOpenNotification(jrpc::IReqMsgUP &msg) {
+void ServerMessageDispatcher::didOpenNotification(jrpc::IReqMsgUP &msg) {
     DEBUG_ENTER("didOpenNotification");
     IDidOpenTextDocumentParamsUP params(DidOpenTextDocumentParams::mk(msg->getParams()));
     m_server->didOpen(params);
     DEBUG_LEAVE("didOpenNotification");
-    return 0;
 }
 
-jrpc::IRspMsgUP ServerMessageDispatcher::didChangeNotification(jrpc::IReqMsgUP &msg) {
+void ServerMessageDispatcher::didChangeNotification(jrpc::IReqMsgUP &msg) {
     DEBUG_ENTER("didChangeNotification");
     IDidChangeTextDocumentParamsUP params(DidChangeTextDocumentParams::mk(msg->getParams()));
     m_server->didChange(params);
     DEBUG_LEAVE("didChangeNotification");
-    return 0;
 }
 
-jrpc::IRspMsgUP ServerMessageDispatcher::didCloseNotification(jrpc::IReqMsgUP &msg) {
+void ServerMessageDispatcher::didCloseNotification(jrpc::IReqMsgUP &msg) {
     DEBUG_ENTER("didCloseNotification");
     IDidCloseTextDocumentParamsUP params(DidCloseTextDocumentParams::mk(msg->getParams()));
     m_server->didClose(params);
     DEBUG_LEAVE("didCloseNotification");
-    return 0;
 }
 
-jrpc::IRspMsgUP ServerMessageDispatcher::documentSymbolRequest(jrpc::IReqMsgUP &msg) {
+void ServerMessageDispatcher::declaration(jrpc::IReqMsgUP &msg) {
+    DEBUG_ENTER("declaration");
+    jrpc::IRspMsgUP rsp;
+    IDeclarationParamsUP params(DeclarationParams::mk(msg->getParams()));
+    m_server->declaration(msg->getId(), params);
+    DEBUG_LEAVE("declaration");
+}
+
+void ServerMessageDispatcher::definition(jrpc::IReqMsgUP &msg) {
+    DEBUG_ENTER("definition");
+    jrpc::IRspMsgUP rsp;
+    ITextDocumentPositionParamsUP params(TextDocumentPositionParams::mk(msg->getParams()));
+    m_server->definition(msg->getId(), params);
+    DEBUG_LEAVE("definition");
+}
+
+void ServerMessageDispatcher::documentSymbolRequest(jrpc::IReqMsgUP &msg) {
     DEBUG_ENTER("documentSymbolRequest");
     jrpc::IRspMsgUP rsp;
 
     IDocumentSymbolParamsUP params(DocumentSymbolParams::mk(msg->getParams()));
-    IDocumentSymbolResponseUP result(m_server->documentSymbols(msg->getId(), params));
-
-    if (result) {
-        rsp = jrpc::IRspMsgUP(m_factory->getFactory()->mkRspMsgSuccess(
-            msg->getId(),
-            result->toJson()));
-    }
+    m_server->documentSymbols(msg->getId(), params);
 
     DEBUG_LEAVE("documentSymbolRequest");
-
-    return rsp;
 }
 
-jrpc::IRspMsgUP ServerMessageDispatcher::hoverRequest(jrpc::IReqMsgUP &msg) {
+void ServerMessageDispatcher::hoverRequest(jrpc::IReqMsgUP &msg) {
     DEBUG_ENTER("hoverRequest");
     IHoverParamsUP params(HoverParams::mk(msg->getParams()));
-    jrpc::IRspMsgUP rsp;
 
-    IHoverUP result(m_server->hover(msg->getId(), params));
-
-    DEBUG("result: %p", result.get());
-    if (result.get()) {
-        rsp = jrpc::IRspMsgUP(m_factory->getFactory()->mkRspMsgSuccess(
-            msg->getId(),
-            result->toJson()
-        ));
-    }
+    m_server->hover(msg->getId(), params);
 
     DEBUG_LEAVE("hoverRequest");
-    return rsp;
+}
+
+void ServerMessageDispatcher::shutdown(jrpc::IReqMsgUP &msg) {
+    DEBUG_ENTER("shutdown");
+    m_server->shutdown(msg->getId());
+    DEBUG_LEAVE("shutdown");
 }
 
 dmgr::IDebug *ServerMessageDispatcher::m_dbg = 0;

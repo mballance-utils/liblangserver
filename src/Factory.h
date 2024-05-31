@@ -73,7 +73,7 @@ public:
 
 
     virtual IHoverUP mkHover(
-        IContentUP                      &contents,
+        IJsonUP                         &contents,
         IRangeUP                        &range) override;
 
     virtual IInitializeParamsUP mkInitializeParams(
@@ -93,6 +93,28 @@ public:
 
     virtual IInitializeResultUP mkInitializeResult(
         const nlohmann::json            &params) override;
+
+    virtual ILocationUP mkLocation(
+        const std::string               &uri,
+        IRangeUP                        &range) override;
+
+    virtual ILocationListUP mkLocationList(
+        std::vector<ILocationUP>        &locations) override;
+
+    virtual ILocationLinkUP mkLocationLink(
+        IRangeUP                        &originSelectionRange,
+        const std::string               &targetUri,
+        IRangeUP                        &targetRange,
+        IRangeUP                        &targetSelectionRange) override;
+
+    virtual ILocationLinkListUP mkLocationLinkList(
+        std::vector<ILocationLinkUP>    &locations) override;
+
+    virtual IMarkupContentUP mkMarkupContent(
+        MarkupKind                      kind,
+        const std::string               &value) override;
+
+    virtual INullUP mkNull() override;
 
     virtual IPositionUP mkPosition(
         int32_t                         line,

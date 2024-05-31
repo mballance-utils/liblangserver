@@ -52,17 +52,15 @@ ClientMessageDispatcher::~ClientMessageDispatcher() {
 
 }
 
-IInitializeResultUP ClientMessageDispatcher::initialize(IInitializeParamsUP &params) {
+void ClientMessageDispatcher::initialize(
+    const std::string       &id,
+    IInitializeParamsUP     &params) {
     DEBUG_ENTER("initialize");
 
     // Send a request and poll waiting for a response
     jrpc::IRspMsgUP rsp(sendMethodRequest("initialize", params->toJson()));
 
-    IInitializeResultUP ret = InitializeResult::mk(rsp->getResult());
-
     DEBUG_LEAVE("initialize");
-
-    return ret;
 }
 
 void ClientMessageDispatcher::initialized() {
@@ -94,22 +92,34 @@ void ClientMessageDispatcher::didClose(IDidCloseTextDocumentParamsUP &params) {
     DEBUG_LEAVE("didClose");
 }
 
-IDocumentSymbolResponseUP ClientMessageDispatcher::documentSymbols(
+void ClientMessageDispatcher::documentSymbols(
     const std::string               &id,
     IDocumentSymbolParamsUP         &params) {
     DEBUG_ENTER("documentSymbols");
     DEBUG("TODO");
     DEBUG_LEAVE("documentSymbols");
-    return 0;
 }
 
-IHoverUP ClientMessageDispatcher::hover(
+void ClientMessageDispatcher::declaration(
+        const std::string           &id,
+        IDeclarationParamsUP        &params) {
+}
+
+void ClientMessageDispatcher::definition(
+        const std::string           &id,
+        ITextDocumentPositionParamsUP        &params) {
+}
+
+void ClientMessageDispatcher::hover(
     const std::string               &id,
     IHoverParamsUP                  &params) {
     DEBUG_ENTER("hover");
     DEBUG("TODO: hover");
     DEBUG_LEAVE("hover");
-    return 0;
+}
+
+void ClientMessageDispatcher::shutdown(const std::string &id) {
+
 }
 
 jrpc::IRspMsgUP ClientMessageDispatcher::sendMethodRequest(const std::string &method, const nlohmann::json &params) {

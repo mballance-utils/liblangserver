@@ -40,6 +40,10 @@ const nlohmann::json &ServerCapabilities::toJson() {
 
     m_json["textDocumentSync"] = m_textDocumentSync->toJson();
     m_json["hoverProvider"] = m_hover_provider;
+    m_json["declarationProvider"] = m_declaration_provider;
+    m_json["definitionProvider"] = true;
+    m_json["typeDefinitionProvider"] = true;
+    m_json["implementaionProvider"] = true;
     m_json["documentSymbolProvider"] = m_documentSymbolProvider;
 
     return m_json;

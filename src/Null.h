@@ -1,5 +1,5 @@
 /**
- * IHover.h
+ * Null.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -19,25 +19,25 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IJson.h"
-#include "lls/IContent.h"
-#include "lls/IRange.h"
+#include "lls/INull.h"
+#include "Json.h"
 
 namespace lls {
 
-class IHover;
-using IHoverUP=std::unique_ptr<IHover>;
-class IHover : public virtual IJson {
+
+
+class Null :
+    public virtual INull,
+    public virtual Json {
 public:
+    Null();
 
-    virtual ~IHover() { }
+    virtual ~Null();
 
-    virtual IJson *getContents() = 0;
-
-    virtual IRange *getRange() = 0;
+    virtual const nlohmann::json &toJson() override;
 
 };
 
-} /* namespace lls */
+}
 
 

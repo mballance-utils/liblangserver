@@ -47,6 +47,10 @@ public:
     virtual void setHoverProvider(bool have) override {
         m_hover_provider = have;
     }
+
+    virtual bool setDeclarationProvider(bool have) override {
+        m_declaration_provider = have;
+    }
     
     virtual bool getDocumentSymbolProvider() override {
         return m_documentSymbolProvider;
@@ -63,6 +67,7 @@ public:
 private:
     ITextDocumentSyncOptionsUP          m_textDocumentSync;
     bool                                m_hover_provider;
+    bool                                m_declaration_provider;
     bool                                m_documentSymbolProvider;
 
 };

@@ -31,6 +31,7 @@
 #include "lls/IInitializeParams.h"
 #include "lls/IInitializeResult.h"
 #include "lls/IServerCapabilities.h"
+#include "lls/IDeclarationParams.h"
 #include "lls/IDidChangeTextDocumentParams.h"
 #include "lls/IDidCloseTextDocumentParams.h"
 #include "lls/IDidOpenTextDocumentParams.h"
@@ -48,14 +49,9 @@ public:
 
     virtual void init(IClient *client) = 0;
 
-/*
-    virtual void init(
-        jrpc::IEventLoop            *loop,
-        IFactory                    *factory,
-        IClientConnection           *connection) = 0;
- */
-
-	virtual IInitializeResultUP initialize(IInitializeParamsUP &params) = 0;
+	virtual void initialize(
+        const std::string           &id,
+        IInitializeParamsUP         &params) = 0;
 
     virtual void initialized() = 0;
 
@@ -68,13 +64,24 @@ public:
     /*
      * Expected to submit a response of DocumentSymbolResponse
      */
-    virtual IDocumentSymbolResponseUP documentSymbols(
+    virtual void documentSymbols(
         const std::string           &id,
         IDocumentSymbolParamsUP     &params) = 0;
 
-    virtual IHoverUP hover(
+    virtual void hover(
         const std::string           &id,
         IHoverParamsUP              &params) = 0;
+
+    virtual void declaration(
+        const std::string           &id,
+        IDeclarationParamsUP        &params) = 0;
+
+    virtual void definition(
+        const std::string               &id,
+        ITextDocumentPositionParamsUP   &params) = 0;
+
+    virtual void shutdown(
+        const std::string           &id) = 0;
 
 /*
 	virtual void didChangeTextDocument(DidChangeTextDocumentParamsSP params) = 0;

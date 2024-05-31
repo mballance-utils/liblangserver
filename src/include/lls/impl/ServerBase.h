@@ -42,15 +42,15 @@ public:
         m_client = client;
     }
 
-	virtual IInitializeResultUP initialize(IInitializeParamsUP &params) override {
+	virtual void initialize(
+        const std::string       &id,
+        IInitializeParamsUP     &params) override {
         IServerCapabilitiesUP capabilites;
         IServerInfoUP serverInfo;
 
         IInitializeResultUP ret(m_factory->mkInitializeResult(
             capabilites,
             serverInfo));
-
-        return ret;
     }
 
     virtual void initialized() override {
@@ -69,19 +69,30 @@ public:
 
     }
 
-    virtual IDocumentSymbolResponseUP documentSymbols(
-        const std::string       &id,
-        IDocumentSymbolParamsUP &params) override {
-        std::vector<IDocumentSymbolUP> symbols;
-        return m_factory->mkDocumentSymbolResponse(symbols);
+    virtual void declaration(
+        const std::string           &id,
+        IDeclarationParamsUP        &params) override {
+
     }
 
-    virtual IHoverUP hover(
+    virtual void definition(
+        const std::string               &id,
+        ITextDocumentPositionParamsUP   &params) override {
+
+    }
+
+    virtual void documentSymbols(
+        const std::string       &id,
+        IDocumentSymbolParamsUP &params) override {
+    }
+
+    virtual void hover(
         const std::string   &id,
         IHoverParamsUP      &params) override {
-        IContentUP contents;
-        IRangeUP range;
-        return m_factory->mkHover(contents, range);
+    }
+
+    virtual void shutdown(const std::string &id) override {
+
     }
 
 protected:

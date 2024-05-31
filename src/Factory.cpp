@@ -28,7 +28,13 @@
 #include "Hover.h"
 #include "InitializeParams.h"
 #include "InitializeResult.h"
+#include "Location.h"
+#include "LocationList.h"
+#include "LocationLink.h"
+#include "LocationLinkList.h"
+#include "MarkupContent.h"
 #include "MarkedString.h"
+#include "Null.h"
 #include "Position.h"
 #include "PublishDiagnosticsParams.h"
 #include "Range.h"
@@ -100,7 +106,7 @@ IDocumentSymbolResponseUP Factory::mkDocumentSymbolResponse(
 }
 
 IHoverUP Factory::mkHover(
-        IContentUP                      &contents,
+        IJsonUP                         &contents,
         IRangeUP                        &range) {
     return IHoverUP(new Hover(contents, range));
 }
@@ -139,10 +145,48 @@ IInitializeResultUP Factory::mkInitializeResult(
     return 0;
 }
 
+IMarkupContentUP Factory::mkMarkupContent(
+        MarkupKind                      kind,
+        const std::string               &value) {
+    return IMarkupContentUP(new MarkupContent(kind, value));
+}
+
+INullUP Factory::mkNull() {
+    return INullUP(new Null());
+}
+
 IPositionUP Factory::mkPosition(
         int32_t                         line,
         int32_t                         character) {
-    return IPositionUP(new Position(line, character));
+    return IPositionUP(new Position(line, character));;
+}
+
+ILocationUP Factory::mkLocation(
+        const std::string               &uri,
+        IRangeUP                        &range) {
+    return ILocationUP(new Location(uri, range));
+}
+
+ILocationListUP Factory::mkLocationList(
+        std::vector<ILocationUP>        &locations) {
+    return ILocationListUP(new LocationList(locations));
+}
+
+ILocationLinkUP Factory::mkLocationLink(
+        IRangeUP                        &originSelectionRange,
+        const std::string               &targetUri,
+        IRangeUP                        &targetRange,
+        IRangeUP                        &targetSelectionRange) {
+    return ILocationLinkUP(new LocationLink(
+        originSelectionRange,
+        targetUri,
+        targetRange,
+        targetSelectionRange));
+}
+
+ILocationLinkListUP Factory::mkLocationLinkList(
+        std::vector<ILocationLinkUP>    &locations) {
+    return ILocationLinkListUP(new LocationLinkList(locations));
 }
 
 IPublishDiagnosticsParamsUP Factory::mkPublishDiagnosticsParams(

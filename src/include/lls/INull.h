@@ -1,5 +1,5 @@
 /**
- * IHover.h
+ * INull.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -20,21 +20,15 @@
  */
 #pragma once
 #include "lls/IJson.h"
-#include "lls/IContent.h"
-#include "lls/IRange.h"
 
 namespace lls {
 
-class IHover;
-using IHoverUP=std::unique_ptr<IHover>;
-class IHover : public virtual IJson {
+class INull;
+using INullUP=std::unique_ptr<INull>;
+class INull : public virtual IJson {
 public:
 
-    virtual ~IHover() { }
-
-    virtual IJson *getContents() = 0;
-
-    virtual IRange *getRange() = 0;
+    virtual ~INull() { }
 
 };
 

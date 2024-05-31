@@ -1,5 +1,5 @@
-/**
- * IHover.h
+/*
+ * LocationList.cpp
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -16,28 +16,38 @@
  * limitations under the License.
  *
  * Created on:
- *     Author: 
+ *     Author:
  */
-#pragma once
-#include "lls/IJson.h"
-#include "lls/IContent.h"
-#include "lls/IRange.h"
+#include "LocationList.h"
+
 
 namespace lls {
 
-class IHover;
-using IHoverUP=std::unique_ptr<IHover>;
-class IHover : public virtual IJson {
-public:
 
-    virtual ~IHover() { }
+LocationList::LocationList(
+    std::vector<ILocationUP>        &locations) {
+    for (std::vector<ILocationUP>::iterator
+        it=locations.begin();
+        it!=locations.end(); it++) {
+        m_locations.push_back(std::move(*it));
+    }
+}
 
-    virtual IJson *getContents() = 0;
+LocationList::~LocationList() {
 
-    virtual IRange *getRange() = 0;
+}
 
-};
+const nlohmann::json &LocationList::toJson() {
+    m_json.clear();
+    m_json = nlohmann::json::array();
 
-} /* namespace lls */
+    for (std::vector<ILocationUP>::const_iterator
+        it=m_locations.begin();
+        it!=m_locations.end(); it++) {
+        m_json.push_back((*it)->toJson());
+    }
 
+    return m_json;
+}
 
+}

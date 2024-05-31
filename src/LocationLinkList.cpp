@@ -1,5 +1,5 @@
 /*
- * Hover.cpp
+ * LocationLinkList.cpp
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -18,34 +18,37 @@
  * Created on:
  *     Author:
  */
-#include "Hover.h"
+#include "LocationLinkList.h"
 
 
 namespace lls {
 
 
-Hover::Hover(
-    IJsonUP             &contents,
-    IRangeUP            &range) : 
-        m_contents(std::move(contents)), m_range(std::move(range)) {
-
-}
-
-Hover::~Hover() {
-
-}
-
-const nlohmann::json &Hover::toJson() {
-    m_json.clear();
-    if (m_contents || m_range) {
-        m_json["contents"] = m_contents->toJson();
-        if (m_range) {
-            m_json["range"] = m_range->toJson();
-        }
+LocationLinkList::LocationLinkList(
+    std::vector<ILocationLinkUP>        &locations) {
+    
+    for (std::vector<ILocationLinkUP>::iterator
+        it=locations.begin();
+        it!=locations.end(); it++) {
+        m_locations.push_back(std::move(*it));
     }
+}
+
+LocationLinkList::~LocationLinkList() {
+
+}
+
+const nlohmann::json &LocationLinkList::toJson() {
+    m_json.clear();
+
+    m_json = nlohmann::json::array();
+    for (std::vector<ILocationLinkUP>::const_iterator
+        it=m_locations.begin();
+        it!=m_locations.end(); it++) {
+        m_json.push_back((*it)->toJson());
+    }
+
     return m_json;
 }
-
-    static IHoverUP mk(const nlohmann::json &m);
 
 }

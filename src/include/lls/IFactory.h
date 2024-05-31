@@ -31,7 +31,13 @@
 #include "lls/IHover.h"
 #include "lls/IInitializeParams.h"
 #include "lls/IInitializeResult.h"
+#include "lls/ILocation.h"
+#include "lls/ILocationList.h"
+#include "lls/ILocationLink.h"
+#include "lls/ILocationLinkList.h"
 #include "lls/IMarkedString.h"
+#include "lls/IMarkupContent.h"
+#include "lls/INull.h"
 #include "lls/IPublishDiagnosticsParams.h"
 #include "lls/IServer.h"
 #include "lls/IServerMessageDispatcher.h"
@@ -85,7 +91,7 @@ public:
     ) = 0;
 
     virtual IHoverUP mkHover(
-        IContentUP                      &contents,
+        IJsonUP                         &contents,
         IRangeUP                        &range) = 0;
 
     virtual IInitializeParamsUP mkInitializeParams(
@@ -106,6 +112,28 @@ public:
 
     virtual IInitializeResultUP mkInitializeResult(
         const nlohmann::json            &params) = 0;
+
+    virtual ILocationUP mkLocation(
+        const std::string               &uri,
+        IRangeUP                        &range) = 0;
+
+    virtual ILocationListUP mkLocationList(
+        std::vector<ILocationUP>        &locations) = 0;
+
+    virtual ILocationLinkUP mkLocationLink(
+        IRangeUP                        &originSelectionRange,
+        const std::string               &targetUri,
+        IRangeUP                        &targetRange,
+        IRangeUP                        &targetSelectionRange) = 0;
+
+    virtual ILocationLinkListUP mkLocationLinkList(
+        std::vector<ILocationLinkUP>    &locations) = 0;
+
+    virtual IMarkupContentUP mkMarkupContent(
+        MarkupKind                      kind,
+        const std::string               &value) = 0;
+
+    virtual INullUP mkNull() = 0;
 
     virtual IPositionUP mkPosition(
         int32_t                         line,

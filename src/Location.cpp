@@ -1,5 +1,5 @@
-/**
- * IHover.h
+/*
+ * Location.cpp
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -16,28 +16,31 @@
  * limitations under the License.
  *
  * Created on:
- *     Author: 
+ *     Author:
  */
-#pragma once
-#include "lls/IJson.h"
-#include "lls/IContent.h"
-#include "lls/IRange.h"
+#include "Location.h"
+
 
 namespace lls {
 
-class IHover;
-using IHoverUP=std::unique_ptr<IHover>;
-class IHover : public virtual IJson {
-public:
 
-    virtual ~IHover() { }
+Location::Location(
+    const std::string       &uri,
+    IRangeUP                &range) : 
+        m_uri(uri), m_range(std::move(range)) {
 
-    virtual IJson *getContents() = 0;
+}
 
-    virtual IRange *getRange() = 0;
+Location::~Location() {
 
-};
+}
 
-} /* namespace lls */
+const nlohmann::json &Location::toJson() {
+    m_json.clear();
+    m_json["uri"] = m_uri;
+    m_json["range"] = m_range->toJson();
 
+    return m_json;
+}
 
+}

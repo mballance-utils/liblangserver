@@ -31,13 +31,13 @@ class Hover :
     public virtual Json {
 public:
     Hover(
-        IContentUP      &contents,
+        IJsonUP         &contents,
         IRangeUP        &range
     );
 
     virtual ~Hover();
 
-    virtual IContent *getContents() override {
+    virtual IJson *getContents() override {
         return m_contents.get();
     }
 
@@ -50,7 +50,7 @@ public:
     static IHoverUP mk(const nlohmann::json &m);
 
 private:
-    IContentUP              m_contents;
+    IJsonUP                 m_contents;
     IRangeUP                m_range;
 };
 

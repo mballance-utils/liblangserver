@@ -59,20 +59,25 @@ public:
         IJson                           *data) override;
 
 private:
-    jrpc::IRspMsgUP initializeRequest(jrpc::IReqMsgUP &msg);
+    void initializeRequest(jrpc::IReqMsgUP &msg);
 
-    jrpc::IRspMsgUP initializedRequest(jrpc::IReqMsgUP &msg);
+    void initializedRequest(jrpc::IReqMsgUP &msg);
 
-    jrpc::IRspMsgUP didOpenNotification(jrpc::IReqMsgUP &msg);
+    void didOpenNotification(jrpc::IReqMsgUP &msg);
 
-    jrpc::IRspMsgUP didChangeNotification(jrpc::IReqMsgUP &msg);
+    void didChangeNotification(jrpc::IReqMsgUP &msg);
 
-    jrpc::IRspMsgUP didCloseNotification(jrpc::IReqMsgUP &msg);
+    void didCloseNotification(jrpc::IReqMsgUP &msg);
 
-    jrpc::IRspMsgUP documentSymbolRequest(jrpc::IReqMsgUP &msg);
+    void declaration(jrpc::IReqMsgUP &msg);
 
-    jrpc::IRspMsgUP hoverRequest(jrpc::IReqMsgUP &msg);
+    void definition(jrpc::IReqMsgUP &msg);
+    
+    void documentSymbolRequest(jrpc::IReqMsgUP &msg);
 
+    void hoverRequest(jrpc::IReqMsgUP &msg);
+
+    void shutdown(jrpc::IReqMsgUP &msg);
 
 private:
     static dmgr::IDebug             *m_dbg;

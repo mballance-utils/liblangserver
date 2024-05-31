@@ -1,5 +1,5 @@
 /**
- * IHover.h
+ * ILocationLinkList.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -20,21 +20,18 @@
  */
 #pragma once
 #include "lls/IJson.h"
-#include "lls/IContent.h"
-#include "lls/IRange.h"
+#include "lls/ILocationLink.h"
 
 namespace lls {
 
-class IHover;
-using IHoverUP=std::unique_ptr<IHover>;
-class IHover : public virtual IJson {
+class ILocationLinkList;
+using ILocationLinkListUP=std::unique_ptr<ILocationLinkList>;
+class ILocationLinkList : public virtual IJson {
 public:
 
-    virtual ~IHover() { }
+    virtual ~ILocationLinkList() { }
 
-    virtual IJson *getContents() = 0;
-
-    virtual IRange *getRange() = 0;
+    virtual const std::vector<ILocationLinkUP> &getLocations() = 0;
 
 };
 

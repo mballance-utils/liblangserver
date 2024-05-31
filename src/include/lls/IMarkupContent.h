@@ -19,6 +19,7 @@
  *     Author: 
  */
 #pragma once
+#include <string>
 #include "lls/IContent.h"
 
 namespace lls {
@@ -28,12 +29,14 @@ enum class MarkupKind {
     Markdown
 };
 
-class IMarkupContent : public virtual IContent {
+class IMarkupContent;
+using IMarkupContentUP=std::unique_ptr<IMarkupContent>;
+class IMarkupContent : public virtual IJson {
 public:
 
     virtual ~IMarkupContent() { }
 
-    virtual MarkupKind getMarkupKind() = 0;
+    virtual MarkupKind getKind() = 0;
 
     virtual const std::string &getValue() = 0;
 

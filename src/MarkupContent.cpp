@@ -1,5 +1,5 @@
-/**
- * IHover.h
+/*
+ * MarkupContent.cpp
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -16,28 +16,29 @@
  * limitations under the License.
  *
  * Created on:
- *     Author: 
+ *     Author:
  */
-#pragma once
-#include "lls/IJson.h"
-#include "lls/IContent.h"
-#include "lls/IRange.h"
+#include "MarkupContent.h"
+
 
 namespace lls {
 
-class IHover;
-using IHoverUP=std::unique_ptr<IHover>;
-class IHover : public virtual IJson {
-public:
 
-    virtual ~IHover() { }
+MarkupContent::MarkupContent(
+    MarkupKind          kind,
+    const std::string   &value) : m_kind(kind), m_value(value) {
 
-    virtual IJson *getContents() = 0;
+}
 
-    virtual IRange *getRange() = 0;
+MarkupContent::~MarkupContent() {
 
-};
+}
 
-} /* namespace lls */
+const nlohmann::json &MarkupContent::toJson() {
+    m_json.clear();
+    m_json["kind"] = (m_kind == MarkupKind::Markdown)?"markdown":"plaintext";
+    m_json["value"] = m_value;
+    return m_json;
+}
 
-
+}

@@ -1,5 +1,5 @@
 /**
- * IHover.h
+ * DeclarationParams.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -19,25 +19,29 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IJson.h"
-#include "lls/IContent.h"
-#include "lls/IRange.h"
+#include "lls/IDeclarationParams.h"
+#include "TextDocumentPositionParams.h"
 
 namespace lls {
 
-class IHover;
-using IHoverUP=std::unique_ptr<IHover>;
-class IHover : public virtual IJson {
+
+
+class DeclarationParams :
+    public virtual IDeclarationParams,
+    public virtual TextDocumentPositionParams {
 public:
+    DeclarationParams(
+        ITextDocumentIdentifierUP       &textDocument,
+        IPositionUP                     &position);
 
-    virtual ~IHover() { }
+    DeclarationParams(const nlohmann::json &m);
 
-    virtual IJson *getContents() = 0;
+    virtual ~DeclarationParams();
 
-    virtual IRange *getRange() = 0;
+    static IDeclarationParamsUP mk(const nlohmann::json &m);
 
 };
 
-} /* namespace lls */
+}
 
 

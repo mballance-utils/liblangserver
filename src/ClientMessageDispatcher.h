@@ -68,7 +68,9 @@ public:
         return m_transport->getLoop();
     }
 
-	virtual IInitializeResultUP initialize(IInitializeParamsUP &params) override;
+	virtual void initialize(
+        const std::string           &id,
+        IInitializeParamsUP         &params) override;
 
     virtual void initialized() override;
 
@@ -78,13 +80,23 @@ public:
 
     virtual void didClose(IDidCloseTextDocumentParamsUP &params) override;
 
-    virtual IDocumentSymbolResponseUP documentSymbols(
+    virtual void documentSymbols(
             const std::string       &id,
             IDocumentSymbolParamsUP &params) override;
 
-    virtual IHoverUP hover(
+    virtual void declaration(
+        const std::string           &id,
+        IDeclarationParamsUP        &params) override;
+
+    virtual void definition(
+        const std::string                   &id,
+        ITextDocumentPositionParamsUP       &params) override;
+
+    virtual void hover(
             const std::string       &id,
             IHoverParamsUP          &params) override;
+
+    virtual void shutdown(const std::string &id) override;
 
 private:
 
