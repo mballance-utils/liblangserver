@@ -48,7 +48,7 @@ public:
         m_hover_provider = have;
     }
 
-    virtual bool setDeclarationProvider(bool have) override {
+    virtual void setDeclarationProvider(bool have) override {
         m_declaration_provider = have;
     }
     

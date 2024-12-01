@@ -38,7 +38,7 @@ public:
 
     virtual void setHoverProvider(bool have) = 0;
 
-    virtual bool setDeclarationProvider(bool have) = 0;
+    virtual void setDeclarationProvider(bool have) = 0;
 
     virtual bool getDocumentSymbolProvider() = 0;
 

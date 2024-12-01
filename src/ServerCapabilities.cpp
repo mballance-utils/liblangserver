@@ -27,7 +27,9 @@ namespace lls {
 ServerCapabilities::ServerCapabilities(
     ITextDocumentSyncOptionsUP      &textDocumentSync) :
         m_textDocumentSync(textDocumentSync.release()),
-        m_hover_provider(false) {
+        m_hover_provider(false),
+        m_declaration_provider(false),
+        m_documentSymbolProvider(false) {
 
 }
 
