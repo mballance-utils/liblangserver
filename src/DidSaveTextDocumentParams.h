@@ -1,5 +1,5 @@
 /**
- * DidCloseTextDocumentParams.h
+ * DidSaveTextDocumentParams.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -19,30 +19,37 @@
  *     Author: 
  */
 #pragma once
-#include "lls/IDidCloseTextDocumentParams.h"
+#include "lls/IDidSaveTextDocumentParams.h"
 #include "Json.h"
 
 namespace lls {
 
 
-class DidCloseTextDocumentParams :
-    public virtual IDidCloseTextDocumentParams,
+class DidSaveTextDocumentParams :
+    public virtual IDidSaveTextDocumentParams,
     public virtual Json {
 public:
-    DidCloseTextDocumentParams(ITextDocumentIdentifierUP &textDocument);
+    DidSaveTextDocumentParams(
+        ITextDocumentIdentifierUP   &textDocument,
+        const std::string           &text);
 
-    virtual ~DidCloseTextDocumentParams();
+    virtual ~DidSaveTextDocumentParams();
 
     virtual ITextDocumentIdentifier *getTextDocument() override {
         return m_textDocument.get();
     }
 
+    virtual const std::string &getText() override {
+        return m_text;
+    }
+
     virtual const nlohmann::json &toJson() override;
 
-    static IDidCloseTextDocumentParamsUP mk(const nlohmann::json &m);
+    static IDidSaveTextDocumentParamsUP mk(const nlohmann::json &m);
 
 private:
     ITextDocumentIdentifierUP                 m_textDocument;
+    std::string                               m_text;
 
 
 };

@@ -35,6 +35,7 @@
 #include "lls/IDidChangeTextDocumentParams.h"
 #include "lls/IDidCloseTextDocumentParams.h"
 #include "lls/IDidOpenTextDocumentParams.h"
+#include "lls/IDidSaveTextDocumentParams.h"
 #include "lls/IDocumentSymbolParams.h"
 #include "lls/IDocumentSymbolResponse.h"
 
@@ -59,6 +60,8 @@ public:
 
     virtual void didChange(IDidChangeTextDocumentParamsUP &params) = 0;
 
+    virtual void didSave(IDidSaveTextDocumentParamsUP &params) = 0;
+
     virtual void didClose(IDidCloseTextDocumentParamsUP &params) = 0;
 
     /*
@@ -82,6 +85,8 @@ public:
 
     virtual void shutdown(
         const std::string           &id) = 0;
+
+    virtual void exit() = 0;
 
 /*
 	virtual void didChangeTextDocument(DidChangeTextDocumentParamsSP params) = 0;

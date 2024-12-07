@@ -24,6 +24,7 @@
 #include "DidChangeTextDocumentParams.h"
 #include "DidCloseTextDocumentParams.h"
 #include "DidOpenTextDocumentParams.h"
+#include "DidSaveTextDocumentParams.h"
 #include "DocumentSymbolParams.h"
 #include "HoverParams.h"
 
@@ -50,6 +51,8 @@ ServerMessageDispatcher::ServerMessageDispatcher(
         std::bind(&ServerMessageDispatcher::didOpenNotification, this, std::placeholders::_1));
     m_dispatch->registerMethod("textDocument/didChange",
         std::bind(&ServerMessageDispatcher::didChangeNotification, this, std::placeholders::_1));
+    m_dispatch->registerMethod("textDocument/didSave",
+        std::bind(&ServerMessageDispatcher::didSaveNotification, this, std::placeholders::_1));
     m_dispatch->registerMethod("textDocument/didClose",
         std::bind(&ServerMessageDispatcher::didCloseNotification, this, std::placeholders::_1));
     m_dispatch->registerMethod("textDocument/hover",
@@ -62,6 +65,8 @@ ServerMessageDispatcher::ServerMessageDispatcher(
         std::bind(&ServerMessageDispatcher::documentSymbolRequest, this, std::placeholders::_1));
     m_dispatch->registerMethod("shutdown",
         std::bind(&ServerMessageDispatcher::shutdown, this, std::placeholders::_1));
+    m_dispatch->registerMethod("exit",
+        std::bind(&ServerMessageDispatcher::exit, this, std::placeholders::_1));
 }
 
 ServerMessageDispatcher::~ServerMessageDispatcher() {
@@ -100,7 +105,11 @@ void ServerMessageDispatcher::sendRspSuccess(
 
     msg["id"] = id;
     msg["jsonrpc"] = "2.0";
-    msg["result"] = result->toJson();
+    if (result) {
+        msg["result"] = result->toJson();
+    } else {
+        msg["result"] = nullptr;
+    }
 
     m_dispatch->getPeer()->send(msg);
 
@@ -153,6 +162,13 @@ void ServerMessageDispatcher::didChangeNotification(jrpc::IReqMsgUP &msg) {
     DEBUG_LEAVE("didChangeNotification");
 }
 
+void ServerMessageDispatcher::didSaveNotification(jrpc::IReqMsgUP &msg) {
+    DEBUG_ENTER("didSaveNotification");
+    IDidSaveTextDocumentParamsUP params(DidSaveTextDocumentParams::mk(msg->getParams()));
+    m_server->didSave(params);
+    DEBUG_LEAVE("didSaveNotification");
+}
+
 void ServerMessageDispatcher::didCloseNotification(jrpc::IReqMsgUP &msg) {
     DEBUG_ENTER("didCloseNotification");
     IDidCloseTextDocumentParamsUP params(DidCloseTextDocumentParams::mk(msg->getParams()));
@@ -199,6 +215,12 @@ void ServerMessageDispatcher::shutdown(jrpc::IReqMsgUP &msg) {
     DEBUG_ENTER("shutdown");
     m_server->shutdown(msg->getId());
     DEBUG_LEAVE("shutdown");
+}
+
+void ServerMessageDispatcher::exit(jrpc::IReqMsgUP &msg) {
+    DEBUG_ENTER("exit");
+    m_server->exit();
+    DEBUG_LEAVE("exit");
 }
 
 dmgr::IDebug *ServerMessageDispatcher::m_dbg = 0;

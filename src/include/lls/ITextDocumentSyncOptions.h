@@ -44,6 +44,22 @@ public:
 
     virtual void setChange(TextDocumentSyncKind kind) = 0;
 
+    virtual bool getWillSave() = 0;
+
+    virtual void setWillSave(bool e) = 0;
+
+    virtual bool getWillSaveWaitUntil() = 0;
+
+    virtual void setWillSaveWaitUntil(bool e) = 0;
+
+    virtual bool getSave() = 0;
+
+    virtual void setSave(bool e) = 0;
+
+    virtual bool getSaveIncludeText() = 0;
+
+    virtual void setSaveIncludeText(bool e) = 0;
+
 };
 
 } /* namespace lls */

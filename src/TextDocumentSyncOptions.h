@@ -32,7 +32,11 @@ class TextDocumentSyncOptions :
 public:
     TextDocumentSyncOptions(
         bool                    open_close,
-        TextDocumentSyncKind    sync_kind
+        TextDocumentSyncKind    sync_kind,
+        bool                    will_save,
+        bool                    will_save_wait_until,
+        bool                    save,
+        bool                    save_include_text
     );
 
     virtual ~TextDocumentSyncOptions();
@@ -53,6 +57,38 @@ public:
         m_sync_kind = kind;
     }
 
+    virtual bool getWillSave() override {
+        return m_will_save;
+    }
+
+    virtual void setWillSave(bool e) override {
+        m_will_save = e;
+    }
+
+    virtual bool getWillSaveWaitUntil() override {
+        return m_will_save_wait_until;
+    }
+
+    virtual void setWillSaveWaitUntil(bool e) override {
+        m_will_save_wait_until = e;
+    }
+
+    virtual bool getSave() override {
+        return m_save;
+    }
+
+    virtual void setSave(bool e) override {
+        m_save = e;
+    }
+
+    virtual bool getSaveIncludeText() override {
+        return m_save_include_text;
+    }
+
+    virtual void setSaveIncludeText(bool e) override {
+        m_save_include_text = e;
+    }
+
     const nlohmann::json &toJson();
 
     static TextDocumentSyncOptions *mk(const nlohmann::json &msg);
@@ -60,6 +96,10 @@ public:
 private:
     bool                    m_open_close;
     TextDocumentSyncKind    m_sync_kind;
+    bool                    m_will_save;
+    bool                    m_will_save_wait_until;
+    bool                    m_save;
+    bool                    m_save_include_text;
 
 };
 

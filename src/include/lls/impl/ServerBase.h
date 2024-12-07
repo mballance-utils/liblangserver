@@ -65,6 +65,10 @@ public:
 
     }
 
+    virtual void didSave(IDidSaveTextDocumentParamsUP &params) override {
+
+    }
+
     virtual void didClose(IDidCloseTextDocumentParamsUP &params) override {
 
     }
@@ -91,9 +95,9 @@ public:
         IHoverParamsUP      &params) override {
     }
 
-    virtual void shutdown(const std::string &id) override {
+    virtual void shutdown(const std::string &id) override { }
 
-    }
+    virtual void exit() override { }
 
 protected:
     IClient                         *m_client;

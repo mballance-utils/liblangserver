@@ -1,5 +1,5 @@
 /**
- * IDidCloseTextDocumentParams.h
+ * IDidSaveTextDocumentParams.h
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -24,14 +24,16 @@
 
 namespace lls {
 
-class IDidCloseTextDocumentParams;
-using IDidCloseTextDocumentParamsUP=std::unique_ptr<IDidCloseTextDocumentParams>;
-class IDidCloseTextDocumentParams : public virtual IJson {
+class IDidSaveTextDocumentParams;
+using IDidSaveTextDocumentParamsUP=std::unique_ptr<IDidSaveTextDocumentParams>;
+class IDidSaveTextDocumentParams : public virtual IJson {
 public:
 
-    virtual ~IDidCloseTextDocumentParams() { }
+    virtual ~IDidSaveTextDocumentParams() { }
 
     virtual ITextDocumentIdentifier *getTextDocument() = 0;
+
+    virtual const std::string &getText() = 0;
 
 };
 

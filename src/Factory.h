@@ -135,7 +135,11 @@ public:
 
     virtual ITextDocumentSyncOptionsUP mkTextDocumentSyncOptions(
         bool                            open_close,
-        TextDocumentSyncKind            sync_kind
+        TextDocumentSyncKind            sync_kind,
+        bool                            will_save,
+        bool                            will_save_wait_until,
+        bool                            save,
+        bool                            save_include_text
     ) override;
 
     static IFactory *inst();

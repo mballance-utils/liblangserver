@@ -78,6 +78,8 @@ public:
 
     virtual void didChange(IDidChangeTextDocumentParamsUP &params) override;
 
+    virtual void didSave(IDidSaveTextDocumentParamsUP &params) override;
+
     virtual void didClose(IDidCloseTextDocumentParamsUP &params) override;
 
     virtual void documentSymbols(
@@ -97,6 +99,8 @@ public:
             IHoverParamsUP          &params) override;
 
     virtual void shutdown(const std::string &id) override;
+
+    virtual void exit() override;
 
 private:
 

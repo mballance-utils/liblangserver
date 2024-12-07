@@ -1,5 +1,5 @@
 /*
- * DidCloseTextDocumentParams.cpp
+ * DidSaveTextDocumentParams.cpp
  *
  * Copyright 2023 Matthew Ballance and Contributors
  *
@@ -18,32 +18,39 @@
  * Created on:
  *     Author:
  */
-#include "DidCloseTextDocumentParams.h"
+#include "DidSaveTextDocumentParams.h"
 #include "TextDocumentIdentifier.h"
 
 
 namespace lls {
 
 
-DidCloseTextDocumentParams::DidCloseTextDocumentParams(
-        ITextDocumentIdentifierUP     &textDocument) : m_textDocument(std::move(textDocument)) {
+DidSaveTextDocumentParams::DidSaveTextDocumentParams(
+        ITextDocumentIdentifierUP     &textDocument,
+        const std::string             &text) : 
+        m_textDocument(std::move(textDocument)), m_text(text) {
 
 }
 
-DidCloseTextDocumentParams::~DidCloseTextDocumentParams() {
+DidSaveTextDocumentParams::~DidSaveTextDocumentParams() {
 
 }
 
-const nlohmann::json &DidCloseTextDocumentParams::toJson() {
+const nlohmann::json &DidSaveTextDocumentParams::toJson() {
     m_json.clear();
     m_json["textDocument"] = m_textDocument->toJson();
+    m_json["text"] = m_text;
     return m_json;
 }
 
-IDidCloseTextDocumentParamsUP DidCloseTextDocumentParams::mk(const nlohmann::json &m) {
+IDidSaveTextDocumentParamsUP DidSaveTextDocumentParams::mk(const nlohmann::json &m) {
     ITextDocumentIdentifierUP textDocument(TextDocumentIdentifier::mk(m["textDocument"]));
+    std::string text;
+    if (m.find("text") != m.end()) {
+        text = m["text"];
+    }
 
-    return IDidCloseTextDocumentParamsUP(new DidCloseTextDocumentParams(textDocument));
+    return IDidSaveTextDocumentParamsUP(new DidSaveTextDocumentParams(textDocument, text));
 }
 
 }

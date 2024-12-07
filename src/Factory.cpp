@@ -213,8 +213,18 @@ IServerCapabilitiesUP Factory::mkServerCapabilities(
 
 ITextDocumentSyncOptionsUP Factory::mkTextDocumentSyncOptions(
         bool                            open_close,
-        TextDocumentSyncKind            sync_kind) {
-    return ITextDocumentSyncOptionsUP(new TextDocumentSyncOptions(open_close, sync_kind));
+        TextDocumentSyncKind            sync_kind,
+        bool                            will_save,
+        bool                            will_save_wait_until,
+        bool                            save,
+        bool                            save_include_text) {
+    return ITextDocumentSyncOptionsUP(new TextDocumentSyncOptions(
+        open_close, 
+        sync_kind,
+        will_save,
+        will_save_wait_until,
+        save,
+        save_include_text));
 }
 
 IFactory *Factory::inst() {

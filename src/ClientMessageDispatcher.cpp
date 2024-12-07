@@ -86,6 +86,13 @@ void ClientMessageDispatcher::didChange(IDidChangeTextDocumentParamsUP &params) 
     DEBUG_LEAVE("didChange");
 }
 
+void ClientMessageDispatcher::didSave(IDidSaveTextDocumentParamsUP &params) {
+    DEBUG_ENTER("didSave");
+    nlohmann::json msg_params = params->toJson();
+    sendNotification("textDocument/didSave", msg_params);
+    DEBUG_LEAVE("didSave");
+}
+
 void ClientMessageDispatcher::didClose(IDidCloseTextDocumentParamsUP &params) {
     DEBUG_ENTER("didClose");
     DEBUG("TODO");
@@ -119,6 +126,10 @@ void ClientMessageDispatcher::hover(
 }
 
 void ClientMessageDispatcher::shutdown(const std::string &id) {
+
+}
+
+void ClientMessageDispatcher::exit() {
 
 }
 

@@ -67,6 +67,8 @@ private:
 
     void didChangeNotification(jrpc::IReqMsgUP &msg);
 
+    void didSaveNotification(jrpc::IReqMsgUP &msg);
+
     void didCloseNotification(jrpc::IReqMsgUP &msg);
 
     void declaration(jrpc::IReqMsgUP &msg);
@@ -78,6 +80,8 @@ private:
     void hoverRequest(jrpc::IReqMsgUP &msg);
 
     void shutdown(jrpc::IReqMsgUP &msg);
+
+    void exit(jrpc::IReqMsgUP &msg);
 
 private:
     static dmgr::IDebug             *m_dbg;
